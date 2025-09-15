@@ -2,274 +2,285 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
-import { FiPlay, FiGift, FiZap, FiEye } from "react-icons/fi";
 import gasSponsorService from "../services/gasSponsor";
 
+// 이미지 상수들
+const imgImage3 = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
+const imgImage10 = "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
+const img11 = "http://localhost:3845/assets/3a576cb5f4cb120ccaa705bb36531ed3dde6793e.png";
+const imgImage2 = "http://localhost:3845/assets/a5afa55a89940975aa49915299cb08c7c192db96.png";
+const imgImage12 = "http://localhost:3845/assets/c91a88f6c25bac59ea92b4abfe1628b921fef463.png";
+const imgPolygon1 = "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
+const imgFrame61 = "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
+const imgPolygon2 = "http://localhost:3845/assets/53fbb2746b1d4ea19636c18d0b9ef4e79652148f.svg";
+const imgEllipse2 = "http://localhost:3845/assets/9bcc4b909b8ec2fd01adeeaf82d47b22c8e9d181.svg";
+const imgEllipse4 = "http://localhost:3845/assets/be5a31e41c19f8e4c9bb19c23ce01d5c4f53b249.svg";
+const imgLine42 = "http://localhost:3845/assets/2eeecc92fcde4a9c11fe718d7116c4af4338d0d9.svg";
+
 const DashboardContainer = styled.div`
-  background: linear-gradient(135deg, #1d1818 0%, #2a2525 100%);
-  min-height: 100vh;
-  padding: 20px;
-  color: white;
+  background: #1d1818;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 `;
 
 const Header = styled.div`
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
 `;
 
-const Logo = styled.h1`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 24px;
-  color: #f29d38;
-  margin: 0;
+const BackButton = styled.button`
+  position: absolute;
+  left: 25px;
+  top: 7px;
+  width: 25px;
+  height: 25px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transform: rotate(270deg);
+  background-image: url("${imgPolygon2}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
-const UserInfo = styled.div`
+const AccountInfo = styled.div`
+  position: absolute;
+  left: 151px;
+  top: 5px;
   display: flex;
   align-items: center;
   gap: 10px;
 `;
 
-const Avatar = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(45deg, #f29d38, #ff6b35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+const AccountName = styled.div`
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
   color: white;
+  text-align: center;
+`;
+
+const AccountAddress = styled.div`
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #999999;
+  text-align: center;
 `;
 
 const TicketBalance = styled.div`
-  background: linear-gradient(135deg, #f29d38, #ff6b35);
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 30px;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(242, 157, 56, 0.3);
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  background: #3b3b3b;
+  border-radius: 25px;
+  height: 40px;
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 `;
 
-const BalanceTitle = styled.h2`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  margin: 0 0 10px 0;
-  opacity: 0.9;
+const TicketIcon = styled.div`
+  width: 25px;
+  height: 25px;
+  background-image: url("${imgImage3}");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
-const BalanceAmount = styled.div`
+const TicketAmount = styled.div`
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
-  font-size: 36px;
-  margin: 0 0 5px 0;
+  font-size: 16px;
+  color: white;
 `;
 
-const BalanceUnit = styled.div`
-  font-size: 14px;
-  opacity: 0.8;
+const LargeTicketIcon = styled.div`
+  position: absolute;
+  left: 5px;
+  top: 110px;
+  width: 50px;
+  height: 50px;
+  background-image: url("${imgImage3}");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
-const QuickActions = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-bottom: 30px;
-`;
-
-const ActionCard = styled.div`
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-radius: 15px;
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  
-  &:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  }
-`;
-
-const ActionIcon = styled.div`
+const LargeTicketAmount = styled.div`
+  position: absolute;
+  left: 85px;
+  top: 110px;
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-weight: 700;
   font-size: 32px;
-  margin-bottom: 10px;
-  color: #f29d38;
-`;
-
-const ActionTitle = styled.h3`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  margin: 0 0 5px 0;
-`;
-
-const ActionDesc = styled.p`
-  font-size: 12px;
-  opacity: 0.7;
-  margin: 0;
-`;
-
-const AdSection = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 30px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-`;
-
-const AdTitle = styled.h3`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 600;
-  font-size: 18px;
-  margin: 0 0 15px 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-
-const AdCard = styled.div`
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-  }
-`;
-
-const AdCardTitle = styled.h4`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  margin: 0 0 8px 0;
-`;
-
-const AdCardDesc = styled.p`
-  font-size: 14px;
-  opacity: 0.9;
-  margin: 0 0 10px 0;
-`;
-
-const AdReward = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const RewardAmount = styled.span`
-  font-weight: 600;
-  color: #f29d38;
-`;
-
-const WatchButton = styled.button`
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
   color: white;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  line-height: normal;
+`;
+
+const Description = styled.div`
+  position: absolute;
+  left: 127.5px;
+  top: 173.5px;
+  transform: translateX(-50%) translateY(-50%);
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #999999;
+  text-align: center;
+  line-height: normal;
+`;
+
+const ChartContainer = styled.div`
+  position: absolute;
+  left: 5px;
+  top: 196px;
+  width: 372px;
+  height: 100px;
+  background: #110b0b;
+  overflow: hidden;
+`;
+
+const ChartImage = styled.div`
+  position: absolute;
+  left: 85px;
+  top: 0;
+  width: 201px;
+  height: 100px;
+  background-image: url("${imgImage10}");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+const ChartDots = styled.div`
+  position: absolute;
+  left: 171px;
+  top: 301px;
+  display: flex;
+  gap: 15px;
+`;
+
+const ChartDot = styled.div`
+  width: 10px;
+  height: 10px;
+  background-image: url("${imgEllipse4}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
+  &:first-child {
+    background-image: url("${imgEllipse2}");
   }
 `;
 
-const GasSponsorSection = styled.div`
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+const AdList = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 321px;
+  transform: translateX(-50%);
+  width: 412px;
 `;
 
-const GasSponsorTitle = styled.h3`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 600;
-  font-size: 18px;
-  margin: 0 0 15px 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-
-const GasInfo = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-`;
-
-const GasLabel = styled.span`
-  font-size: 14px;
-  opacity: 0.8;
-`;
-
-const GasValue = styled.span`
-  font-weight: 600;
-  color: #f29d38;
-`;
-
-const SponsorButton = styled.button`
+const AdItem = styled.div`
+  height: 60px;
   width: 100%;
-  background: linear-gradient(135deg, #f29d38, #ff6b35);
-  border: none;
-  border-radius: 12px;
-  padding: 15px;
-  color: white;
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 600;
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-bottom: 0;
   cursor: pointer;
   transition: all 0.3s ease;
   
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(242, 157, 56, 0.4);
+    background: rgba(255, 255, 255, 0.05);
   }
-  
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
+`;
+
+const AdIcon = styled.div`
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 25px;
+  height: 25px;
+  background-image: url("${(props) => props.icon}");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+const AdTitle = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+`;
+
+const AdLimit = styled.div`
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+  text-align: right;
+`;
+
+const AdDescription = styled.div`
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(calc(-50% + 20px));
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #999999;
+  text-align: right;
+`;
+
+const Divider = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 60px;
+  transform: translateX(-50%);
+  width: 372px;
+  height: 1px;
+  background-image: url("${imgLine42}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const ADTicketDashboard = () => {
   const navigate = useNavigate();
-  const [ticketBalance, setTicketBalance] = useState(150);
+  const [ticketBalance, setTicketBalance] = useState(18);
   const [isWatchingAd, setIsWatchingAd] = useState(false);
-  const [currentGasPrice, setCurrentGasPrice] = useState(0.002);
-  const [isGasSponsorActive, setIsGasSponsorActive] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [dailyLimit, setDailyLimit] = useState(5);
+  const [currentUsage, setCurrentUsage] = useState(5);
 
   // 컴포넌트 마운트 시 초기화
   useEffect(() => {
     initializeDashboard();
-  }, []);
-
-  // 가스비 정보 업데이트
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const gasPrice = await gasSponsorService.getCurrentGasPrice();
-      setCurrentGasPrice(gasPrice);
-    }, 5000);
-    return () => clearInterval(interval);
   }, []);
 
   const initializeDashboard = async () => {
@@ -277,182 +288,136 @@ const ADTicketDashboard = () => {
       // 티켓 잔액 조회
       const balance = await gasSponsorService.getTicketBalance();
       setTicketBalance(balance);
-      
-      // 가스비 대납 상태 확인
-      const status = gasSponsorService.getSponsorStatus();
-      setIsGasSponsorActive(status.isActive);
     } catch (error) {
       console.error('대시보드 초기화 실패:', error);
     }
   };
 
-  const handleWatchAd = async (adId, reward) => {
+  const handleWatchAd = async (adType, reward) => {
+    if (currentUsage >= dailyLimit) {
+      toast.error("일일 제한 횟수를 초과했습니다.");
+      return;
+    }
+
     setIsWatchingAd(true);
     toast.success(`광고 시청 중... +${reward} 티켓`);
     
-    // 광고 시청 시뮬레이션 (5초)
+    // 광고 시청 시뮬레이션 (3초)
     setTimeout(async () => {
       const newBalance = ticketBalance + reward;
       setTicketBalance(newBalance);
+      setCurrentUsage(prev => prev + 1);
       gasSponsorService.updateTicketBalance(reward);
       setIsWatchingAd(false);
       toast.success(`${reward} 티켓을 획득했습니다!`);
-    }, 5000);
+    }, 3000);
   };
 
-  const handleGasSponsor = async () => {
-    if (isLoading) return;
-    
-    setIsLoading(true);
-    
-    try {
-      if (isGasSponsorActive) {
-        // 가스비 대납 비활성화
-        const result = await gasSponsorService.deactivateGasSponsor();
-        if (result.success) {
-          setIsGasSponsorActive(false);
-          toast.success("가스비 대납이 비활성화되었습니다.");
-        } else {
-          toast.error(result.error);
-        }
-      } else {
-        // 가스비 대납 활성화
-        const requiredTickets = Math.ceil(currentGasPrice * 1000);
-        
-        if (ticketBalance < requiredTickets) {
-          toast.error("티켓이 부족합니다. 광고를 더 시청해주세요!");
-          setIsLoading(false);
-          return;
-        }
-        
-        const result = await gasSponsorService.activateGasSponsor(requiredTickets);
-        if (result.success) {
-          setIsGasSponsorActive(true);
-          setTicketBalance(prev => prev - requiredTickets);
-          toast.success("가스비 대납이 활성화되었습니다!");
-        } else {
-          toast.error(result.error);
-        }
-      }
-    } catch (error) {
-      toast.error("가스비 대납 처리 중 오류가 발생했습니다.");
-      console.error('가스비 대납 오류:', error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleCryptoMission = () => {
+    toast.info("크립토 미션 기능은 준비 중입니다.");
+  };
+
+  const handleCoupang = () => {
+    toast.info("쿠팡 제휴 기능은 준비 중입니다.");
+  };
+
+  const handleFriendInvite = () => {
+    toast.info("친구초대 기능은 준비 중입니다.");
   };
 
   const ads = [
     {
       id: 1,
-      title: "DeFi 프로토콜 소개",
-      description: "새로운 DeFi 서비스를 만나보세요",
-      reward: 10,
-      duration: "30초"
+      title: "광고 시청하기 + 1",
+      icon: imgImage3,
+      limit: "5/5",
+      description: "일일 제한 횟수 5회",
+      reward: 1,
+      onClick: () => handleWatchAd("ad", 1)
     },
     {
       id: 2,
-      title: "NFT 마켓플레이스",
-      description: "최신 NFT 컬렉션을 확인하세요",
-      reward: 15,
-      duration: "45초"
+      title: "크립토 미션",
+      icon: imgImage2,
+      description: "다양한 Web3 미션을 통한 리워드",
+      onClick: handleCryptoMission
     },
     {
       id: 3,
-      title: "Web3 게임",
-      description: "플레이 투 언 게임을 체험해보세요",
-      reward: 20,
-      duration: "60초"
+      title: "쿠팡 제휴",
+      icon: img11,
+      description: "3,333원 결제당 AD Ticket 지급\n※ 구매 취소 시, AD 취소",
+      onClick: handleCoupang
+    },
+    {
+      id: 4,
+      title: "친구초대",
+      icon: imgImage12,
+      description: "초대코드로 친구를 초대 리워드",
+      onClick: handleFriendInvite
     }
   ];
 
   return (
     <DashboardContainer>
+      {/* 상단 헤더 */}
       <Header>
-        <Logo>AD Ticket</Logo>
-        <UserInfo>
-          <Avatar>U</Avatar>
-        </UserInfo>
+        <BackButton onClick={() => navigate("/dashboard")} />
+        
+        <AccountInfo>
+          <div
+            style={{
+              width: "15px",
+              height: "15px",
+              backgroundImage: `url("${imgFrame61}")`,
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+            }}
+          />
+          <div>
+            <AccountName>Account 1</AccountName>
+            <AccountAddress>0xcEDBf...4926F</AccountAddress>
+          </div>
+        </AccountInfo>
+
+        <TicketBalance>
+          <TicketIcon />
+          <TicketAmount>{ticketBalance}</TicketAmount>
+        </TicketBalance>
       </Header>
 
-      <TicketBalance>
-        <BalanceTitle>보유 티켓</BalanceTitle>
-        <BalanceAmount>{ticketBalance.toLocaleString()}</BalanceAmount>
-        <BalanceUnit>AD Tickets</BalanceUnit>
-      </TicketBalance>
+      {/* 큰 티켓 아이콘과 잔액 */}
+      <LargeTicketIcon />
+      <LargeTicketAmount>{ticketBalance}</LargeTicketAmount>
 
-      <QuickActions>
-        <ActionCard onClick={() => navigate("/send")}>
-          <ActionIcon>
-            <FiZap />
-          </ActionIcon>
-          <ActionTitle>송금</ActionTitle>
-          <ActionDesc>토큰 전송</ActionDesc>
-        </ActionCard>
+      {/* 설명 텍스트 */}
+      <Description>가스비를 결제해주는 AD Ticket</Description>
 
-        <ActionCard onClick={() => navigate("/receive")}>
-          <ActionIcon>
-            <FiGift />
-          </ActionIcon>
-          <ActionTitle>수신</ActionTitle>
-          <ActionDesc>QR 코드 공유</ActionDesc>
-        </ActionCard>
-      </QuickActions>
+      {/* 차트 */}
+      <ChartContainer>
+        <ChartImage />
+      </ChartContainer>
 
-      <AdSection>
-        <AdTitle>
-          <FiPlay />
-          광고 시청으로 티켓 획득
-        </AdTitle>
-        {ads.map(ad => (
-          <AdCard key={ad.id} onClick={() => handleWatchAd(ad.id, ad.reward)}>
-            <AdCardTitle>{ad.title}</AdCardTitle>
-            <AdCardDesc>{ad.description}</AdCardDesc>
-            <AdReward>
-              <RewardAmount>+{ad.reward} 티켓</RewardAmount>
-              <WatchButton disabled={isWatchingAd}>
-                {isWatchingAd ? "시청 중..." : `${ad.duration} 시청`}
-              </WatchButton>
-            </AdReward>
-          </AdCard>
+      {/* 차트 도트들 */}
+      <ChartDots>
+        {[...Array(5)].map((_, index) => (
+          <ChartDot key={index} />
         ))}
-      </AdSection>
+      </ChartDots>
 
-      <GasSponsorSection>
-        <GasSponsorTitle>
-          <FiZap />
-          가스비 대납 서비스
-        </GasSponsorTitle>
-        
-        <GasInfo>
-          <GasLabel>현재 가스비</GasLabel>
-          <GasValue>{currentGasPrice.toFixed(4)} ETH</GasValue>
-        </GasInfo>
-        
-        <GasInfo>
-          <GasLabel>필요 티켓</GasLabel>
-          <GasValue>{Math.ceil(currentGasPrice * 1000)} 티켓</GasValue>
-        </GasInfo>
-        
-        <GasInfo>
-          <GasLabel>보유 티켓</GasLabel>
-          <GasValue>{ticketBalance} 티켓</GasValue>
-        </GasInfo>
-
-        <SponsorButton 
-          onClick={handleGasSponsor}
-          disabled={!isGasSponsorActive && ticketBalance < currentGasPrice * 1000}
-        >
-          {isLoading 
-            ? "처리 중..." 
-            : isGasSponsorActive 
-              ? "가스비 대납 비활성화" 
-              : ticketBalance >= currentGasPrice * 1000 
-                ? "가스비 대납 활성화" 
-                : "티켓 부족 - 광고 시청 필요"
-          }
-        </SponsorButton>
-      </GasSponsorSection>
+      {/* 광고 목록 */}
+      <AdList>
+        {ads.map((ad, index) => (
+          <AdItem key={ad.id} onClick={ad.onClick}>
+            <AdIcon icon={ad.icon} />
+            <AdTitle>{ad.title}</AdTitle>
+            {ad.limit && <AdLimit>{ad.limit}</AdLimit>}
+            <AdDescription>{ad.description}</AdDescription>
+            <Divider />
+          </AdItem>
+        ))}
+      </AdList>
     </DashboardContainer>
   );
 };
