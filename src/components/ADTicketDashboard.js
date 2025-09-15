@@ -4,6 +4,7 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 import gasSponsorService from "../services/gasSponsor";
 import AdModal from "./AdModal";
+import AdWatchModal from "./AdWatchModal";
 import { 
   createContainerStyle, 
   createButtonStyle, 
@@ -206,6 +207,7 @@ const ADTicketDashboard = () => {
   const [dailyLimit, setDailyLimit] = useState(5);
   const [currentUsage, setCurrentUsage] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAdWatchModalOpen, setIsAdWatchModalOpen] = useState(false);
 
   useEffect(() => {
     initializeDashboard();
@@ -222,12 +224,20 @@ const ADTicketDashboard = () => {
     }
   };
 
-  const handleWatchAd = async () => {
+  const handleWatchAd = () => {
     if (currentUsage >= dailyLimit) {
       toast.error("오늘 시청 가능한 광고 횟수를 모두 소진했습니다.");
       return;
     }
+    setIsAdWatchModalOpen(true);
+  };
 
+  const handleCloseAdWatchModal = () => {
+    setIsAdWatchModalOpen(false);
+  };
+
+  const handleConfirmWatchAd = async () => {
+    setIsAdWatchModalOpen(false);
     setIsWatchingAd(true);
     toast.success("광고 시청 중... (3초)");
     
@@ -361,6 +371,13 @@ const ADTicketDashboard = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onParticipate={handleParticipate}
+      />
+
+      {/* 광고 시청 모달 */}
+      <AdWatchModal
+        isOpen={isAdWatchModalOpen}
+        onClose={handleCloseAdWatchModal}
+        onWatchAd={handleConfirmWatchAd}
       />
     </DashboardContainer>
   );
