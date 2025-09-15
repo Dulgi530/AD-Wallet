@@ -22,25 +22,31 @@ const DashboardContainer = styled.div`
   background: #1d1818;
   position: relative;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+  
+  @media (max-width: 480px) {
+    min-height: 100vh;
+  }
 `;
 
 const Header = styled.div`
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  height: 40px;
+  position: relative;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  
+  @media (max-width: 480px) {
+    padding: 15px;
+  }
 `;
 
 const BackButton = styled.button`
-  position: absolute;
-  left: 25px;
-  top: 7px;
   width: 25px;
   height: 25px;
   background: none;
@@ -51,15 +57,23 @@ const BackButton = styled.button`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  
+  @media (max-width: 480px) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const AccountInfo = styled.div`
-  position: absolute;
-  left: 151px;
-  top: 5px;
   display: flex;
   align-items: center;
   gap: 10px;
+  flex: 1;
+  justify-content: center;
+  
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
 `;
 
 const AccountName = styled.div`
@@ -68,6 +82,10 @@ const AccountName = styled.div`
   font-size: 14px;
   color: white;
   text-align: center;
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const AccountAddress = styled.div`
@@ -76,20 +94,28 @@ const AccountAddress = styled.div`
   font-size: 12px;
   color: #999999;
   text-align: center;
+  
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 const TicketBalance = styled.div`
-  position: absolute;
-  right: 5px;
-  top: 5px;
   background: #3b3b3b;
   border-radius: 25px;
   height: 40px;
-  width: 80px;
+  min-width: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
+  padding: 0 10px;
+  
+  @media (max-width: 480px) {
+    height: 35px;
+    min-width: 70px;
+    gap: 3px;
+  }
 `;
 
 const TicketIcon = styled.div`
@@ -99,6 +125,11 @@ const TicketIcon = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  
+  @media (max-width: 480px) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const TicketAmount = styled.div`
@@ -106,72 +137,87 @@ const TicketAmount = styled.div`
   font-weight: 700;
   font-size: 16px;
   color: white;
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 `;
 
 const LargeTicketIcon = styled.div`
-  position: absolute;
-  left: 5px;
-  top: 110px;
   width: 50px;
   height: 50px;
   background-image: url("${imgImage3}");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  margin-right: 20px;
+  
+  @media (max-width: 480px) {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+  }
 `;
 
 const LargeTicketAmount = styled.div`
-  position: absolute;
-  left: 85px;
-  top: 110px;
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 32px;
   color: white;
   line-height: normal;
+  
+  @media (max-width: 480px) {
+    font-size: 28px;
+  }
 `;
 
 const Description = styled.div`
-  position: absolute;
-  left: 127.5px;
-  top: 173.5px;
-  transform: translateX(-50%) translateY(-50%);
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: #999999;
   text-align: center;
   line-height: normal;
+  margin: 20px 0;
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+    margin: 15px 0;
+  }
 `;
 
 const ChartContainer = styled.div`
-  position: absolute;
-  left: 5px;
-  top: 196px;
-  width: 372px;
+  width: 100%;
   height: 100px;
   background: #110b0b;
   overflow: hidden;
+  margin: 20px 0;
+  border-radius: 8px;
+  
+  @media (max-width: 480px) {
+    height: 80px;
+    margin: 15px 0;
+  }
 `;
 
 const ChartImage = styled.div`
-  position: absolute;
-  left: 85px;
-  top: 0;
-  width: 201px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   background-image: url("${imgImage10}");
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 `;
 
 const ChartDots = styled.div`
-  position: absolute;
-  left: 171px;
-  top: 301px;
   display: flex;
   gap: 15px;
+  justify-content: center;
+  margin: 10px 0;
+  
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
 `;
 
 const ChartDot = styled.div`
@@ -185,14 +231,22 @@ const ChartDot = styled.div`
   &:first-child {
     background-image: url("${imgEllipse2}");
   }
+  
+  @media (max-width: 480px) {
+    width: 8px;
+    height: 8px;
+  }
 `;
 
 const AdList = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 321px;
-  transform: translateX(-50%);
-  width: 412px;
+  width: 100%;
+  padding: 0 20px;
+  margin: 20px 0;
+  
+  @media (max-width: 480px) {
+    padding: 0 15px;
+    margin: 15px 0;
+  }
 `;
 
 const AdItem = styled.div`
@@ -204,72 +258,85 @@ const AdItem = styled.div`
   margin-bottom: 0;
   cursor: pointer;
   transition: all 0.3s ease;
+  padding: 10px 0;
   
   &:hover {
     background: rgba(255, 255, 255, 0.05);
   }
+  
+  @media (max-width: 480px) {
+    height: 50px;
+    padding: 8px 0;
+  }
 `;
 
 const AdIcon = styled.div`
-  position: absolute;
-  left: 5px;
-  top: 50%;
-  transform: translateY(-50%);
   width: 25px;
   height: 25px;
   background-image: url("${(props) => props.icon}");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  margin-right: 15px;
+  
+  @media (max-width: 480px) {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
 `;
 
 const AdTitle = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: white;
-  text-align: center;
+  text-align: left;
+  flex: 1;
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const AdLimit = styled.div`
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: white;
   text-align: right;
+  margin-right: 10px;
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+    margin-right: 5px;
+  }
 `;
 
 const AdDescription = styled.div`
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(calc(-50% + 20px));
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 12px;
   color: #999999;
   text-align: right;
+  
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 const Divider = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 60px;
-  transform: translateX(-50%);
-  width: 372px;
+  width: 100%;
   height: 1px;
   background-image: url("${imgLine42}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  margin: 10px 0;
+  
+  @media (max-width: 480px) {
+    margin: 8px 0;
+  }
 `;
 
 const ADTicketDashboard = () => {
@@ -399,8 +466,10 @@ const ADTicketDashboard = () => {
       </Header>
 
       {/* 큰 티켓 아이콘과 잔액 */}
-      <LargeTicketIcon />
-      <LargeTicketAmount>{ticketBalance}</LargeTicketAmount>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '20px 0' }}>
+        <LargeTicketIcon />
+        <LargeTicketAmount>{ticketBalance}</LargeTicketAmount>
+      </div>
 
       {/* 설명 텍스트 */}
       <Description>가스비를 결제해주는 AD Ticket</Description>
@@ -425,7 +494,7 @@ const ADTicketDashboard = () => {
             <AdTitle>{ad.title}</AdTitle>
             {ad.limit && <AdLimit>{ad.limit}</AdLimit>}
             <AdDescription>{ad.description}</AdDescription>
-            <Divider />
+            {index < ads.length - 1 && <Divider />}
           </AdItem>
         ))}
       </AdList>

@@ -28,17 +28,34 @@ const ModalContainer = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 10px;
+  max-width: 90vw;
+  max-height: 90vh;
+  
+  @media (max-width: 480px) {
+    width: 320px;
+    height: 640px;
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  @media (max-width: 360px) {
+    width: 300px;
+    height: 600px;
+  }
 `;
 
 const ModalHeader = styled.div`
-  position: absolute;
-  top: 35px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  position: relative;
+  padding: 35px 20px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  box-sizing: border-box;
+  
+  @media (max-width: 480px) {
+    padding: 25px 15px 15px;
+  }
 `;
 
 const ModalTitle = styled.h2`
@@ -48,13 +65,16 @@ const ModalTitle = styled.h2`
   color: white;
   text-align: center;
   margin: 0;
+  
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
 `;
 
 const CloseButton = styled.button`
   position: absolute;
-  right: 24.5px;
-  top: 31px;
-  transform: translateY(-50%);
+  right: 20px;
+  top: 20px;
   background: none;
   border: none;
   color: white;
@@ -67,45 +87,26 @@ const CloseButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  @media (max-width: 480px) {
+    right: 15px;
+    top: 15px;
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+  }
 `;
 
-const PatternTop = styled.div`
-  position: absolute;
-  left: -26px;
-  top: calc(50% - 354.5px);
-  transform: translateY(-50%);
-  display: contents;
-`;
-
-const PatternBottom = styled.div`
-  position: absolute;
-  left: -26px;
-  top: calc(50% + 354.5px);
-  transform: translateY(-50%);
-  display: contents;
-`;
-
-const PatternDot = styled.div`
-  position: absolute;
-  background: #5f5f5f;
-  height: 7px;
-  border-radius: 1px;
-  transform: translateY(-50%);
-  width: ${(props) => props.width || "6px"};
-  left: ${(props) => props.left}px;
-  top: ${(props) => props.top};
-`;
 
 const GuideSection = styled.div`
-  position: absolute;
-  top: 213px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  width: 320px;
-  height: 204px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  
+  @media (max-width: 480px) {
+    padding: 15px;
+  }
 `;
 
 const GuideTitle = styled.h3`
@@ -115,6 +116,11 @@ const GuideTitle = styled.h3`
   color: white;
   margin: 0 0 20px 0;
   text-align: center;
+  
+  @media (max-width: 480px) {
+    font-size: 18px;
+    margin: 0 0 15px 0;
+  }
 `;
 
 const GuideText = styled.div`
@@ -132,17 +138,27 @@ const GuideText = styled.div`
   .small {
     font-size: 10px;
   }
+  
+  @media (max-width: 480px) {
+    font-size: 11px;
+    
+    .small {
+      font-size: 9px;
+    }
+  }
 `;
 
 const ProductImages = styled.div`
-  position: absolute;
-  top: 365px;
-  left: 5px;
-  right: 5px;
-  height: 132px;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
+  
+  @media (max-width: 480px) {
+    padding: 15px;
+    gap: 8px;
+  }
 `;
 
 const ProductImage = styled.div`
@@ -152,17 +168,29 @@ const ProductImage = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  flex: 1;
+  
+  @media (max-width: 480px) {
+    width: 80px;
+    height: 110px;
+  }
+  
+  @media (max-width: 360px) {
+    width: 70px;
+    height: 100px;
+  }
 `;
 
 const ButtonContainer = styled.div`
-  position: absolute;
-  top: 600px;
-  left: 10px;
-  right: 10px;
-  height: 80px;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  
+  @media (max-width: 480px) {
+    padding: 15px;
+    gap: 15px;
+  }
 `;
 
 const ActionButton = styled.button`
@@ -174,6 +202,7 @@ const ActionButton = styled.button`
   cursor: pointer;
   overflow: hidden;
   transition: transform 0.2s ease;
+  flex: 1;
   
   &:hover {
     transform: scale(1.02);
@@ -181,6 +210,16 @@ const ActionButton = styled.button`
   
   &:active {
     transform: scale(0.98);
+  }
+  
+  @media (max-width: 480px) {
+    width: 140px;
+    height: 70px;
+  }
+  
+  @media (max-width: 360px) {
+    width: 120px;
+    height: 60px;
   }
 `;
 
@@ -210,82 +249,23 @@ const ButtonText = styled.p`
   text-align: center;
   margin: 0;
   z-index: 1;
+  
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
+  
+  @media (max-width: 360px) {
+    font-size: 14px;
+  }
 `;
 
 const AdModal = ({ isOpen, onClose, onParticipate }) => {
   if (!isOpen) return null;
 
-  // 패턴 도트들의 위치 데이터
-  const patternDots = [
-    { left: -6, top: "calc(50% - 354.5px)" },
-    { left: -17, top: "calc(50% - 354.5px)" },
-    { left: -26, top: "calc(50% - 354.5px)", width: "4px" },
-    { left: 82, top: "calc(50% - 354.5px)" },
-    { left: 170, top: "calc(50% - 354.5px)" },
-    { left: 258, top: "calc(50% - 354.5px)" },
-    { left: 38, top: "calc(50% - 354.5px)" },
-    { left: 126, top: "calc(50% - 354.5px)" },
-    { left: 214, top: "calc(50% - 354.5px)" },
-    { left: 302, top: "calc(50% - 354.5px)" },
-    { left: 4, top: "calc(50% - 354.5px)" },
-    { left: 104, top: "calc(50% - 354.5px)" },
-    { left: 48, top: "calc(50% - 354.5px)" },
-    { left: 280, top: "calc(50% - 354.5px)" },
-    { left: 60, top: "calc(50% - 354.5px)" },
-    { left: 148, top: "calc(50% - 354.5px)" },
-    { left: 236, top: "calc(50% - 354.5px)" },
-    { left: 324, top: "calc(50% - 354.5px)" },
-    { left: 357, top: "calc(50% - 354.5px)" },
-    { left: 5, top: "calc(50% - 354.5px)" },
-    { left: 93, top: "calc(50% - 354.5px)" },
-    { left: 181, top: "calc(50% - 354.5px)" },
-    { left: 269, top: "calc(50% - 354.5px)" },
-    { left: 49, top: "calc(50% - 354.5px)" },
-    { left: 137, top: "calc(50% - 354.5px)" },
-    { left: 225, top: "calc(50% - 354.5px)" },
-    { left: 313, top: "calc(50% - 354.5px)" },
-    { left: 346, top: "calc(50% - 354.5px)" },
-    { left: 27, top: "calc(50% - 354.5px)" },
-    { left: 115, top: "calc(50% - 354.5px)" },
-    { left: 203, top: "calc(50% - 354.5px)" },
-    { left: 291, top: "calc(50% - 354.5px)" },
-    { left: 71, top: "calc(50% - 354.5px)" },
-    { left: 159, top: "calc(50% - 354.5px)" },
-    { left: 247, top: "calc(50% - 354.5px)" },
-    { left: 335, top: "calc(50% - 354.5px)" },
-    { left: 368, top: "calc(50% - 354.5px)" },
-    { left: 379, top: "calc(50% - 354.5px)" },
-  ];
-
-  const bottomPatternDots = patternDots.map((dot) => ({
-    ...dot,
-    top: "calc(50% + 354.5px)",
-  }));
 
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
-        {/* 패턴 도트들 */}
-        <PatternTop>
-          {patternDots.map((dot, index) => (
-            <PatternDot
-              key={`top-${index}`}
-              left={dot.left}
-              top={dot.top}
-              width={dot.width}
-            />
-          ))}
-        </PatternTop>
-        <PatternBottom>
-          {bottomPatternDots.map((dot, index) => (
-            <PatternDot
-              key={`bottom-${index}`}
-              left={dot.left}
-              top={dot.top}
-              width={dot.width}
-            />
-          ))}
-        </PatternBottom>
 
         {/* 헤더 */}
         <ModalHeader>

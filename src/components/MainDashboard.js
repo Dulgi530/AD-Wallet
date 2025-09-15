@@ -27,75 +27,59 @@ const DashboardContainer = styled.div`
   background: #1d1818;
   position: relative;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+  
+  @media (max-width: 480px) {
+    min-height: 100vh;
+  }
 `;
 
-const PatternContainer = styled.div`
-  position: absolute;
-  left: 0;
-  top: 837px;
-  width: 412px;
-  height: 80px;
-  overflow: hidden;
-`;
-
-const PatternTop = styled.div`
-  position: absolute;
-  left: 0;
-  top: calc(50% - 34.5px);
-  transform: translateY(-50%);
-  display: contents;
-`;
-
-const PatternBottom = styled.div`
-  position: absolute;
-  left: 0;
-  top: calc(50% + 34.5px);
-  transform: translateY(-50%);
-  display: contents;
-`;
-
-const PatternDot = styled.div`
-  position: absolute;
-  background: #5f5f5f;
-  height: 7px;
-  border-radius: 1px;
-  transform: translateY(-50%);
-  width: ${(props) => props.width || "6px"};
-  left: ${(props) => props.left}px;
-  top: ${(props) => props.top};
-`;
 
 const Header = styled.div`
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  height: 40px;
+  position: relative;
+  padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  
+  @media (max-width: 480px) {
+    padding: 15px;
+  }
 `;
 
 const TokenBalance = styled.div`
-  position: absolute;
-  left: 5px;
-  top: 110px;
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 32px;
   color: white;
   line-height: normal;
+  display: flex;
+  align-items: center;
+  
+  @media (max-width: 480px) {
+    font-size: 28px;
+  }
+  
+  @media (max-width: 360px) {
+    font-size: 24px;
+  }
 `;
 
 const AccountInfo = styled.div`
-  position: absolute;
-  left: 151px;
-  top: 5px;
   display: flex;
   align-items: center;
   gap: 10px;
+  flex: 1;
+  justify-content: center;
+  
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
 `;
 
 const AccountName = styled.div`
@@ -104,6 +88,10 @@ const AccountName = styled.div`
   font-size: 14px;
   color: white;
   text-align: center;
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const AccountAddress = styled.div`
@@ -112,20 +100,28 @@ const AccountAddress = styled.div`
   font-size: 12px;
   color: #999999;
   text-align: center;
+  
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 const TicketBalance = styled.div`
-  position: absolute;
-  right: 5px;
-  top: 5px;
   background: #3b3b3b;
   border-radius: 25px;
   height: 40px;
-  width: 80px;
+  min-width: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
+  padding: 0 10px;
+  
+  @media (max-width: 480px) {
+    height: 35px;
+    min-width: 70px;
+    gap: 3px;
+  }
 `;
 
 const TicketIcon = styled.div`
@@ -135,6 +131,11 @@ const TicketIcon = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  
+  @media (max-width: 480px) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const TicketAmount = styled.div`
@@ -142,48 +143,58 @@ const TicketAmount = styled.div`
   font-weight: 700;
   font-size: 16px;
   color: white;
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 `;
 
 const PortfolioChange = styled.div`
-  position: absolute;
-  left: 77.5px;
-  top: 173.5px;
-  transform: translateX(-50%) translateY(-50%);
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: #3ae851;
   text-align: center;
+  margin: 20px 0;
+  
+  @media (max-width: 480px) {
+    font-size: 14px;
+    margin: 15px 0;
+  }
 `;
 
 const ChartContainer = styled.div`
-  position: absolute;
-  left: 5px;
-  top: 196px;
-  width: 372px;
+  width: 100%;
   height: 100px;
   background: #110b0b;
   overflow: hidden;
+  margin: 20px 0;
+  border-radius: 8px;
+  
+  @media (max-width: 480px) {
+    height: 80px;
+    margin: 15px 0;
+  }
 `;
 
 const ChartImage = styled.div`
-  position: absolute;
-  left: 85px;
-  top: 0;
-  width: 201px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   background-image: url("${imgImage10}");
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 `;
 
 const ChartDots = styled.div`
-  position: absolute;
-  left: 171px;
-  top: 301px;
   display: flex;
   gap: 15px;
+  justify-content: center;
+  margin: 10px 0;
+  
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
 `;
 
 const ChartDot = styled.div`
@@ -197,12 +208,14 @@ const ChartDot = styled.div`
   &:first-child {
     background-image: url("${imgEllipse2}");
   }
+  
+  @media (max-width: 480px) {
+    width: 8px;
+    height: 8px;
+  }
 `;
 
 const EyeButton = styled.button`
-  position: absolute;
-  left: 125px;
-  top: 122px;
   width: 20px;
   height: 20px;
   background: none;
@@ -212,14 +225,27 @@ const EyeButton = styled.button`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  margin-left: 10px;
+  
+  @media (max-width: 480px) {
+    width: 18px;
+    height: 18px;
+    margin-left: 8px;
+  }
 `;
 
 const TabContainer = styled.div`
-  position: absolute;
-  left: 60px;
-  top: 336px;
   display: flex;
   gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 0 20px;
+  
+  @media (max-width: 480px) {
+    gap: 8px;
+    margin: 15px 0;
+    padding: 0 15px;
+  }
 `;
 
 const Tab = styled.button`
@@ -234,18 +260,30 @@ const Tab = styled.button`
   padding: 0 20px;
   border-radius: 5px;
   transition: all 0.3s ease;
+  flex: 1;
+  max-width: 150px;
   
   &:hover {
     background: ${(props) => (props.active ? "#f29d38" : "rgba(242, 157, 56, 0.1)")};
   }
+  
+  @media (max-width: 480px) {
+    font-size: 24px;
+    height: 45px;
+    padding: 0 15px;
+    max-width: 120px;
+  }
 `;
 
 const TokenList = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 412px;
-  transform: translateX(-50%);
-  width: 412px;
+  width: 100%;
+  padding: 0 20px;
+  margin: 20px 0;
+  
+  @media (max-width: 480px) {
+    padding: 0 15px;
+    margin: 15px 0;
+  }
 `;
 
 const TokenItem = styled.div`
@@ -255,88 +293,99 @@ const TokenItem = styled.div`
   align-items: center;
   position: relative;
   margin-bottom: 0;
+  padding: 10px 0;
+  
+  @media (max-width: 480px) {
+    height: 50px;
+    padding: 8px 0;
+  }
 `;
 
 const TokenIcon = styled.div`
-  position: absolute;
-  left: 5px;
-  top: 50%;
-  transform: translateY(-50%);
   width: 25px;
   height: 25px;
   background-image: url("${(props) => props.icon}");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  margin-right: 15px;
+  
+  @media (max-width: 480px) {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
 `;
 
 const TokenName = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: white;
-  text-align: center;
+  text-align: left;
+  flex: 1;
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const TokenAmount = styled.div`
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: white;
   text-align: right;
+  margin-right: 10px;
+  
+  @media (max-width: 480px) {
+    font-size: 12px;
+    margin-right: 5px;
+  }
 `;
 
 const TokenPrice = styled.div`
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(calc(-50% + 20px));
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 12px;
   color: #999999;
   text-align: right;
+  margin-right: 10px;
+  
+  @media (max-width: 480px) {
+    font-size: 10px;
+    margin-right: 5px;
+  }
 `;
 
 const TokenChange = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translateX(-50%) translateY(calc(-50% + 20px));
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
   font-size: 12px;
   color: ${(props) => props.color};
-  text-align: center;
+  text-align: right;
+  
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 const Divider = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 60px;
-  transform: translateX(-50%);
-  width: 372px;
+  width: 100%;
   height: 1px;
   background-image: url("${imgLine42}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  margin: 10px 0;
+  
+  @media (max-width: 480px) {
+    margin: 8px 0;
+  }
 `;
 
 const AddTokenButton = styled.button`
-  position: absolute;
-  left: 50%;
-  top: 592px;
-  transform: translateX(-50%);
-  width: 412px;
+  width: 100%;
   height: 60px;
   background: none;
   border: none;
@@ -350,21 +399,34 @@ const AddTokenButton = styled.button`
   color: #f29d38;
   text-align: center;
   transition: all 0.3s ease;
+  margin: 20px 0;
+  padding: 0 20px;
   
   &:hover {
     background: rgba(242, 157, 56, 0.1);
   }
+  
+  @media (max-width: 480px) {
+    height: 50px;
+    font-size: 12px;
+    margin: 15px 0;
+    padding: 0 15px;
+  }
 `;
 
 const BottomNavigation = styled.div`
-  position: absolute;
-  left: 0;
-  top: 837px;
-  width: 412px;
+  width: 100%;
   height: 80px;
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
+  margin-top: 20px;
+  
+  @media (max-width: 480px) {
+    height: 70px;
+    padding: 8px 15px;
+    margin-top: 15px;
+  }
 `;
 
 const NavItem = styled.button`
@@ -380,9 +442,18 @@ const NavItem = styled.button`
   justify-content: center;
   gap: 5px;
   transition: all 0.3s ease;
+  flex: 1;
+  max-width: 70px;
   
   &:hover {
     background: ${(props) => (props.active ? "white" : "#6f6f6f")};
+  }
+  
+  @media (max-width: 480px) {
+    width: 60px;
+    height: 50px;
+    max-width: 60px;
+    gap: 3px;
   }
 `;
 
@@ -393,6 +464,11 @@ const NavIcon = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  
+  @media (max-width: 480px) {
+    width: 25px;
+    height: 25px;
+  }
 `;
 
 const NavLabel = styled.div`
@@ -402,6 +478,10 @@ const NavLabel = styled.div`
   color: ${(props) => (props.active ? "#f29d38" : "black")};
   text-align: center;
   line-height: 1;
+  
+  @media (max-width: 480px) {
+    font-size: 8px;
+  }
 `;
 
 const MainDashboard = () => {
@@ -430,52 +510,6 @@ const MainDashboard = () => {
     }
   };
 
-  // 패턴 도트들의 위치 데이터
-  const patternDots = [
-    { left: 20, top: "calc(50% - 34.5px)" },
-    { left: 36, top: "calc(50% - 34.5px)" },
-    { left: 0, top: "calc(50% - 34.5px)", width: "4px" },
-    { left: 432, top: "calc(50% - 34.5px)" },
-    { left: 784, top: "calc(50% - 34.5px)" },
-    { left: 1136, top: "calc(50% - 34.5px)" },
-    { left: 64, top: "calc(50% - 34.5px)" },
-    { left: 608, top: "calc(50% - 34.5px)" },
-    { left: 240, top: "calc(50% - 34.5px)" },
-    { left: 1312, top: "calc(50% - 34.5px)" },
-    { left: 168, top: "calc(50% - 34.5px)" },
-    { left: 520, top: "calc(50% - 34.5px)" },
-    { left: 872, top: "calc(50% - 34.5px)" },
-    { left: 1224, top: "calc(50% - 34.5px)" },
-    { left: 344, top: "calc(50% - 34.5px)" },
-    { left: 696, top: "calc(50% - 34.5px)" },
-    { left: 1048, top: "calc(50% - 34.5px)" },
-    { left: 1400, top: "calc(50% - 34.5px)" },
-    { left: 1532, top: "calc(50% - 34.5px)" },
-    { left: 124, top: "calc(50% - 34.5px)" },
-    { left: 476, top: "calc(50% - 34.5px)" },
-    { left: 828, top: "calc(50% - 34.5px)" },
-    { left: 1180, top: "calc(50% - 34.5px)" },
-    { left: 300, top: "calc(50% - 34.5px)" },
-    { left: 652, top: "calc(50% - 34.5px)" },
-    { left: 1004, top: "calc(50% - 34.5px)" },
-    { left: 1356, top: "calc(50% - 34.5px)" },
-    { left: 1488, top: "calc(50% - 34.5px)" },
-    { left: 212, top: "calc(50% - 34.5px)" },
-    { left: 564, top: "calc(50% - 34.5px)" },
-    { left: 916, top: "calc(50% - 34.5px)" },
-    { left: 1268, top: "calc(50% - 34.5px)" },
-    { left: 388, top: "calc(50% - 34.5px)" },
-    { left: 740, top: "calc(50% - 34.5px)" },
-    { left: 1092, top: "calc(50% - 34.5px)" },
-    { left: 1444, top: "calc(50% - 34.5px)" },
-    { left: 1576, top: "calc(50% - 34.5px)" },
-    { left: 1620, top: "calc(50% - 34.5px)" },
-  ];
-
-  const bottomPatternDots = patternDots.map((dot) => ({
-    ...dot,
-    top: "calc(50% + 34.5px)",
-  }));
 
   const tokens = [
     {
@@ -536,6 +570,7 @@ const MainDashboard = () => {
       <Header>
         <TokenBalance>
           {showBalance ? "$6.29" : "****"}
+          <EyeButton onClick={() => setShowBalance(!showBalance)} />
         </TokenBalance>
         
         <AccountInfo>
@@ -576,8 +611,6 @@ const MainDashboard = () => {
         ))}
       </ChartDots>
 
-      {/* 잔액 표시/숨김 버튼 */}
-      <EyeButton onClick={() => setShowBalance(!showBalance)} />
 
       {/* 탭 */}
       <TabContainer>
@@ -606,7 +639,7 @@ const MainDashboard = () => {
             <TokenChange color={token.changeColor}>
               {token.change}
             </TokenChange>
-            <Divider />
+            {index < tokens.length - 1 && <Divider />}
           </TokenItem>
         ))}
       </TokenList>
@@ -647,29 +680,6 @@ const MainDashboard = () => {
         </NavItem>
       </BottomNavigation>
 
-      {/* 하단 패턴 */}
-      <PatternContainer>
-        <PatternTop>
-          {patternDots.map((dot, index) => (
-            <PatternDot
-              key={`top-${index}`}
-              left={dot.left}
-              top={dot.top}
-              width={dot.width}
-            />
-          ))}
-        </PatternTop>
-        <PatternBottom>
-          {bottomPatternDots.map((dot, index) => (
-            <PatternDot
-              key={`bottom-${index}`}
-              left={dot.left}
-              top={dot.top}
-              width={dot.width}
-            />
-          ))}
-        </PatternBottom>
-      </PatternContainer>
     </DashboardContainer>
   );
 };

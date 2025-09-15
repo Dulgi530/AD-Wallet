@@ -12,12 +12,13 @@ const WalletContainer = styled.div`
   background: #1d1818;
   position: relative;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
   
   @media (max-width: 480px) {
-    height: 100vh;
-    min-height: 667px;
+    min-height: 100vh;
   }
 `;
 
