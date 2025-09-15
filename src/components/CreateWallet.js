@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { 
   createContainerStyle, 
   createButtonStyle, 
@@ -57,90 +58,65 @@ const PatternDot = styled.div`
   top: ${(props) => props.top};
 `;
 
-const TitleContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 48px;
-  transform: translateX(-50%) translateY(-50%);
+const MainContent = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: ${responsiveSpacing(60)} ${responsiveSpacing(40)};
+  gap: ${responsiveSpacing(40)};
 `;
 
-const Title = styled.p`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: normal;
+const Title = styled.h1`
+  ${createTextStyle(24)}
   color: white;
   text-align: center;
-  white-space: pre;
-  margin: 0;
-  
-  @media (max-width: 480px) {
-    font-size: 20px;
-  }
+  margin: 0 0 ${responsiveSpacing(40)} 0;
+  font-weight: 700;
 `;
 
-const SubtitleContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 161px;
-  transform: translateX(-50%) translateY(-50%);
+const FormSection = styled.div`
+  width: 100%;
+  max-width: ${responsiveSize(320)};
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  gap: ${responsiveSpacing(30)};
 `;
 
-const Subtitle = styled.p`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: normal;
+const InputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${responsiveSpacing(15)};
+`;
+
+const Label = styled.label`
+  ${createTextStyle(20)}
   color: white;
-  text-align: center;
-  white-space: pre;
-  margin: 0;
-  
-  @media (max-width: 480px) {
-    font-size: 18px;
-  }
+  text-align: left;
+  font-weight: 700;
 `;
 
 const InputContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  top: ${(props) => props.top}px;
-  transform: translateX(-50%);
-  width: 320px;
-  height: 40px;
-  
-  @media (max-width: 480px) {
-    width: 280px;
-  }
+  position: relative;
+  width: 100%;
 `;
 
 const InputField = styled.input`
-  position: absolute;
-  left: 50%;
-  top: 0;
-  transform: translateX(-50%);
-  width: 100%;
-  height: 40px;
   background: white;
-  border: none;
-  border-radius: 5px;
-  padding: 0 15px;
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-size: 16px;
+  border-radius: ${responsiveSize(5)};
+  width: 100%;
+  height: ${responsiveSize(40)};
+  padding: 0 ${responsiveSpacing(15)};
+  font-family: "Inter", sans-serif;
+  font-size: ${responsiveFontSize(16)};
   color: #333;
-  box-shadow: inset 0px 4px 4px 2px rgba(0, 0, 0, 0.25);
+  border: none;
+  box-shadow: 0px 4px 4px 2px inset rgba(0, 0, 0, 0.25);
+  outline: none;
   
   &:focus {
-    outline: none;
-    box-shadow: inset 0px 4px 4px 2px rgba(0, 0, 0, 0.25), 0 0 0 2px #f29d38;
+    border: 2px solid #f29d38;
   }
   
   &::placeholder {
@@ -148,65 +124,47 @@ const InputField = styled.input`
   }
 `;
 
-const EyeIcon = styled.div`
+const PasswordToggle = styled.button`
   position: absolute;
-  right: 15px;
+  right: ${responsiveSpacing(10)};
   top: 50%;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  background-image: url("${imgInvisible}");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  background: none;
+  border: none;
+  color: #5f5f5f;
   cursor: pointer;
-  z-index: 1;
+  font-size: ${responsiveFontSize(18)};
+  z-index: 2;
 `;
 
-const HelperText = styled.p`
-  position: absolute;
-  left: 40px;
-  top: 258px;
-  transform: translateY(-50%);
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: normal;
+const InfoText = styled.p`
+  ${createTextStyle(14)}
   color: white;
-  white-space: pre;
+  text-align: left;
   margin: 0;
-  
-  @media (max-width: 480px) {
-    left: 20px;
-    font-size: 12px;
-  }
+  line-height: 1.4;
 `;
 
 const ButtonContainer = styled.div`
-  position: absolute;
-  top: 720px;
-  display: flex;
-  justify-content: space-between;
+  ${createFlexStyle('row', 'space-between', 'center', 20)}
   width: 100%;
-  padding: 0 40px;
-  gap: 20px;
+  margin-top: ${responsiveSpacing(40)};
   
   @media (max-width: 480px) {
-    top: 580px;
-    padding: 0 20px;
-    gap: 15px;
+    gap: ${responsiveSpacing(15)};
   }
 `;
 
 const ActionButton = styled.button`
   position: relative;
-  width: 160px;
-  height: 80px;
+  width: ${responsiveSize(160)};
+  height: ${responsiveSize(80)};
   border: none;
   background: none;
   cursor: pointer;
   overflow: hidden;
   transition: transform 0.2s ease;
+  flex: 1;
   
   &:hover {
     transform: scale(1.02);
@@ -217,8 +175,8 @@ const ActionButton = styled.button`
   }
   
   @media (max-width: 480px) {
-    width: 140px;
-    height: 70px;
+    width: ${responsiveSize(140)};
+    height: ${responsiveSize(70)};
   }
 `;
 
@@ -241,19 +199,12 @@ const ButtonText = styled.p`
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: normal;
+  ${createTextStyle(20)}
   color: white;
   text-align: center;
-  white-space: pre;
   margin: 0;
   z-index: 1;
-  
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
+  font-weight: 700;
 `;
 
 const CreateWallet = () => {
@@ -263,8 +214,25 @@ const CreateWallet = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const handleCreate = () => {
+    if (password.length < 10) {
+      toast.error("비밀번호는 최소 10자리 이상이어야 합니다.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast.error("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    toast.success("지갑이 성공적으로 생성되었습니다!");
+    navigate("/dashboard");
+  };
+
+  const handleCancel = () => {
+    navigate("/");
+  };
+
   // 패턴 도트들의 위치 데이터
-  const topPatternDots = [
+  const patternDots = [
     { left: 20, top: "calc(50% - 453px)" },
     { left: 36, top: "calc(50% - 453px)" },
     { left: 0, top: "calc(50% - 453px)", width: "4px" },
@@ -305,37 +273,16 @@ const CreateWallet = () => {
     { left: 1620, top: "calc(50% - 453px)" },
   ];
 
-  const bottomPatternDots = topPatternDots.map((dot) => ({
+  const bottomPatternDots = patternDots.map((dot) => ({
     ...dot,
     top: "calc(50% + 453px)",
   }));
-
-  const handleCancel = () => {
-    navigate("/");
-  };
-
-  const handleConfirm = () => {
-    // 비밀번호 유효성 검사
-    if (password.length < 10) {
-      toast.error("비밀번호는 최소 10자리 이상이어야 합니다.");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      toast.error("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-
-    // 지갑 생성 성공
-    toast.success("지갑이 성공적으로 생성되었습니다!");
-    navigate("/dashboard");
-  };
 
   return (
     <WalletContainer>
       {/* 상단 패턴 */}
       <PatternTop>
-        {topPatternDots.map((dot, index) => (
+        {patternDots.map((dot, index) => (
           <PatternDot
             key={`top-${index}`}
             left={dot.left}
@@ -357,55 +304,55 @@ const CreateWallet = () => {
         ))}
       </PatternBottom>
 
-      {/* 제목 */}
-      <TitleContainer>
+      {/* 메인 컨텐츠 */}
+      <MainContent>
         <Title>새 지갑 만들기</Title>
-      </TitleContainer>
 
-      {/* 비밀번호 설정 */}
-      <SubtitleContainer>
-        <Subtitle>비밀번호 설정</Subtitle>
-      </SubtitleContainer>
+        <FormSection>
+          <InputGroup>
+            <Label>비밀번호 설정</Label>
+            <InputContainer>
+              <InputField
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="비밀번호를 입력해주세요"
+              />
+              <PasswordToggle onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </PasswordToggle>
+            </InputContainer>
+            <InfoText>최소 10자리 이상 설정해주세요.</InfoText>
+          </InputGroup>
 
-      <InputContainer top={197}>
-        <InputField
-          type={showPassword ? "text" : "password"}
-          placeholder="비밀번호를 입력하세요"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <EyeIcon onClick={() => setShowPassword(!showPassword)} />
-      </InputContainer>
+          <InputGroup>
+            <Label>비밀번호 확인</Label>
+            <InputContainer>
+              <InputField
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="비밀번호를 다시 입력해주세요"
+              />
+              <PasswordToggle onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+              </PasswordToggle>
+            </InputContainer>
+          </InputGroup>
+        </FormSection>
 
-      <HelperText>최소 10자리 이상 설정해주세요.</HelperText>
+        <ButtonContainer>
+          <ActionButton onClick={handleCancel}>
+            <ButtonBackground background={imgVector} />
+            <ButtonText>취소</ButtonText>
+          </ActionButton>
 
-      {/* 비밀번호 확인 */}
-      <SubtitleContainer style={{ top: "353px" }}>
-        <Subtitle>비밀번호 확인</Subtitle>
-      </SubtitleContainer>
-
-      <InputContainer top={389}>
-        <InputField
-          type={showConfirmPassword ? "text" : "password"}
-          placeholder="비밀번호를 다시 입력하세요"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <EyeIcon onClick={() => setShowConfirmPassword(!showConfirmPassword)} />
-      </InputContainer>
-
-      {/* 버튼들 */}
-      <ButtonContainer>
-        <ActionButton onClick={handleCancel}>
-          <ButtonBackground background={imgVector} />
-          <ButtonText>취소</ButtonText>
-        </ActionButton>
-
-        <ActionButton onClick={handleConfirm}>
-          <ButtonBackground background={imgVector1} />
-          <ButtonText>확인</ButtonText>
-        </ActionButton>
-      </ButtonContainer>
+          <ActionButton onClick={handleCreate}>
+            <ButtonBackground background={imgVector1} />
+            <ButtonText>확인</ButtonText>
+          </ActionButton>
+        </ButtonContainer>
+      </MainContent>
     </WalletContainer>
   );
 };

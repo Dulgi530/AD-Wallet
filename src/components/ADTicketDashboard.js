@@ -6,7 +6,6 @@ import gasSponsorService from "../services/gasSponsor";
 import AdModal from "./AdModal";
 import { 
   createContainerStyle, 
-  createHeaderStyle, 
   createButtonStyle, 
   createTextStyle, 
   createIconStyle,
@@ -34,7 +33,10 @@ const DashboardContainer = styled.div`
 `;
 
 const Header = styled.div`
-  ${createHeaderStyle()}
+  ${createFlexStyle('row', 'space-between', 'center', 0)}
+  padding: ${responsiveSpacing(20)};
+  width: 100%;
+  box-sizing: border-box;
 `;
 
 const BackButton = styled.button`
@@ -49,6 +51,11 @@ const BackButton = styled.button`
 const AccountInfo = styled.div`
   ${createFlexStyle('row', 'center', 'center', 10)}
   flex: 1;
+`;
+
+const AccountIcon = styled.div`
+  ${createIconStyle(15)}
+  background-image: url("${imgFrame61}");
 `;
 
 const AccountName = styled.div`
@@ -85,114 +92,111 @@ const TicketAmount = styled.div`
   color: white;
 `;
 
-const LargeTicketIcon = styled.div`
-  ${createIconStyle(50)}
+const MainTicketSection = styled.div`
+  ${createFlexStyle('column', 'center', 'center', 20)}
+  margin: ${responsiveSpacing(40)} 0;
+`;
+
+const MainTicketIcon = styled.div`
+  ${createIconStyle(100)}
   background-image: url("${imgImage3}");
-  margin-right: ${responsiveSpacing(20)};
 `;
 
-const LargeTicketAmount = styled.div`
-  ${createTextStyle(32)}
+const MainTicketAmount = styled.div`
+  ${createTextStyle(48)}
   color: white;
-  line-height: normal;
+  font-weight: 700;
 `;
 
-const Description = styled.div`
+const MainTicketDescription = styled.div`
   ${createTextStyle(16)}
   color: #999999;
   text-align: center;
-  line-height: normal;
-  margin: ${responsiveSpacing(20)} 0;
 `;
 
-const ChartContainer = styled.div`
-  width: 100%;
-  height: ${responsiveSize(100)};
-  background: #110b0b;
-  overflow: hidden;
-  margin: ${responsiveSpacing(20)} 0;
-  border-radius: ${responsiveSize(8)};
+const ChartSection = styled.div`
+  ${createFlexStyle('column', 'center', 'center', 15)}
+  margin: ${responsiveSpacing(30)} 0;
 `;
 
 const ChartImage = styled.div`
-  width: 100%;
-  height: 100%;
+  width: ${responsiveSize(300)};
+  height: ${responsiveSize(150)};
   background-image: url("${imgImage10}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 `;
 
-const ChartDots = styled.div`
+const DotContainer = styled.div`
   ${createFlexStyle('row', 'center', 'center', 15)}
-  margin: ${responsiveSpacing(10)} 0;
 `;
 
-const ChartDot = styled.div`
+const Dot = styled.div`
   ${createIconStyle(10)}
   background-image: url("${imgEllipse4}");
   
-  &:first-child {
+  ${props => props.active && `
     background-image: url("${imgEllipse2}");
-  }
+  `}
 `;
 
-const AdList = styled.div`
+const RewardList = styled.div`
   width: 100%;
   padding: 0 ${responsiveSpacing(20)};
-  margin: ${responsiveSpacing(20)} 0;
+  margin: ${responsiveSpacing(30)} 0;
 `;
 
-const AdItem = styled.div`
-  height: ${responsiveSize(60)};
+const RewardItem = styled.div`
+  ${createFlexStyle('row', 'space-between', 'center', 15)}
+  height: ${responsiveSize(70)};
   width: 100%;
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-bottom: 0;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: ${responsiveSpacing(10)} 0;
+  padding: ${responsiveSpacing(15)} 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   
   &:hover {
     background: rgba(255, 255, 255, 0.05);
   }
+  
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
-const AdIcon = styled.div`
-  ${createIconStyle(25)}
+const RewardIcon = styled.div`
+  ${createIconStyle(40)}
   background-image: url("${(props) => props.icon}");
-  margin-right: ${responsiveSpacing(15)};
+  flex-shrink: 0;
 `;
 
-const AdTitle = styled.div`
-  ${createTextStyle(14)}
+const RewardDetails = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: ${responsiveSpacing(5)};
+`;
+
+const RewardTitle = styled.div`
+  ${createTextStyle(16)}
   color: white;
   text-align: left;
-  flex: 1;
+  font-weight: 700;
 `;
 
-const AdLimit = styled.div`
+const RewardInfo = styled.div`
+  ${createTextStyle(12)}
+  color: #999999;
+  text-align: left;
+  line-height: 1.4;
+`;
+
+const RewardStatus = styled.div`
   ${createTextStyle(14)}
   color: white;
   text-align: right;
-  margin-right: ${responsiveSpacing(10)};
-`;
-
-const AdDescription = styled.div`
-  ${createTextStyle(12)}
-  color: #999999;
-  text-align: right;
-`;
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-image: url("${imgLine42}");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: ${responsiveSpacing(10)} 0;
+  font-weight: 700;
 `;
 
 const ADTicketDashboard = () => {
@@ -203,38 +207,38 @@ const ADTicketDashboard = () => {
   const [currentUsage, setCurrentUsage] = useState(5);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // 컴포넌트 마운트 시 초기화
   useEffect(() => {
     initializeDashboard();
   }, []);
 
   const initializeDashboard = async () => {
     try {
-      // 티켓 잔액 조회
       const balance = await gasSponsorService.getTicketBalance();
       setTicketBalance(balance);
+      // TODO: 실제 백엔드에서 일일 광고 시청 횟수 가져오기
+      setCurrentUsage(0); // 임시
     } catch (error) {
-      console.error('대시보드 초기화 실패:', error);
+      console.error('AD Ticket 대시보드 초기화 실패:', error);
     }
   };
 
-  const handleWatchAd = async (adType, reward) => {
+  const handleWatchAd = async () => {
     if (currentUsage >= dailyLimit) {
-      toast.error("일일 제한 횟수를 초과했습니다.");
+      toast.error("오늘 시청 가능한 광고 횟수를 모두 소진했습니다.");
       return;
     }
 
     setIsWatchingAd(true);
-    toast.success(`광고 시청 중... +${reward} 티켓`);
+    toast.success("광고 시청 중... (3초)");
     
-    // 광고 시청 시뮬레이션 (3초)
+    // Simulate ad watching
     setTimeout(async () => {
-      const newBalance = ticketBalance + reward;
+      const reward = 1; // Each ad gives 1 ticket
+      const newBalance = await gasSponsorService.updateTicketBalance(reward);
       setTicketBalance(newBalance);
       setCurrentUsage(prev => prev + 1);
-      gasSponsorService.updateTicketBalance(reward);
       setIsWatchingAd(false);
-      toast.success(`${reward} 티켓을 획득했습니다!`);
+      toast.success(`+${reward} 티켓을 획득했습니다!`);
     }, 3000);
   };
 
@@ -246,6 +250,10 @@ const ADTicketDashboard = () => {
     setIsModalOpen(true);
   };
 
+  const handleInviteFriends = () => {
+    toast.info("친구초대 기능은 준비 중입니다.");
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -255,60 +263,47 @@ const ADTicketDashboard = () => {
     toast.success("쿠팡 제휴에 참여했습니다! 결제 시 AD Ticket이 지급됩니다.");
   };
 
-  const handleFriendInvite = () => {
-    toast.info("친구초대 기능은 준비 중입니다.");
-  };
-
-  const ads = [
+  const rewards = [
     {
-      id: 1,
-      title: "광고 시청하기 + 1",
+      id: "watch-ad",
       icon: imgImage3,
-      limit: "5/5",
-      description: "일일 제한 횟수 5회",
-      reward: 1,
-      onClick: () => handleWatchAd("ad", 1)
+      title: "광고 시청하기 + 1",
+      info: "일일 제한 횟수 5회",
+      status: `${currentUsage}/${dailyLimit}`,
+      onClick: handleWatchAd,
+      disabled: currentUsage >= dailyLimit || isWatchingAd
     },
     {
-      id: 2,
-      title: "크립토 미션",
+      id: "crypto-mission",
       icon: imgImage2,
-      description: "다양한 Web3 미션을 통한 리워드",
+      title: "크립토 미션",
+      info: "다양한 Web3 미션을 통한 리워드",
       onClick: handleCryptoMission
     },
     {
-      id: 3,
-      title: "쿠팡 제휴",
+      id: "coupang",
       icon: img11,
-      description: "3,333원 결제당 AD Ticket 지급\n※ 구매 취소 시, AD 취소",
+      title: "쿠팡 제휴",
+      info: "3,333원 결제당 AD Ticket 지급\n※ 구매 취소 시, AD 취소",
       onClick: handleCoupang
     },
     {
-      id: 4,
-      title: "친구초대",
+      id: "invite-friends",
       icon: imgImage12,
-      description: "초대코드로 친구를 초대 리워드",
-      onClick: handleFriendInvite
+      title: "친구초대",
+      info: "초대코드로 친구를 초대 리워드",
+      onClick: handleInviteFriends
     }
   ];
 
   return (
     <DashboardContainer>
-      {/* 상단 헤더 */}
+      {/* 헤더 */}
       <Header>
         <BackButton onClick={() => navigate("/dashboard")} />
         
         <AccountInfo>
-          <div
-            style={{
-              width: "15px",
-              height: "15px",
-              backgroundImage: `url("${imgFrame61}")`,
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-            }}
-          />
+          <AccountIcon />
           <div>
             <AccountName>Account 1</AccountName>
             <AccountAddress>0xcEDBf...4926F</AccountAddress>
@@ -321,39 +316,45 @@ const ADTicketDashboard = () => {
         </TicketBalance>
       </Header>
 
-      {/* 큰 티켓 아이콘과 잔액 */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '20px 0' }}>
-        <LargeTicketIcon />
-        <LargeTicketAmount>{ticketBalance}</LargeTicketAmount>
-      </div>
+      {/* 메인 티켓 섹션 */}
+      <MainTicketSection>
+        <MainTicketIcon />
+        <MainTicketAmount>{ticketBalance}</MainTicketAmount>
+        <MainTicketDescription>가스비를 결제해주는 AD Ticket</MainTicketDescription>
+      </MainTicketSection>
 
-      {/* 설명 텍스트 */}
-      <Description>가스비를 결제해주는 AD Ticket</Description>
-
-      {/* 차트 */}
-      <ChartContainer>
+      {/* 차트 섹션 */}
+      <ChartSection>
         <ChartImage />
-      </ChartContainer>
+        <DotContainer>
+          <Dot active />
+          <Dot />
+          <Dot />
+          <Dot />
+          <Dot />
+        </DotContainer>
+      </ChartSection>
 
-      {/* 차트 도트들 */}
-      <ChartDots>
-        {[...Array(5)].map((_, index) => (
-          <ChartDot key={index} />
+      {/* 리워드 목록 */}
+      <RewardList>
+        {rewards.map((reward) => (
+          <RewardItem 
+            key={reward.id} 
+            onClick={reward.onClick}
+            style={{ 
+              opacity: reward.disabled ? 0.5 : 1,
+              cursor: reward.disabled ? 'not-allowed' : 'pointer'
+            }}
+          >
+            <RewardIcon icon={reward.icon} />
+            <RewardDetails>
+              <RewardTitle>{reward.title}</RewardTitle>
+              <RewardInfo>{reward.info}</RewardInfo>
+            </RewardDetails>
+            {reward.status && <RewardStatus>{reward.status}</RewardStatus>}
+          </RewardItem>
         ))}
-      </ChartDots>
-
-      {/* 광고 목록 */}
-      <AdList>
-        {ads.map((ad, index) => (
-          <AdItem key={ad.id} onClick={ad.onClick}>
-            <AdIcon icon={ad.icon} />
-            <AdTitle>{ad.title}</AdTitle>
-            {ad.limit && <AdLimit>{ad.limit}</AdLimit>}
-            <AdDescription>{ad.description}</AdDescription>
-            {index < ads.length - 1 && <Divider />}
-          </AdItem>
-        ))}
-      </AdList>
+      </RewardList>
 
       {/* 광고 모달 */}
       <AdModal

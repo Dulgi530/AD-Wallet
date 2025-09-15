@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 import gasSponsorService from "../services/gasSponsor";
 import { 
   createContainerStyle, 
-  createHeaderStyle, 
   createButtonStyle, 
   createTextStyle, 
   createIconStyle,
@@ -38,20 +37,48 @@ const DashboardContainer = styled.div`
   ${createContainerStyle()}
 `;
 
-
 const Header = styled.div`
-  ${createHeaderStyle()}
+  ${createFlexStyle('row', 'space-between', 'center', 0)}
+  padding: ${responsiveSpacing(20)};
+  width: 100%;
+  box-sizing: border-box;
 `;
 
-const TokenBalance = styled.div`
-  ${createTextStyle(32)}
+const NetworkSelector = styled.button`
+  background: #5f5f5f;
+  border: none;
+  border-radius: ${responsiveSize(20)};
+  height: ${responsiveSize(40)};
+  padding: 0 ${responsiveSpacing(15)};
   display: flex;
   align-items: center;
+  gap: ${responsiveSpacing(8)};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #6f6f6f;
+  }
+`;
+
+const NetworkIcon = styled.div`
+  ${createIconStyle(20)}
+  background-image: url("${imgPolygon1}");
+`;
+
+const NetworkText = styled.span`
+  ${createTextStyle(12)}
+  color: white;
 `;
 
 const AccountInfo = styled.div`
   ${createFlexStyle('row', 'center', 'center', 10)}
   flex: 1;
+`;
+
+const AccountIcon = styled.div`
+  ${createIconStyle(15)}
+  background-image: url("${imgFrame58}");
 `;
 
 const AccountName = styled.div`
@@ -76,6 +103,12 @@ const TicketBalance = styled.div`
   justify-content: center;
   gap: ${responsiveSpacing(5)};
   padding: 0 ${responsiveSpacing(10)};
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #4a4a4a;
+  }
 `;
 
 const TicketIcon = styled.div`
@@ -88,43 +121,18 @@ const TicketAmount = styled.div`
   color: white;
 `;
 
-const PortfolioChange = styled.div`
-  ${createTextStyle(16)}
-  color: #3ae851;
-  text-align: center;
-  margin: ${responsiveSpacing(20)} 0;
+const BalanceSection = styled.div`
+  ${createFlexStyle('column', 'center', 'center', 10)}
+  margin: ${responsiveSpacing(30)} 0;
 `;
 
-const ChartContainer = styled.div`
-  width: 100%;
-  height: ${responsiveSize(100)};
-  background: #110b0b;
-  overflow: hidden;
-  margin: ${responsiveSpacing(20)} 0;
-  border-radius: ${responsiveSize(8)};
-`;
-
-const ChartImage = styled.div`
-  width: 100%;
-  height: 100%;
-  background-image: url("${imgImage10}");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
-
-const ChartDots = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 15)}
-  margin: ${responsiveSpacing(10)} 0;
-`;
-
-const ChartDot = styled.div`
-  ${createIconStyle(10)}
-  background-image: url("${imgEllipse4}");
-  
-  &:first-child {
-    background-image: url("${imgEllipse2}");
-  }
+const BalanceAmount = styled.div`
+  ${createTextStyle(48)}
+  color: white;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: ${responsiveSpacing(10)};
 `;
 
 const EyeButton = styled.button`
@@ -133,10 +141,94 @@ const EyeButton = styled.button`
   border: none;
   cursor: pointer;
   background-image: url("${imgEye}");
-  margin-left: ${responsiveSpacing(10)};
 `;
 
-const TabContainer = styled.div`
+const BalanceChange = styled.div`
+  ${createTextStyle(16)}
+  color: #3ae851;
+  text-align: center;
+`;
+
+const BannerSection = styled.div`
+  ${createFlexStyle('column', 'center', 'center', 15)}
+  margin: ${responsiveSpacing(30)} 0;
+  padding: 0 ${responsiveSpacing(20)};
+`;
+
+const Banner = styled.div`
+  width: 100%;
+  height: ${responsiveSize(120)};
+  background: #110b0b;
+  border-radius: ${responsiveSize(10)};
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+  }
+`;
+
+const BannerContent = styled.div`
+  position: absolute;
+  top: ${responsiveSpacing(15)};
+  left: ${responsiveSpacing(20)};
+  z-index: 2;
+`;
+
+const BannerLogo = styled.div`
+  ${createTextStyle(12)}
+  color: #ff6b6b;
+  margin-bottom: ${responsiveSpacing(5)};
+`;
+
+const BannerTitle = styled.div`
+  ${createTextStyle(24)}
+  color: white;
+  font-weight: 700;
+  margin-bottom: ${responsiveSpacing(5)};
+`;
+
+const BannerSubtitle = styled.div`
+  ${createTextStyle(14)}
+  color: #999999;
+  margin-bottom: ${responsiveSpacing(10)};
+`;
+
+const BannerPrize = styled.div`
+  ${createTextStyle(16)}
+  color: white;
+  font-weight: 700;
+`;
+
+const BannerImage = styled.div`
+  position: absolute;
+  right: ${responsiveSpacing(20)};
+  top: 50%;
+  transform: translateY(-50%);
+  width: ${responsiveSize(80)};
+  height: ${responsiveSize(80)};
+  background-image: url("${imgImage10}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+const BannerDots = styled.div`
+  ${createFlexStyle('row', 'center', 'center', 10)}
+`;
+
+const BannerDot = styled.div`
+  ${createIconStyle(8)}
+  background-image: url("${imgEllipse4}");
+  
+  ${props => props.active && `
+    background-image: url("${imgEllipse2}");
+  `}
+`;
+
+const TabSection = styled.div`
   ${createFlexStyle('row', 'center', 'center', 10)}
   margin: ${responsiveSpacing(20)} 0;
   padding: 0 ${responsiveSpacing(20)};
@@ -169,56 +261,61 @@ const TokenList = styled.div`
 `;
 
 const TokenItem = styled.div`
+  ${createFlexStyle('row', 'space-between', 'center', 15)}
   height: ${responsiveSize(60)};
   width: 100%;
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-bottom: 0;
   padding: ${responsiveSpacing(10)} 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  &:last-child {
+    border-bottom: none;
+  }
 `;
 
 const TokenIcon = styled.div`
   ${createIconStyle(25)}
   background-image: url("${(props) => props.icon}");
-  margin-right: ${responsiveSpacing(15)};
+  flex-shrink: 0;
+`;
+
+const TokenDetails = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: ${responsiveSpacing(5)};
 `;
 
 const TokenName = styled.div`
   ${createTextStyle(14)}
   color: white;
   text-align: left;
-  flex: 1;
+  font-weight: 700;
+`;
+
+const TokenChange = styled.div`
+  ${createTextStyle(12)}
+  color: ${(props) => props.color};
+  text-align: left;
+`;
+
+const TokenAmounts = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${responsiveSpacing(5)};
+  align-items: flex-end;
 `;
 
 const TokenAmount = styled.div`
   ${createTextStyle(14)}
   color: white;
   text-align: right;
-  margin-right: ${responsiveSpacing(10)};
+  font-weight: 700;
 `;
 
 const TokenPrice = styled.div`
   ${createTextStyle(12)}
   color: #999999;
   text-align: right;
-  margin-right: ${responsiveSpacing(10)};
-`;
-
-const TokenChange = styled.div`
-  ${createTextStyle(12)}
-  color: ${(props) => props.color};
-  text-align: right;
-`;
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-image: url("${imgLine42}");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin: ${responsiveSpacing(10)} 0;
 `;
 
 const AddTokenButton = styled.button`
@@ -251,6 +348,8 @@ const BottomNavigation = styled.div`
   justify-content: space-between;
   padding: ${responsiveSpacing(10)} ${responsiveSpacing(20)};
   margin-top: ${responsiveSpacing(20)};
+  background: linear-gradient(180deg, rgba(29, 24, 24, 0.8) 0%, rgba(29, 24, 24, 1) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 `;
 
 const NavItem = styled.button`
@@ -291,27 +390,19 @@ const MainDashboard = () => {
   const [activeTab, setActiveTab] = useState("TOKEN");
   const [showBalance, setShowBalance] = useState(true);
   const [ticketBalance, setTicketBalance] = useState(18);
-  const [isGasSponsorActive, setIsGasSponsorActive] = useState(false);
 
-  // 컴포넌트 마운트 시 초기화
   useEffect(() => {
     initializeDashboard();
   }, []);
 
   const initializeDashboard = async () => {
     try {
-      // 티켓 잔액 조회
       const balance = await gasSponsorService.getTicketBalance();
       setTicketBalance(balance);
-      
-      // 가스비 대납 상태 확인
-      const status = gasSponsorService.getSponsorStatus();
-      setIsGasSponsorActive(status.isActive);
     } catch (error) {
       console.error('대시보드 초기화 실패:', error);
     }
   };
-
 
   const tokens = [
     {
@@ -328,7 +419,7 @@ const MainDashboard = () => {
       amount: "0.001 ARB",
       price: "$0.001",
       change: "-0.01%",
-      changeColor: "#f83f3f",
+      changeColor: "#ff6b6b",
     },
     {
       name: "Matic",
@@ -370,22 +461,13 @@ const MainDashboard = () => {
     <DashboardContainer>
       {/* 상단 헤더 */}
       <Header>
-        <TokenBalance>
-          {showBalance ? "$6.29" : "****"}
-          <EyeButton onClick={() => setShowBalance(!showBalance)} />
-        </TokenBalance>
+        <NetworkSelector>
+          <NetworkIcon />
+          <NetworkText>Ethereum</NetworkText>
+        </NetworkSelector>
         
         <AccountInfo>
-          <div
-            style={{
-              width: "15px",
-              height: "15px",
-              backgroundImage: `url("${imgFrame58}")`,
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-            }}
-          />
+          <AccountIcon />
           <div>
             <AccountName>Account 1</AccountName>
             <AccountAddress>0xcEDBf...4926F</AccountAddress>
@@ -398,24 +480,38 @@ const MainDashboard = () => {
         </TicketBalance>
       </Header>
 
-      {/* 포트폴리오 변화 */}
-      <PortfolioChange>+$1.16 (+2.73%)</PortfolioChange>
+      {/* 잔액 섹션 */}
+      <BalanceSection>
+        <BalanceAmount>
+          {showBalance ? "$6.29" : "****"}
+          <EyeButton onClick={() => setShowBalance(!showBalance)} />
+        </BalanceAmount>
+        <BalanceChange>+$1.16 (+2.73%)</BalanceChange>
+      </BalanceSection>
 
-      {/* 차트 */}
-      <ChartContainer>
-        <ChartImage />
-      </ChartContainer>
-
-      {/* 차트 도트들 */}
-      <ChartDots>
-        {[...Array(5)].map((_, index) => (
-          <ChartDot key={index} />
-        ))}
-      </ChartDots>
-
+      {/* 배너 섹션 */}
+      <BannerSection>
+        <Banner>
+          <BannerContent>
+            <BannerLogo>very</BannerLogo>
+            <BannerTitle>VERY Hackathon</BannerTitle>
+            <BannerSubtitle>JUL-SEPT '25</BannerSubtitle>
+            <BannerPrize>Prize Pool</BannerPrize>
+            <BannerPrize>$73,000+13M $VERY</BannerPrize>
+          </BannerContent>
+          <BannerImage />
+        </Banner>
+        <BannerDots>
+          <BannerDot active />
+          <BannerDot />
+          <BannerDot />
+          <BannerDot />
+          <BannerDot />
+        </BannerDots>
+      </BannerSection>
 
       {/* 탭 */}
-      <TabContainer>
+      <TabSection>
         <Tab
           active={activeTab === "TOKEN"}
           onClick={() => setActiveTab("TOKEN")}
@@ -428,20 +524,23 @@ const MainDashboard = () => {
         >
           NFT
         </Tab>
-      </TabContainer>
+      </TabSection>
 
       {/* 토큰 목록 */}
       <TokenList>
         {tokens.map((token, index) => (
           <TokenItem key={index}>
             <TokenIcon icon={token.icon} />
-            <TokenName>{token.name}</TokenName>
-            <TokenAmount>{token.amount}</TokenAmount>
-            <TokenPrice>{token.price}</TokenPrice>
-            <TokenChange color={token.changeColor}>
-              {token.change}
-            </TokenChange>
-            {index < tokens.length - 1 && <Divider />}
+            <TokenDetails>
+              <TokenName>{token.name}</TokenName>
+              <TokenChange color={token.changeColor}>
+                {token.change}
+              </TokenChange>
+            </TokenDetails>
+            <TokenAmounts>
+              <TokenAmount>{token.amount}</TokenAmount>
+              <TokenPrice>{token.price}</TokenPrice>
+            </TokenAmounts>
           </TokenItem>
         ))}
       </TokenList>
@@ -453,35 +552,27 @@ const MainDashboard = () => {
 
       {/* 하단 네비게이션 */}
       <BottomNavigation>
-        <NavItem
-          active={true}
-          onClick={() => handleNavClick("wallet")}
-        >
+        <NavItem active onClick={() => handleNavClick("wallet")}>
           <NavIcon icon={imgWallet} />
-          <NavLabel active={true}>Wallet</NavLabel>
+          <NavLabel active>Wallet</NavLabel>
         </NavItem>
-
         <NavItem onClick={() => handleNavClick("send")}>
           <NavIcon icon={imgDollarEuroExchange} />
           <NavLabel>Send / Recive</NavLabel>
         </NavItem>
-
         <NavItem onClick={() => handleNavClick("swap")}>
           <NavIcon icon={imgAroundTheGlobe} />
           <NavLabel>Swap / Bridge</NavLabel>
         </NavItem>
-
         <NavItem onClick={() => handleNavClick("transaction")}>
           <NavIcon icon={imgCryptoTradingSpot} />
           <NavLabel>Transaction</NavLabel>
         </NavItem>
-
         <NavItem onClick={() => handleNavClick("settings")}>
           <NavIcon icon={imgSettings} />
           <NavLabel>Setting</NavLabel>
         </NavItem>
       </BottomNavigation>
-
     </DashboardContainer>
   );
 };

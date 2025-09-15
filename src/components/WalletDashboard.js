@@ -14,18 +14,12 @@ import {
 } from "../utils/autoLayout";
 
 // 이미지 상수들
-const imgImage3 =
-  "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
-const imgImage29 =
-  "http://localhost:3845/assets/28aa199e34d85cb0a0d533999253f5c50ed2e5f9.png";
-const imgImage27 =
-  "http://localhost:3845/assets/9b387874335e4d7be3b68bbff00b85578869530f.png";
-const imgImage30 =
-  "http://localhost:3845/assets/b7131dce1e4820a3520dd13a947d85a7fa43bf6a.png";
-const imgVector =
-  "http://localhost:3845/assets/9c9baa69399e6e25e9d51108344555d9cd55a853.svg";
-const imgVector1 =
-  "http://localhost:3845/assets/894d81e3b1489d46491680c760b7b4766d1deee2.svg";
+const imgImage3 = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
+const imgImage29 = "http://localhost:3845/assets/28aa199e34d85cb0a0d533999253f5c50ed2e5f9.png";
+const imgImage27 = "http://localhost:3845/assets/9b387874335e4d7be3b68bbff00b85578869530f.png";
+const imgImage30 = "http://localhost:3845/assets/b7131dce1e4820a3520dd13a947d85a7fa43bf6a.png";
+const imgVector = "http://localhost:3845/assets/9c9baa69399e6e25e9d51108344555d9cd55a853.svg";
+const imgVector1 = "http://localhost:3845/assets/894d81e3b1489d46491680c760b7b4766d1deee2.svg";
 
 const WalletContainer = styled.div`
   ${createContainerStyle()}
@@ -37,7 +31,7 @@ const PatternTop = styled.div`
   top: calc(50% - 453px);
   transform: translateY(-50%);
   display: contents;
-
+  
   @media (max-width: 480px) {
     display: none;
   }
@@ -49,7 +43,7 @@ const PatternBottom = styled.div`
   top: calc(50% + 453px);
   transform: translateY(-50%);
   display: contents;
-
+  
   @media (max-width: 480px) {
     display: none;
   }
@@ -66,141 +60,108 @@ const PatternDot = styled.div`
   top: ${(props) => props.top};
 `;
 
-const LogoContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 180px;
-  transform: translateX(-50%);
-  width: 200px;
-  height: 200px;
-  background-image: url("${imgImage3}");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  @media (max-width: 480px) {
-    width: 150px;
-    height: 150px;
-    top: 120px;
-  }
-`;
-
-const TitleContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 422px;
-  transform: translateX(-50%) translateY(-50%);
+const MainContent = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-
-  @media (max-width: 480px) {
-    top: 320px;
-  }
+  justify-content: center;
+  min-height: 100vh;
+  padding: ${responsiveSpacing(40)} ${responsiveSpacing(20)};
+  gap: ${responsiveSpacing(40)};
 `;
 
-const Title = styled.p`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: normal;
+const TicketIcon = styled.div`
+  width: ${responsiveSize(120)};
+  height: ${responsiveSize(120)};
+  background-image: url("${imgImage3}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: ${responsiveSpacing(20)};
+`;
+
+const Title = styled.h1`
+  ${createTextStyle(32)}
   color: #f29d38;
   text-align: center;
-  white-space: pre;
-  margin: 0;
-
-  @media (max-width: 480px) {
-    font-size: 32px;
-  }
+  margin: 0 0 ${responsiveSpacing(60)} 0;
+  font-weight: 700;
 `;
 
 const SocialLoginContainer = styled.div`
-  position: absolute;
-  top: 633px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 0 20px;
-
+  ${createFlexStyle('row', 'center', 'center', 30)}
+  margin-bottom: ${responsiveSpacing(40)};
+  
   @media (max-width: 480px) {
-    top: 480px;
-    padding: 0 40px;
+    gap: ${responsiveSpacing(20)};
   }
 `;
 
-const SocialButton = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+const SocialButton = styled.button`
+  ${createFlexStyle('column', 'center', 'center', 8)}
+  background: none;
+  border: none;
   cursor: pointer;
   transition: transform 0.2s ease;
-
+  
   &:hover {
     transform: scale(1.05);
+  }
+  
+  &:active {
+    transform: scale(0.95);
   }
 `;
 
 const SocialIcon = styled.div`
-  width: 30px;
-  height: 30px;
+  width: ${responsiveSize(60)};
+  height: ${responsiveSize(60)};
   background-image: url("${(props) => props.icon}");
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  border-radius: ${(props) => (props.rounded ? "3px" : "0")};
+  margin-bottom: ${responsiveSpacing(8)};
 `;
 
-const SocialLabel = styled.p`
-  font-family: "Inter", sans-serif;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: normal;
+const SocialLabel = styled.span`
+  ${createTextStyle(14)}
   color: white;
   text-align: center;
-  white-space: pre;
-  margin: 0;
 `;
 
-const ButtonContainer = styled.div`
-  position: absolute;
-  top: 720px;
-  display: flex;
-  justify-content: space-between;
+const ActionButtonsContainer = styled.div`
+  ${createFlexStyle('row', 'center', 'center', 20)}
   width: 100%;
-  padding: 0 40px;
-  gap: 20px;
-
+  max-width: ${responsiveSize(400)};
+  
   @media (max-width: 480px) {
-    top: 580px;
-    padding: 0 20px;
-    gap: 15px;
+    flex-direction: column;
+    gap: ${responsiveSpacing(15)};
   }
 `;
 
 const ActionButton = styled.button`
   position: relative;
-  width: 160px;
-  height: 80px;
+  width: ${responsiveSize(180)};
+  height: ${responsiveSize(80)};
   border: none;
   background: none;
   cursor: pointer;
   overflow: hidden;
   transition: transform 0.2s ease;
-
+  flex: 1;
+  
   &:hover {
     transform: scale(1.02);
   }
-
+  
   &:active {
     transform: scale(0.98);
   }
-
+  
   @media (max-width: 480px) {
-    width: 140px;
-    height: 70px;
+    width: 100%;
+    height: ${responsiveSize(70)};
   }
 `;
 
@@ -223,39 +184,28 @@ const ButtonText = styled.p`
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: normal;
+  ${createTextStyle(18)}
   color: white;
   text-align: center;
-  white-space: pre;
   margin: 0;
   z-index: 1;
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
+  font-weight: 700;
 `;
 
 const WalletDashboard = () => {
   const navigate = useNavigate();
 
   const handleCreateWallet = () => {
-    // 새 지갑 생성 로직
     navigate("/create-wallet");
   };
 
   const handleImportWallet = () => {
-    // 지갑 불러오기 로직
     navigate("/dashboard");
   };
 
   const handleSocialLogin = (provider) => {
-    if (provider === "Google") {
-      // Google OAuth 시뮬레이션
+    if (provider === "google") {
       toast.success("Google 로그인 성공!");
-      // 실제 구현에서는 Google OAuth API를 호출
       setTimeout(() => {
         navigate("/create-wallet");
       }, 1000);
@@ -264,8 +214,8 @@ const WalletDashboard = () => {
     }
   };
 
-  // 패턴 도트들의 위치 데이터 (모바일 최적화)
-  const topPatternDots = [
+  // 패턴 도트들의 위치 데이터
+  const patternDots = [
     { left: 20, top: "calc(50% - 453px)" },
     { left: 36, top: "calc(50% - 453px)" },
     { left: 0, top: "calc(50% - 453px)", width: "4px" },
@@ -304,9 +254,10 @@ const WalletDashboard = () => {
     { left: 1444, top: "calc(50% - 453px)" },
     { left: 1576, top: "calc(50% - 453px)" },
     { left: 1620, top: "calc(50% - 453px)" },
+    { left: 379, top: "calc(50% - 453px)" },
   ];
 
-  const bottomPatternDots = topPatternDots.map((dot) => ({
+  const bottomPatternDots = patternDots.map((dot) => ({
     ...dot,
     top: "calc(50% + 453px)",
   }));
@@ -315,7 +266,7 @@ const WalletDashboard = () => {
     <WalletContainer>
       {/* 상단 패턴 */}
       <PatternTop>
-        {topPatternDots.map((dot, index) => (
+        {patternDots.map((dot, index) => (
           <PatternDot
             key={`top-${index}`}
             left={dot.left}
@@ -337,44 +288,45 @@ const WalletDashboard = () => {
         ))}
       </PatternBottom>
 
-      {/* 로고 */}
-      <LogoContainer />
+      {/* 메인 컨텐츠 */}
+      <MainContent>
+        {/* AD Ticket 아이콘 */}
+        <TicketIcon />
 
-      {/* 제목 */}
-      <TitleContainer>
+        {/* 제목 */}
         <Title>AD Ticket</Title>
-      </TitleContainer>
 
-      {/* 소셜 로그인 */}
-      <SocialLoginContainer>
-        <SocialButton onClick={() => handleSocialLogin("Google")}>
-          <SocialIcon icon={imgImage29} />
-          <SocialLabel>Google</SocialLabel>
-        </SocialButton>
+        {/* 소셜 로그인 버튼들 */}
+        <SocialLoginContainer>
+          <SocialButton onClick={() => handleSocialLogin("google")}>
+            <SocialIcon icon={imgImage29} />
+            <SocialLabel>Google</SocialLabel>
+          </SocialButton>
 
-        <SocialButton onClick={() => handleSocialLogin("Apple")}>
-          <SocialIcon icon={imgImage27} />
-          <SocialLabel>Apple</SocialLabel>
-        </SocialButton>
+          <SocialButton onClick={() => handleSocialLogin("apple")}>
+            <SocialIcon icon={imgImage27} />
+            <SocialLabel>Apple</SocialLabel>
+          </SocialButton>
 
-        <SocialButton onClick={() => handleSocialLogin("Kakao")}>
-          <SocialIcon icon={imgImage30} rounded />
-          <SocialLabel>kakao</SocialLabel>
-        </SocialButton>
-      </SocialLoginContainer>
+          <SocialButton onClick={() => handleSocialLogin("kakao")}>
+            <SocialIcon icon={imgImage30} />
+            <SocialLabel>kakao</SocialLabel>
+          </SocialButton>
+        </SocialLoginContainer>
 
-      {/* 액션 버튼들 */}
-      <ButtonContainer>
-        <ActionButton onClick={handleCreateWallet}>
-          <ButtonBackground background={imgVector} />
-          <ButtonText>새 지갑 만들기</ButtonText>
-        </ActionButton>
+        {/* 액션 버튼들 */}
+        <ActionButtonsContainer>
+          <ActionButton onClick={handleCreateWallet}>
+            <ButtonBackground background={imgVector} />
+            <ButtonText>새 지갑 만들기</ButtonText>
+          </ActionButton>
 
-        <ActionButton onClick={handleImportWallet}>
-          <ButtonBackground background={imgVector1} />
-          <ButtonText>지갑 불러오기</ButtonText>
-        </ActionButton>
-      </ButtonContainer>
+          <ActionButton onClick={handleImportWallet}>
+            <ButtonBackground background={imgVector1} />
+            <ButtonText>지갑 불러오기</ButtonText>
+          </ActionButton>
+        </ActionButtonsContainer>
+      </MainContent>
     </WalletContainer>
   );
 };
