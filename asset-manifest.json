@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/AD-Wallet/static/css/main.9eebb46d.css",
-    "main.js": "/AD-Wallet/static/js/main.f1f57e03.js",
+    "main.js": "/AD-Wallet/static/js/main.9e78252e.js",
     "index.html": "/AD-Wallet/index.html",
     "main.9eebb46d.css.map": "/AD-Wallet/static/css/main.9eebb46d.css.map",
-    "main.f1f57e03.js.map": "/AD-Wallet/static/js/main.f1f57e03.js.map"
+    "main.9e78252e.js.map": "/AD-Wallet/static/js/main.9e78252e.js.map"
   },
   "entrypoints": [
     "static/css/main.9eebb46d.css",
-    "static/js/main.f1f57e03.js"
+    "static/js/main.9e78252e.js"
   ]
 }
