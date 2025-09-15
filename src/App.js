@@ -6,6 +6,7 @@ import styled from "styled-components";
 // 컴포넌트 import
 import Header from "./components/Header";
 import WalletDashboard from "./components/WalletDashboard";
+import ADTicketDashboard from "./components/ADTicketDashboard";
 import CreateWallet from "./components/CreateWallet";
 import SendMoney from "./components/SendMoney";
 import ReceiveMoney from "./components/ReceiveMoney";
@@ -32,27 +33,7 @@ function App() {
         <Routes>
           <Route path="/" element={<WalletDashboard />} />
           <Route path="/create-wallet" element={<CreateWallet />} />
-          <Route
-            path="/dashboard"
-            element={
-              <>
-                <Header />
-                <MainContent>
-                  <div
-                    style={{
-                      padding: "20px",
-                      maxWidth: "400px",
-                      margin: "0 auto",
-                      width: "100%",
-                    }}
-                  >
-                    <h2>지갑 대시보드</h2>
-                    <p>지갑이 생성되었습니다!</p>
-                  </div>
-                </MainContent>
-              </>
-            }
-          />
+          <Route path="/dashboard" element={<ADTicketDashboard />} />
           <Route
             path="/send"
             element={

@@ -61,7 +61,11 @@ const Header = () => {
   const getPageTitle = () => {
     switch (location.pathname) {
       case "/":
-        return "AD Wallet";
+        return "AD Ticket";
+      case "/dashboard":
+        return "AD Ticket";
+      case "/create-wallet":
+        return "새 지갑 만들기";
       case "/send":
         return "송금";
       case "/receive":
@@ -71,7 +75,7 @@ const Header = () => {
       case "/settings":
         return "설정";
       default:
-        return "AD Wallet";
+        return "AD Ticket";
     }
   };
 
