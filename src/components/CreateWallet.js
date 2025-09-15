@@ -1,21 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 
 // 이미지 상수들
-const imgImage3 =
-  "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
-const imgImage29 =
-  "http://localhost:3845/assets/28aa199e34d85cb0a0d533999253f5c50ed2e5f9.png";
-const imgImage27 =
-  "http://localhost:3845/assets/9b387874335e4d7be3b68bbff00b85578869530f.png";
-const imgImage30 =
-  "http://localhost:3845/assets/b7131dce1e4820a3520dd13a947d85a7fa43bf6a.png";
-const imgVector =
-  "http://localhost:3845/assets/9c9baa69399e6e25e9d51108344555d9cd55a853.svg";
-const imgVector1 =
-  "http://localhost:3845/assets/894d81e3b1489d46491680c760b7b4766d1deee2.svg";
+const imgInvisible = "http://localhost:3845/assets/f2b01876f41f56e3e6a7dfd6363d3854a834f76e.png";
+const imgVector = "http://localhost:3845/assets/9c9baa69399e6e25e9d51108344555d9cd55a853.svg";
+const imgVector1 = "http://localhost:3845/assets/894d81e3b1489d46491680c760b7b4766d1deee2.svg";
 
 const WalletContainer = styled.div`
   background: #1d1818;
@@ -23,7 +14,7 @@ const WalletContainer = styled.div`
   width: 100%;
   height: 100vh;
   overflow: hidden;
-
+  
   @media (max-width: 480px) {
     height: 100vh;
     min-height: 667px;
@@ -36,7 +27,7 @@ const PatternTop = styled.div`
   top: calc(50% - 453px);
   transform: translateY(-50%);
   display: contents;
-
+  
   @media (max-width: 480px) {
     display: none;
   }
@@ -48,7 +39,7 @@ const PatternBottom = styled.div`
   top: calc(50% + 453px);
   transform: translateY(-50%);
   display: contents;
-
+  
   @media (max-width: 480px) {
     display: none;
   }
@@ -65,102 +56,129 @@ const PatternDot = styled.div`
   top: ${(props) => props.top};
 `;
 
-const LogoContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 180px;
-  transform: translateX(-50%);
-  width: 200px;
-  height: 200px;
-  background-image: url("${imgImage3}");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  @media (max-width: 480px) {
-    width: 150px;
-    height: 150px;
-    top: 120px;
-  }
-`;
-
 const TitleContainer = styled.div`
   position: absolute;
   left: 50%;
-  top: 422px;
+  top: 48px;
   transform: translateX(-50%) translateY(-50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  @media (max-width: 480px) {
-    top: 320px;
-  }
 `;
 
 const Title = styled.p`
   font-family: "Mina", "Noto Sans KR", sans-serif;
   font-weight: 700;
-  font-size: 40px;
-  line-height: normal;
-  color: #f29d38;
-  text-align: center;
-  white-space: pre;
-  margin: 0;
-
-  @media (max-width: 480px) {
-    font-size: 32px;
-  }
-`;
-
-const SocialLoginContainer = styled.div`
-  position: absolute;
-  top: 633px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 0 20px;
-
-  @media (max-width: 480px) {
-    top: 480px;
-    padding: 0 40px;
-  }
-`;
-
-const SocialButton = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-`;
-
-const SocialIcon = styled.div`
-  width: 30px;
-  height: 30px;
-  background-image: url("${(props) => props.icon}");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  border-radius: ${(props) => (props.rounded ? "3px" : "0")};
-`;
-
-const SocialLabel = styled.p`
-  font-family: "Inter", sans-serif;
-  font-weight: 600;
-  font-size: 12px;
+  font-size: 24px;
   line-height: normal;
   color: white;
   text-align: center;
   white-space: pre;
   margin: 0;
+  
+  @media (max-width: 480px) {
+    font-size: 20px;
+  }
+`;
+
+const SubtitleContainer = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 161px;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Subtitle = styled.p`
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: normal;
+  color: white;
+  text-align: center;
+  white-space: pre;
+  margin: 0;
+  
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
+`;
+
+const InputContainer = styled.div`
+  position: absolute;
+  left: 50%;
+  top: ${(props) => props.top}px;
+  transform: translateX(-50%);
+  width: 320px;
+  height: 40px;
+  
+  @media (max-width: 480px) {
+    width: 280px;
+  }
+`;
+
+const InputField = styled.input`
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 40px;
+  background: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0 15px;
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  color: #333;
+  box-shadow: inset 0px 4px 4px 2px rgba(0, 0, 0, 0.25);
+  
+  &:focus {
+    outline: none;
+    box-shadow: inset 0px 4px 4px 2px rgba(0, 0, 0, 0.25), 0 0 0 2px #f29d38;
+  }
+  
+  &::placeholder {
+    color: #999;
+  }
+`;
+
+const EyeIcon = styled.div`
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-image: url("${imgInvisible}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  z-index: 1;
+`;
+
+const HelperText = styled.p`
+  position: absolute;
+  left: 40px;
+  top: 258px;
+  transform: translateY(-50%);
+  font-family: "Mina", "Noto Sans KR", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: normal;
+  color: white;
+  white-space: pre;
+  margin: 0;
+  
+  @media (max-width: 480px) {
+    left: 20px;
+    font-size: 12px;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -171,7 +189,7 @@ const ButtonContainer = styled.div`
   width: 100%;
   padding: 0 40px;
   gap: 20px;
-
+  
   @media (max-width: 480px) {
     top: 580px;
     padding: 0 20px;
@@ -188,15 +206,15 @@ const ActionButton = styled.button`
   cursor: pointer;
   overflow: hidden;
   transition: transform 0.2s ease;
-
+  
   &:hover {
     transform: scale(1.02);
   }
-
+  
   &:active {
     transform: scale(0.98);
   }
-
+  
   @media (max-width: 480px) {
     width: 140px;
     height: 70px;
@@ -231,39 +249,20 @@ const ButtonText = styled.p`
   white-space: pre;
   margin: 0;
   z-index: 1;
-
+  
   @media (max-width: 480px) {
     font-size: 16px;
   }
 `;
 
-const WalletDashboard = () => {
+const CreateWallet = () => {
   const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleCreateWallet = () => {
-    // 새 지갑 생성 로직
-    navigate("/create-wallet");
-  };
-
-  const handleImportWallet = () => {
-    // 지갑 불러오기 로직
-    navigate("/dashboard");
-  };
-
-  const handleSocialLogin = (provider) => {
-    if (provider === "Google") {
-      // Google OAuth 시뮬레이션
-      toast.success("Google 로그인 성공!");
-      // 실제 구현에서는 Google OAuth API를 호출
-      setTimeout(() => {
-        navigate("/create-wallet");
-      }, 1000);
-    } else {
-      toast.info(`${provider} 로그인은 준비 중입니다.`);
-    }
-  };
-
-  // 패턴 도트들의 위치 데이터 (모바일 최적화)
+  // 패턴 도트들의 위치 데이터
   const topPatternDots = [
     { left: 20, top: "calc(50% - 453px)" },
     { left: 36, top: "calc(50% - 453px)" },
@@ -310,6 +309,27 @@ const WalletDashboard = () => {
     top: "calc(50% + 453px)",
   }));
 
+  const handleCancel = () => {
+    navigate("/");
+  };
+
+  const handleConfirm = () => {
+    // 비밀번호 유효성 검사
+    if (password.length < 10) {
+      toast.error("비밀번호는 최소 10자리 이상이어야 합니다.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    // 지갑 생성 성공
+    toast.success("지갑이 성공적으로 생성되었습니다!");
+    navigate("/dashboard");
+  };
+
   return (
     <WalletContainer>
       {/* 상단 패턴 */}
@@ -336,46 +356,57 @@ const WalletDashboard = () => {
         ))}
       </PatternBottom>
 
-      {/* 로고 */}
-      <LogoContainer />
-
       {/* 제목 */}
       <TitleContainer>
-        <Title>AD Ticket</Title>
+        <Title>새 지갑 만들기</Title>
       </TitleContainer>
 
-      {/* 소셜 로그인 */}
-      <SocialLoginContainer>
-        <SocialButton onClick={() => handleSocialLogin("Google")}>
-          <SocialIcon icon={imgImage29} />
-          <SocialLabel>Google</SocialLabel>
-        </SocialButton>
+      {/* 비밀번호 설정 */}
+      <SubtitleContainer>
+        <Subtitle>비밀번호 설정</Subtitle>
+      </SubtitleContainer>
 
-        <SocialButton onClick={() => handleSocialLogin("Apple")}>
-          <SocialIcon icon={imgImage27} />
-          <SocialLabel>Apple</SocialLabel>
-        </SocialButton>
+      <InputContainer top={197}>
+        <InputField
+          type={showPassword ? "text" : "password"}
+          placeholder="비밀번호를 입력하세요"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <EyeIcon onClick={() => setShowPassword(!showPassword)} />
+      </InputContainer>
 
-        <SocialButton onClick={() => handleSocialLogin("Kakao")}>
-          <SocialIcon icon={imgImage30} rounded />
-          <SocialLabel>kakao</SocialLabel>
-        </SocialButton>
-      </SocialLoginContainer>
+      <HelperText>최소 10자리 이상 설정해주세요.</HelperText>
 
-      {/* 액션 버튼들 */}
+      {/* 비밀번호 확인 */}
+      <SubtitleContainer style={{ top: "353px" }}>
+        <Subtitle>비밀번호 확인</Subtitle>
+      </SubtitleContainer>
+
+      <InputContainer top={389}>
+        <InputField
+          type={showConfirmPassword ? "text" : "password"}
+          placeholder="비밀번호를 다시 입력하세요"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+        <EyeIcon onClick={() => setShowConfirmPassword(!showConfirmPassword)} />
+      </InputContainer>
+
+      {/* 버튼들 */}
       <ButtonContainer>
-        <ActionButton onClick={handleCreateWallet}>
+        <ActionButton onClick={handleCancel}>
           <ButtonBackground background={imgVector} />
-          <ButtonText>새 지갑 만들기</ButtonText>
+          <ButtonText>취소</ButtonText>
         </ActionButton>
 
-        <ActionButton onClick={handleImportWallet}>
+        <ActionButton onClick={handleConfirm}>
           <ButtonBackground background={imgVector1} />
-          <ButtonText>지갑 불러오기</ButtonText>
+          <ButtonText>확인</ButtonText>
         </ActionButton>
       </ButtonContainer>
     </WalletContainer>
   );
 };
 
-export default WalletDashboard;
+export default CreateWallet;

@@ -6,6 +6,7 @@ import styled from "styled-components";
 // 컴포넌트 import
 import Header from "./components/Header";
 import WalletDashboard from "./components/WalletDashboard";
+import CreateWallet from "./components/CreateWallet";
 import SendMoney from "./components/SendMoney";
 import ReceiveMoney from "./components/ReceiveMoney";
 import TransactionHistory from "./components/TransactionHistory";
@@ -30,6 +31,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<WalletDashboard />} />
+          <Route path="/create-wallet" element={<CreateWallet />} />
           <Route
             path="/dashboard"
             element={
