@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import gasSponsorService from "../services/gasSponsor";
+import AdModal from "./AdModal";
 
 // 이미지 상수들
 const imgImage3 = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
@@ -277,6 +278,7 @@ const ADTicketDashboard = () => {
   const [isWatchingAd, setIsWatchingAd] = useState(false);
   const [dailyLimit, setDailyLimit] = useState(5);
   const [currentUsage, setCurrentUsage] = useState(5);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 컴포넌트 마운트 시 초기화
   useEffect(() => {
@@ -318,7 +320,16 @@ const ADTicketDashboard = () => {
   };
 
   const handleCoupang = () => {
-    toast.info("쿠팡 제휴 기능은 준비 중입니다.");
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleParticipate = () => {
+    setIsModalOpen(false);
+    toast.success("쿠팡 제휴에 참여했습니다! 결제 시 AD Ticket이 지급됩니다.");
   };
 
   const handleFriendInvite = () => {
@@ -418,6 +429,13 @@ const ADTicketDashboard = () => {
           </AdItem>
         ))}
       </AdList>
+
+      {/* 광고 모달 */}
+      <AdModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onParticipate={handleParticipate}
+      />
     </DashboardContainer>
   );
 };
