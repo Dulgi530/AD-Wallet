@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/AD-Wallet/static/css/main.9eebb46d.css",
+    "main.js": "/AD-Wallet/static/js/main.738105ec.js",
+    "index.html": "/AD-Wallet/index.html",
+    "main.9eebb46d.css.map": "/AD-Wallet/static/css/main.9eebb46d.css.map",
+    "main.738105ec.js.map": "/AD-Wallet/static/js/main.738105ec.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9eebb46d.css",
+    "static/js/main.738105ec.js"
+  ]
+}
