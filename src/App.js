@@ -7,6 +7,7 @@ import styled from "styled-components";
 import Header from "./components/Header";
 import WalletDashboard from "./components/WalletDashboard";
 import ADTicketDashboard from "./components/ADTicketDashboard";
+import MainDashboard from "./components/MainDashboard";
 import CreateWallet from "./components/CreateWallet";
 import SendMoney from "./components/SendMoney";
 import ReceiveMoney from "./components/ReceiveMoney";
@@ -33,7 +34,8 @@ function App() {
         <Routes>
           <Route path="/" element={<WalletDashboard />} />
           <Route path="/create-wallet" element={<CreateWallet />} />
-          <Route path="/dashboard" element={<ADTicketDashboard />} />
+          <Route path="/dashboard" element={<MainDashboard />} />
+          <Route path="/ad-ticket" element={<ADTicketDashboard />} />
           <Route
             path="/send"
             element={
