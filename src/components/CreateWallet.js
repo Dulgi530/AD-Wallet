@@ -21,51 +21,89 @@ const imgVector1 = "http://localhost:3845/assets/894d81e3b1489d46491680c760b7b47
 
 const WalletContainer = styled.div`
   ${createContainerStyle()}
+  position: relative;
 `;
 
 const PatternTop = styled.div`
   position: absolute;
+  top: 0;
   left: 0;
-  top: calc(50% - 453px);
-  transform: translateY(-50%);
-  display: contents;
+  right: 0;
+  height: ${responsiveSize(50)};
+  background-image: 
+    radial-gradient(circle at 20px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 40px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 60px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 80px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 100px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 120px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 140px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 160px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 180px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 200px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 220px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 240px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 260px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 280px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 300px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 320px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 340px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 360px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 380px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 400px 20px, #5f5f5f 2px, transparent 2px);
+  background-size: ${responsiveSize(20)} ${responsiveSize(20)};
+  background-position: 0 0;
+  z-index: 1;
   
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;
 
 const PatternBottom = styled.div`
   position: absolute;
+  bottom: 0;
   left: 0;
-  top: calc(50% + 453px);
-  transform: translateY(-50%);
-  display: contents;
+  right: 0;
+  height: ${responsiveSize(50)};
+  background-image: 
+    radial-gradient(circle at 20px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 40px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 60px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 80px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 100px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 120px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 140px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 160px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 180px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 200px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 220px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 240px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 260px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 280px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 300px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 320px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 340px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 360px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 380px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 400px 20px, #5f5f5f 2px, transparent 2px);
+  background-size: ${responsiveSize(20)} ${responsiveSize(20)};
+  background-position: 0 0;
+  z-index: 1;
   
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;
 
-const PatternDot = styled.div`
-  position: absolute;
-  background: #5f5f5f;
-  height: 7px;
-  border-radius: 1px;
-  transform: translateY(-50%);
-  width: ${(props) => props.width || "6px"};
-  left: ${(props) => props.left}px;
-  top: ${(props) => props.top};
-`;
-
 const MainContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: ${responsiveSpacing(60)} ${responsiveSpacing(40)};
-  gap: ${responsiveSpacing(40)};
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100vh;
+  ${createFlexStyle('column', 'center', 'center', 0)}
+  padding: ${responsiveSpacing(40)} ${responsiveSpacing(20)};
+  box-sizing: border-box;
 `;
 
 const Title = styled.h1`
@@ -76,25 +114,21 @@ const Title = styled.h1`
   font-weight: 700;
 `;
 
-const FormSection = styled.div`
+const FormContainer = styled.div`
   width: 100%;
-  max-width: ${responsiveSize(320)};
-  display: flex;
-  flex-direction: column;
-  gap: ${responsiveSpacing(30)};
+  max-width: ${responsiveSize(350)};
+  ${createFlexStyle('column', 'center', 'center', 20)}
 `;
 
 const InputGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${responsiveSpacing(15)};
+  width: 100%;
+  ${createFlexStyle('column', 'flex-start', 'flex-start', 8)}
 `;
 
 const Label = styled.label`
-  ${createTextStyle(20)}
+  ${createTextStyle(14)}
   color: white;
-  text-align: left;
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 const InputContainer = styled.div`
@@ -102,57 +136,47 @@ const InputContainer = styled.div`
   width: 100%;
 `;
 
-const InputField = styled.input`
-  background: white;
-  border-radius: ${responsiveSize(5)};
+const Input = styled.input`
   width: 100%;
-  height: ${responsiveSize(40)};
+  height: ${responsiveSize(50)};
+  background: #2a2a2a;
+  border: 1px solid #3b3b3b;
+  border-radius: ${responsiveSize(8)};
   padding: 0 ${responsiveSpacing(15)};
-  font-family: "Inter", sans-serif;
-  font-size: ${responsiveFontSize(16)};
-  color: #333;
-  border: none;
-  box-shadow: 0px 4px 4px 2px inset rgba(0, 0, 0, 0.25);
-  outline: none;
+  ${createTextStyle(16)}
+  color: white;
+  box-sizing: border-box;
   
   &:focus {
-    border: 2px solid #f29d38;
+    outline: none;
+    border-color: #f29d38;
   }
   
   &::placeholder {
-    color: #999;
+    color: #666;
   }
 `;
 
-const PasswordToggle = styled.button`
+const EyeButton = styled.button`
   position: absolute;
-  right: ${responsiveSpacing(10)};
+  right: ${responsiveSpacing(15)};
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: #5f5f5f;
+  color: #999;
   cursor: pointer;
-  font-size: ${responsiveFontSize(18)};
-  z-index: 2;
-`;
-
-const InfoText = styled.p`
-  ${createTextStyle(14)}
-  color: white;
-  text-align: left;
-  margin: 0;
-  line-height: 1.4;
+  padding: ${responsiveSpacing(5)};
+  
+  &:hover {
+    color: white;
+  }
 `;
 
 const ButtonContainer = styled.div`
-  ${createFlexStyle('row', 'space-between', 'center', 20)}
+  ${createFlexStyle('row', 'center', 'center', 20)}
   width: 100%;
-  margin-top: ${responsiveSpacing(40)};
-  
-  @media (max-width: 480px) {
-    gap: ${responsiveSpacing(15)};
-  }
+  margin-top: ${responsiveSpacing(20)};
 `;
 
 const ActionButton = styled.button`
@@ -160,9 +184,7 @@ const ActionButton = styled.button`
   width: ${responsiveSize(160)};
   height: ${responsiveSize(80)};
   border: none;
-  background: none;
   cursor: pointer;
-  overflow: hidden;
   transition: transform 0.2s ease;
   flex: 1;
   
@@ -172,11 +194,6 @@ const ActionButton = styled.button`
   
   &:active {
     transform: scale(0.98);
-  }
-  
-  @media (max-width: 480px) {
-    width: ${responsiveSize(140)};
-    height: ${responsiveSize(70)};
   }
 `;
 
@@ -204,7 +221,6 @@ const ButtonText = styled.p`
   text-align: center;
   margin: 0;
   z-index: 1;
-  font-weight: 700;
 `;
 
 const CreateWallet = () => {
@@ -213,145 +229,112 @@ const CreateWallet = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleCreate = () => {
-    if (password.length < 10) {
-      toast.error("비밀번호는 최소 10자리 이상이어야 합니다.");
-      return;
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  const validateForm = () => {
+    if (!password) {
+      toast.error("비밀번호를 입력해주세요.");
+      return false;
     }
+    
+    if (password.length < 8) {
+      toast.error("비밀번호는 8자 이상이어야 합니다.");
+      return false;
+    }
+    
     if (password !== confirmPassword) {
       toast.error("비밀번호가 일치하지 않습니다.");
-      return;
+      return false;
     }
-    toast.success("지갑이 성공적으로 생성되었습니다!");
-    navigate("/dashboard");
+    
+    return true;
+  };
+
+  const handleCreateWallet = async () => {
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
+    toast.success("지갑을 생성하는 중...");
+    
+    // 지갑 생성 시뮬레이션
+    setTimeout(() => {
+      setIsLoading(false);
+      toast.success("지갑이 성공적으로 생성되었습니다!");
+      navigate("/dashboard");
+    }, 2000);
   };
 
   const handleCancel = () => {
-    navigate("/");
+    navigate(-1);
   };
-
-  // 패턴 도트들의 위치 데이터
-  const patternDots = [
-    { left: 20, top: "calc(50% - 453px)" },
-    { left: 36, top: "calc(50% - 453px)" },
-    { left: 0, top: "calc(50% - 453px)", width: "4px" },
-    { left: 432, top: "calc(50% - 453px)" },
-    { left: 784, top: "calc(50% - 453px)" },
-    { left: 1136, top: "calc(50% - 453px)" },
-    { left: 64, top: "calc(50% - 453px)" },
-    { left: 608, top: "calc(50% - 453px)" },
-    { left: 240, top: "calc(50% - 453px)" },
-    { left: 1312, top: "calc(50% - 453px)" },
-    { left: 168, top: "calc(50% - 453px)" },
-    { left: 520, top: "calc(50% - 453px)" },
-    { left: 872, top: "calc(50% - 453px)" },
-    { left: 1224, top: "calc(50% - 453px)" },
-    { left: 344, top: "calc(50% - 453px)" },
-    { left: 696, top: "calc(50% - 453px)" },
-    { left: 1048, top: "calc(50% - 453px)" },
-    { left: 1400, top: "calc(50% - 453px)" },
-    { left: 1532, top: "calc(50% - 453px)" },
-    { left: 124, top: "calc(50% - 453px)" },
-    { left: 476, top: "calc(50% - 453px)" },
-    { left: 828, top: "calc(50% - 453px)" },
-    { left: 1180, top: "calc(50% - 453px)" },
-    { left: 300, top: "calc(50% - 453px)" },
-    { left: 652, top: "calc(50% - 453px)" },
-    { left: 1004, top: "calc(50% - 453px)" },
-    { left: 1356, top: "calc(50% - 453px)" },
-    { left: 1488, top: "calc(50% - 453px)" },
-    { left: 212, top: "calc(50% - 453px)" },
-    { left: 564, top: "calc(50% - 453px)" },
-    { left: 916, top: "calc(50% - 453px)" },
-    { left: 1268, top: "calc(50% - 453px)" },
-    { left: 388, top: "calc(50% - 453px)" },
-    { left: 740, top: "calc(50% - 453px)" },
-    { left: 1092, top: "calc(50% - 453px)" },
-    { left: 1444, top: "calc(50% - 453px)" },
-    { left: 1576, top: "calc(50% - 453px)" },
-    { left: 1620, top: "calc(50% - 453px)" },
-  ];
-
-  const bottomPatternDots = patternDots.map((dot) => ({
-    ...dot,
-    top: "calc(50% + 453px)",
-  }));
 
   return (
     <WalletContainer>
-      {/* 상단 패턴 */}
-      <PatternTop>
-        {patternDots.map((dot, index) => (
-          <PatternDot
-            key={`top-${index}`}
-            left={dot.left}
-            top={dot.top}
-            width={dot.width}
-          />
-        ))}
-      </PatternTop>
-
-      {/* 하단 패턴 */}
-      <PatternBottom>
-        {bottomPatternDots.map((dot, index) => (
-          <PatternDot
-            key={`bottom-${index}`}
-            left={dot.left}
-            top={dot.top}
-            width={dot.width}
-          />
-        ))}
-      </PatternBottom>
-
-      {/* 메인 컨텐츠 */}
+      <PatternTop />
+      <PatternBottom />
+      
       <MainContent>
         <Title>새 지갑 만들기</Title>
-
-        <FormSection>
+        
+        <FormContainer>
           <InputGroup>
-            <Label>비밀번호 설정</Label>
+            <Label>비밀번호</Label>
             <InputContainer>
-              <InputField
+              <Input
                 type={showPassword ? "text" : "password"}
+                placeholder="비밀번호를 입력하세요"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="비밀번호를 입력해주세요"
+                onChange={handlePasswordChange}
               />
-              <PasswordToggle onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? <FiEyeOff /> : <FiEye />}
-              </PasswordToggle>
+              <EyeButton onClick={togglePasswordVisibility}>
+                {showPassword ? <FiEye size={20} /> : <FiEyeOff size={20} />}
+              </EyeButton>
             </InputContainer>
-            <InfoText>최소 10자리 이상 설정해주세요.</InfoText>
           </InputGroup>
-
+          
           <InputGroup>
             <Label>비밀번호 확인</Label>
             <InputContainer>
-              <InputField
+              <Input
                 type={showConfirmPassword ? "text" : "password"}
+                placeholder="비밀번호를 다시 입력하세요"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="비밀번호를 다시 입력해주세요"
+                onChange={handleConfirmPasswordChange}
               />
-              <PasswordToggle onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
-              </PasswordToggle>
+              <EyeButton onClick={toggleConfirmPasswordVisibility}>
+                {showConfirmPassword ? <FiEye size={20} /> : <FiEyeOff size={20} />}
+              </EyeButton>
             </InputContainer>
           </InputGroup>
-        </FormSection>
-
-        <ButtonContainer>
-          <ActionButton onClick={handleCancel}>
-            <ButtonBackground background={imgVector} />
-            <ButtonText>취소</ButtonText>
-          </ActionButton>
-
-          <ActionButton onClick={handleCreate}>
-            <ButtonBackground background={imgVector1} />
-            <ButtonText>확인</ButtonText>
-          </ActionButton>
-        </ButtonContainer>
+          
+          <ButtonContainer>
+            <ActionButton onClick={handleCancel} disabled={isLoading}>
+              <ButtonBackground background={imgVector} />
+              <ButtonText>취소</ButtonText>
+            </ActionButton>
+            
+            <ActionButton onClick={handleCreateWallet} disabled={isLoading}>
+              <ButtonBackground background={imgVector1} />
+              <ButtonText>{isLoading ? "생성 중..." : "지갑 생성"}</ButtonText>
+            </ActionButton>
+          </ButtonContainer>
+        </FormContainer>
       </MainContent>
     </WalletContainer>
   );

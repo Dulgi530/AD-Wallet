@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
@@ -14,66 +14,103 @@ import {
 } from "../utils/autoLayout";
 
 // 이미지 상수들
-const imgImage3 = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
-const imgImage29 = "http://localhost:3845/assets/28aa199e34d85cb0a0d533999253f5c50ed2e5f9.png";
-const imgImage27 = "http://localhost:3845/assets/9b387874335e4d7be3b68bbff00b85578869530f.png";
-const imgImage30 = "http://localhost:3845/assets/b7131dce1e4820a3520dd13a947d85a7fa43bf6a.png";
-const imgVector = "http://localhost:3845/assets/9c9baa69399e6e25e9d51108344555d9cd55a853.svg";
-const imgVector1 = "http://localhost:3845/assets/894d81e3b1489d46491680c760b7b4766d1deee2.svg";
+const imgImage2 = "http://localhost:3845/assets/a5afa55a89940975aa49915299cb08c7c192db96.png";
+const imgGoogle = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
+const imgApple = "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
+const imgKakao = "http://localhost:3845/assets/3a576cb5f4cb120ccaa705bb36531ed3dde6793e.png";
 
-const WalletContainer = styled.div`
+const DashboardContainer = styled.div`
   ${createContainerStyle()}
+  position: relative;
+  overflow: hidden;
 `;
 
 const PatternTop = styled.div`
   position: absolute;
+  top: 0;
   left: 0;
-  top: calc(50% - 453px);
-  transform: translateY(-50%);
-  display: contents;
+  right: 0;
+  height: ${responsiveSize(50)};
+  background-image: 
+    radial-gradient(circle at 20px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 40px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 60px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 80px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 100px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 120px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 140px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 160px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 180px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 200px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 220px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 240px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 260px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 280px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 300px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 320px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 340px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 360px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 380px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 400px 20px, #5f5f5f 2px, transparent 2px);
+  background-size: ${responsiveSize(20)} ${responsiveSize(20)};
+  background-position: 0 0;
+  z-index: 1;
   
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;
 
 const PatternBottom = styled.div`
   position: absolute;
+  bottom: 0;
   left: 0;
-  top: calc(50% + 453px);
-  transform: translateY(-50%);
-  display: contents;
+  right: 0;
+  height: ${responsiveSize(50)};
+  background-image: 
+    radial-gradient(circle at 20px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 40px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 60px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 80px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 100px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 120px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 140px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 160px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 180px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 200px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 220px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 240px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 260px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 280px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 300px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 320px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 340px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 360px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 380px 20px, #5f5f5f 2px, transparent 2px),
+    radial-gradient(circle at 400px 20px, #5f5f5f 2px, transparent 2px);
+  background-size: ${responsiveSize(20)} ${responsiveSize(20)};
+  background-position: 0 0;
+  z-index: 1;
   
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;
 
-const PatternDot = styled.div`
-  position: absolute;
-  background: #5f5f5f;
-  height: 7px;
-  border-radius: 1px;
-  transform: translateY(-50%);
-  width: ${(props) => props.width || "6px"};
-  left: ${(props) => props.left}px;
-  top: ${(props) => props.top};
-`;
-
 const MainContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100vh;
+  ${createFlexStyle('column', 'center', 'center', 0)}
   padding: ${responsiveSpacing(40)} ${responsiveSpacing(20)};
-  gap: ${responsiveSpacing(40)};
+  box-sizing: border-box;
 `;
 
 const TicketIcon = styled.div`
   width: ${responsiveSize(120)};
   height: ${responsiveSize(120)};
-  background-image: url("${imgImage3}");
+  background-image: url("${imgImage2}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -88,19 +125,20 @@ const Title = styled.h1`
   font-weight: 700;
 `;
 
-const SocialLoginContainer = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 30)}
+const SocialLoginSection = styled.div`
+  ${createFlexStyle('row', 'center', 'center', 20)}
   margin-bottom: ${responsiveSpacing(40)};
-  
-  @media (max-width: 480px) {
-    gap: ${responsiveSpacing(20)};
-  }
+  width: 100%;
+  max-width: ${responsiveSize(300)};
 `;
 
 const SocialButton = styled.button`
   ${createFlexStyle('column', 'center', 'center', 8)}
-  background: none;
+  width: ${responsiveSize(80)};
+  height: ${responsiveSize(80)};
+  background: white;
   border: none;
+  border-radius: 50%;
   cursor: pointer;
   transition: transform 0.2s ease;
   
@@ -114,220 +152,150 @@ const SocialButton = styled.button`
 `;
 
 const SocialIcon = styled.div`
-  width: ${responsiveSize(60)};
-  height: ${responsiveSize(60)};
-  background-image: url("${(props) => props.icon}");
+  width: ${responsiveSize(40)};
+  height: ${responsiveSize(40)};
+  background-image: url("${(props) => props.src}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  margin-bottom: ${responsiveSpacing(8)};
 `;
 
-const SocialLabel = styled.span`
-  ${createTextStyle(14)}
-  color: white;
-  text-align: center;
+const SocialText = styled.span`
+  ${createTextStyle(12)}
+  color: #333;
+  font-weight: 500;
 `;
 
-const ActionButtonsContainer = styled.div`
+const ActionButtons = styled.div`
   ${createFlexStyle('row', 'center', 'center', 20)}
   width: 100%;
-  max-width: ${responsiveSize(400)};
-  
-  @media (max-width: 480px) {
-    flex-direction: column;
-    gap: ${responsiveSpacing(15)};
-  }
+  max-width: ${responsiveSize(350)};
 `;
 
 const ActionButton = styled.button`
   position: relative;
-  width: ${responsiveSize(180)};
+  width: ${responsiveSize(160)};
   height: ${responsiveSize(80)};
+  background: #2a2a2a;
   border: none;
-  background: none;
+  border-radius: ${responsiveSize(8)};
   cursor: pointer;
+  transition: all 0.2s ease;
   overflow: hidden;
-  transition: transform 0.2s ease;
-  flex: 1;
   
   &:hover {
-    transform: scale(1.02);
+    background: #3a3a3a;
+    transform: translateY(-2px);
   }
   
   &:active {
-    transform: scale(0.98);
+    transform: translateY(0);
   }
   
-  @media (max-width: 480px) {
-    width: 100%;
-    height: ${responsiveSize(70)};
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 8px,
+      #5f5f5f 8px,
+      #5f5f5f 12px
+    );
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 8px,
+      #5f5f5f 8px,
+      #5f5f5f 12px
+    );
   }
 `;
 
-const ButtonBackground = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
-  height: 100%;
-  background-image: url("${(props) => props.background}");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
-
-const ButtonText = styled.p`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  ${createTextStyle(18)}
+const ActionButtonText = styled.span`
+  ${createTextStyle(14)}
   color: white;
+  font-weight: 600;
   text-align: center;
-  margin: 0;
-  z-index: 1;
-  font-weight: 700;
 `;
 
 const WalletDashboard = () => {
   const navigate = useNavigate();
+
+  const handleGoogleLogin = () => {
+    toast.success("Google 로그인 시뮬레이션");
+    // 실제 Google OAuth 구현
+    setTimeout(() => {
+      navigate("/create-wallet");
+    }, 1000);
+  };
+
+  const handleAppleLogin = () => {
+    toast.info("Apple 로그인은 준비 중입니다.");
+  };
+
+  const handleKakaoLogin = () => {
+    toast.info("Kakao 로그인은 준비 중입니다.");
+  };
 
   const handleCreateWallet = () => {
     navigate("/create-wallet");
   };
 
   const handleImportWallet = () => {
-    navigate("/dashboard");
+    toast.info("지갑 불러오기 기능은 준비 중입니다.");
   };
-
-  const handleSocialLogin = (provider) => {
-    if (provider === "google") {
-      toast.success("Google 로그인 성공!");
-      setTimeout(() => {
-        navigate("/create-wallet");
-      }, 1000);
-    } else {
-      toast.info(`${provider} 로그인은 준비 중입니다.`);
-    }
-  };
-
-  // 패턴 도트들의 위치 데이터
-  const patternDots = [
-    { left: 20, top: "calc(50% - 453px)" },
-    { left: 36, top: "calc(50% - 453px)" },
-    { left: 0, top: "calc(50% - 453px)", width: "4px" },
-    { left: 432, top: "calc(50% - 453px)" },
-    { left: 784, top: "calc(50% - 453px)" },
-    { left: 1136, top: "calc(50% - 453px)" },
-    { left: 64, top: "calc(50% - 453px)" },
-    { left: 608, top: "calc(50% - 453px)" },
-    { left: 240, top: "calc(50% - 453px)" },
-    { left: 1312, top: "calc(50% - 453px)" },
-    { left: 168, top: "calc(50% - 453px)" },
-    { left: 520, top: "calc(50% - 453px)" },
-    { left: 872, top: "calc(50% - 453px)" },
-    { left: 1224, top: "calc(50% - 453px)" },
-    { left: 344, top: "calc(50% - 453px)" },
-    { left: 696, top: "calc(50% - 453px)" },
-    { left: 1048, top: "calc(50% - 453px)" },
-    { left: 1400, top: "calc(50% - 453px)" },
-    { left: 1532, top: "calc(50% - 453px)" },
-    { left: 124, top: "calc(50% - 453px)" },
-    { left: 476, top: "calc(50% - 453px)" },
-    { left: 828, top: "calc(50% - 453px)" },
-    { left: 1180, top: "calc(50% - 453px)" },
-    { left: 300, top: "calc(50% - 453px)" },
-    { left: 652, top: "calc(50% - 453px)" },
-    { left: 1004, top: "calc(50% - 453px)" },
-    { left: 1356, top: "calc(50% - 453px)" },
-    { left: 1488, top: "calc(50% - 453px)" },
-    { left: 212, top: "calc(50% - 453px)" },
-    { left: 564, top: "calc(50% - 453px)" },
-    { left: 916, top: "calc(50% - 453px)" },
-    { left: 1268, top: "calc(50% - 453px)" },
-    { left: 388, top: "calc(50% - 453px)" },
-    { left: 740, top: "calc(50% - 453px)" },
-    { left: 1092, top: "calc(50% - 453px)" },
-    { left: 1444, top: "calc(50% - 453px)" },
-    { left: 1576, top: "calc(50% - 453px)" },
-    { left: 1620, top: "calc(50% - 453px)" },
-    { left: 379, top: "calc(50% - 453px)" },
-  ];
-
-  const bottomPatternDots = patternDots.map((dot) => ({
-    ...dot,
-    top: "calc(50% + 453px)",
-  }));
 
   return (
-    <WalletContainer>
-      {/* 상단 패턴 */}
-      <PatternTop>
-        {patternDots.map((dot, index) => (
-          <PatternDot
-            key={`top-${index}`}
-            left={dot.left}
-            top={dot.top}
-            width={dot.width}
-          />
-        ))}
-      </PatternTop>
-
-      {/* 하단 패턴 */}
-      <PatternBottom>
-        {bottomPatternDots.map((dot, index) => (
-          <PatternDot
-            key={`bottom-${index}`}
-            left={dot.left}
-            top={dot.top}
-            width={dot.width}
-          />
-        ))}
-      </PatternBottom>
-
-      {/* 메인 컨텐츠 */}
+    <DashboardContainer>
+      <PatternTop />
+      <PatternBottom />
+      
       <MainContent>
-        {/* AD Ticket 아이콘 */}
         <TicketIcon />
-
-        {/* 제목 */}
         <Title>AD Ticket</Title>
-
-        {/* 소셜 로그인 버튼들 */}
-        <SocialLoginContainer>
-          <SocialButton onClick={() => handleSocialLogin("google")}>
-            <SocialIcon icon={imgImage29} />
-            <SocialLabel>Google</SocialLabel>
+        
+        <SocialLoginSection>
+          <SocialButton onClick={handleGoogleLogin}>
+            <SocialIcon src={imgGoogle} />
+            <SocialText>Google</SocialText>
           </SocialButton>
-
-          <SocialButton onClick={() => handleSocialLogin("apple")}>
-            <SocialIcon icon={imgImage27} />
-            <SocialLabel>Apple</SocialLabel>
+          
+          <SocialButton onClick={handleAppleLogin}>
+            <SocialIcon src={imgApple} />
+            <SocialText>Apple</SocialText>
           </SocialButton>
-
-          <SocialButton onClick={() => handleSocialLogin("kakao")}>
-            <SocialIcon icon={imgImage30} />
-            <SocialLabel>kakao</SocialLabel>
+          
+          <SocialButton onClick={handleKakaoLogin}>
+            <SocialIcon src={imgKakao} />
+            <SocialText>kakao</SocialText>
           </SocialButton>
-        </SocialLoginContainer>
-
-        {/* 액션 버튼들 */}
-        <ActionButtonsContainer>
+        </SocialLoginSection>
+        
+        <ActionButtons>
           <ActionButton onClick={handleCreateWallet}>
-            <ButtonBackground background={imgVector} />
-            <ButtonText>새 지갑 만들기</ButtonText>
+            <ActionButtonText>새 지갑 만들기</ActionButtonText>
           </ActionButton>
-
+          
           <ActionButton onClick={handleImportWallet}>
-            <ButtonBackground background={imgVector1} />
-            <ButtonText>지갑 불러오기</ButtonText>
+            <ActionButtonText>지갑 불러오기</ActionButtonText>
           </ActionButton>
-        </ActionButtonsContainer>
+        </ActionButtons>
       </MainContent>
-    </WalletContainer>
+    </DashboardContainer>
   );
 };
 

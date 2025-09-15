@@ -31,6 +31,7 @@ const imgLine42 = "http://localhost:3845/assets/2eeecc92fcde4a9c11fe718d7116c4af
 
 const DashboardContainer = styled.div`
   ${createContainerStyle()}
+  position: relative;
 `;
 
 const Header = styled.div`
@@ -41,22 +42,42 @@ const Header = styled.div`
 `;
 
 const BackButton = styled.button`
-  ${createIconStyle(25)}
+  width: ${responsiveSize(25)};
+  height: ${responsiveSize(25)};
   background: none;
   border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: rotate(270deg);
+`;
+
+const BackIcon = styled.div`
+  width: ${responsiveSize(25)};
+  height: ${responsiveSize(25)};
   background-image: url("${imgPolygon2}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const AccountInfo = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 10)}
+  ${createFlexStyle('column', 'center', 'center', 0)}
   flex: 1;
+  position: relative;
 `;
 
 const AccountIcon = styled.div`
-  ${createIconStyle(15)}
+  position: absolute;
+  left: ${responsiveSpacing(-40)};
+  top: ${responsiveSpacing(2)};
+  width: ${responsiveSize(15)};
+  height: ${responsiveSize(15)};
   background-image: url("${imgFrame61}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const AccountName = styled.div`
@@ -72,23 +93,23 @@ const AccountAddress = styled.div`
 `;
 
 const TicketBalance = styled.div`
+  ${createFlexStyle('row', 'center', 'center', 10)}
   background: #3b3b3b;
   border-radius: ${responsiveSize(25)};
+  padding: ${responsiveSpacing(8)} ${responsiveSpacing(16)};
   height: ${responsiveSize(40)};
-  min-width: ${responsiveSize(80)};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: ${responsiveSpacing(5)};
-  padding: 0 ${responsiveSpacing(10)};
 `;
 
 const TicketIcon = styled.div`
-  ${createIconStyle(25)}
+  width: ${responsiveSize(25)};
+  height: ${responsiveSize(25)};
   background-image: url("${imgImage3}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
-const TicketAmount = styled.div`
+const TicketCount = styled.div`
   ${createTextStyle(16)}
   color: white;
 `;
@@ -96,37 +117,46 @@ const TicketAmount = styled.div`
 const MainTicketSection = styled.div`
   ${createFlexStyle('column', 'center', 'center', 20)}
   margin: ${responsiveSpacing(40)} 0;
+  padding: 0 ${responsiveSpacing(20)};
 `;
 
 const MainTicketIcon = styled.div`
-  ${createIconStyle(100)}
-  background-image: url("${imgImage3}");
+  width: ${responsiveSize(120)};
+  height: ${responsiveSize(120)};
+  background-image: url("${imgImage2}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const MainTicketAmount = styled.div`
   ${createTextStyle(48)}
-  color: white;
+  color: #f29d38;
   font-weight: 700;
+  text-align: center;
 `;
 
 const MainTicketDescription = styled.div`
   ${createTextStyle(16)}
-  color: #999999;
+  color: white;
   text-align: center;
+  line-height: 1.4;
 `;
 
 const ChartSection = styled.div`
   ${createFlexStyle('column', 'center', 'center', 15)}
   margin: ${responsiveSpacing(30)} 0;
+  padding: 0 ${responsiveSpacing(20)};
 `;
 
-const ChartImage = styled.div`
-  width: ${responsiveSize(300)};
-  height: ${responsiveSize(150)};
+const BannerImage = styled.div`
+  width: 100%;
+  height: ${responsiveSize(100)};
   background-image: url("${imgImage10}");
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  border-radius: ${responsiveSize(8)};
 `;
 
 const DotContainer = styled.div`
@@ -145,17 +175,17 @@ const Dot = styled.div`
 const RewardList = styled.div`
   width: 100%;
   padding: 0 ${responsiveSpacing(20)};
-  margin: ${responsiveSpacing(30)} 0;
+  margin-top: ${responsiveSpacing(20)};
 `;
 
 const RewardItem = styled.div`
   ${createFlexStyle('row', 'space-between', 'center', 15)}
   height: ${responsiveSize(70)};
   width: 100%;
-  cursor: pointer;
-  transition: all 0.3s ease;
   padding: ${responsiveSpacing(15)} 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background 0.2s ease;
   
   &:hover {
     background: rgba(255, 255, 255, 0.05);
@@ -167,37 +197,39 @@ const RewardItem = styled.div`
 `;
 
 const RewardIcon = styled.div`
-  ${createIconStyle(40)}
-  background-image: url("${(props) => props.icon}");
+  width: ${responsiveSize(25)};
+  height: ${responsiveSize(25)};
+  background-image: url("${(props) => props.src}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   flex-shrink: 0;
 `;
 
-const RewardDetails = styled.div`
+const RewardContent = styled.div`
+  ${createFlexStyle('column', 'flex-start', 'flex-start', 5)}
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: ${responsiveSpacing(5)};
+  min-width: 0;
 `;
 
 const RewardTitle = styled.div`
-  ${createTextStyle(16)}
+  ${createTextStyle(14)}
   color: white;
-  text-align: left;
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 const RewardInfo = styled.div`
   ${createTextStyle(12)}
   color: #999999;
-  text-align: left;
-  line-height: 1.4;
+  line-height: 1.3;
+  white-space: pre-line;
 `;
 
 const RewardStatus = styled.div`
-  ${createTextStyle(14)}
+  ${createTextStyle(12)}
   color: white;
   text-align: right;
-  font-weight: 700;
+  flex-shrink: 0;
 `;
 
 const ADTicketDashboard = () => {
@@ -217,10 +249,9 @@ const ADTicketDashboard = () => {
     try {
       const balance = await gasSponsorService.getTicketBalance();
       setTicketBalance(balance);
-      // TODO: 실제 백엔드에서 일일 광고 시청 횟수 가져오기
       setCurrentUsage(0); // 임시
     } catch (error) {
-      console.error('AD Ticket 대시보드 초기화 실패:', error);
+      console.error("AD Ticket 대시보드 초기화 실패:", error);
     }
   };
 
@@ -253,15 +284,11 @@ const ADTicketDashboard = () => {
   };
 
   const handleCryptoMission = () => {
-    toast.info("크립토 미션 기능은 준비 중입니다.");
+    navigate("/crypto-mission");
   };
 
   const handleCoupang = () => {
     setIsModalOpen(true);
-  };
-
-  const handleInviteFriends = () => {
-    toast.info("친구초대 기능은 준비 중입니다.");
   };
 
   const handleCloseModal = () => {
@@ -269,13 +296,17 @@ const ADTicketDashboard = () => {
   };
 
   const handleParticipate = () => {
+    toast.success("쿠팡 제휴에 참여합니다!");
     setIsModalOpen(false);
-    toast.success("쿠팡 제휴에 참여했습니다! 결제 시 AD Ticket이 지급됩니다.");
+  };
+
+  const handleInviteFriends = () => {
+    toast.info("친구초대 기능은 준비 중입니다.");
   };
 
   const rewards = [
     {
-      id: "watch-ad",
+      id: 1,
       icon: imgImage3,
       title: "광고 시청하기 + 1",
       info: "일일 제한 횟수 5회",
@@ -284,22 +315,22 @@ const ADTicketDashboard = () => {
       disabled: currentUsage >= dailyLimit || isWatchingAd
     },
     {
-      id: "crypto-mission",
-      icon: imgImage2,
+      id: 2,
+      icon: img11,
       title: "크립토 미션",
       info: "다양한 Web3 미션을 통한 리워드",
       onClick: handleCryptoMission
     },
     {
-      id: "coupang",
-      icon: img11,
+      id: 3,
+      icon: imgImage12,
       title: "쿠팡 제휴",
       info: "3,333원 결제당 AD Ticket 지급\n※ 구매 취소 시, AD 취소",
       onClick: handleCoupang
     },
     {
-      id: "invite-friends",
-      icon: imgImage12,
+      id: 4,
+      icon: imgImage3,
       title: "친구초대",
       info: "초대코드로 친구를 초대 리워드",
       onClick: handleInviteFriends
@@ -308,34 +339,31 @@ const ADTicketDashboard = () => {
 
   return (
     <DashboardContainer>
-      {/* 헤더 */}
       <Header>
         <BackButton onClick={() => navigate("/dashboard")} />
         
         <AccountInfo>
           <AccountIcon />
-          <div>
-            <AccountName>Account 1</AccountName>
-            <AccountAddress>0xcEDBf...4926F</AccountAddress>
-          </div>
+          <AccountName>Account 1</AccountName>
+          <AccountAddress>0xcEDBf...4926F</AccountAddress>
         </AccountInfo>
-
+        
         <TicketBalance>
           <TicketIcon />
-          <TicketAmount>{ticketBalance}</TicketAmount>
+          <TicketCount>{ticketBalance}</TicketCount>
         </TicketBalance>
       </Header>
 
-      {/* 메인 티켓 섹션 */}
       <MainTicketSection>
         <MainTicketIcon />
         <MainTicketAmount>{ticketBalance}</MainTicketAmount>
-        <MainTicketDescription>가스비를 결제해주는 AD Ticket</MainTicketDescription>
+        <MainTicketDescription>
+          가스비를 결제해주는 AD Ticket
+        </MainTicketDescription>
       </MainTicketSection>
 
-      {/* 차트 섹션 */}
       <ChartSection>
-        <ChartImage />
+        <BannerImage />
         <DotContainer>
           <Dot active />
           <Dot />
@@ -345,7 +373,6 @@ const ADTicketDashboard = () => {
         </DotContainer>
       </ChartSection>
 
-      {/* 리워드 목록 */}
       <RewardList>
         {rewards.map((reward) => (
           <RewardItem 
@@ -356,11 +383,11 @@ const ADTicketDashboard = () => {
               cursor: reward.disabled ? 'not-allowed' : 'pointer'
             }}
           >
-            <RewardIcon icon={reward.icon} />
-            <RewardDetails>
+            <RewardIcon src={reward.icon} />
+            <RewardContent>
               <RewardTitle>{reward.title}</RewardTitle>
               <RewardInfo>{reward.info}</RewardInfo>
-            </RewardDetails>
+            </RewardContent>
             {reward.status && <RewardStatus>{reward.status}</RewardStatus>}
           </RewardItem>
         ))}

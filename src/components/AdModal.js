@@ -184,12 +184,19 @@ const AdModal = ({ isOpen, onClose, onParticipate }) => {
         <GuideSection>
           <GuideTitle>참여 가이드</GuideTitle>
           <GuideText>
-            쿠팡에서 상품을 구매하시면<br />
-            <span className="highlight">3,333원 결제당 AD TICKET 1개</span>를 지급해드립니다.<br /><br />
-            예시)<br />
-            • 11,000원 결제 시 → AD TICKET 3개 지급<br />
-            • 14,000원 결제 시 → AD TICKET 4개 지급<br /><br />
-            <span className="small">※ 구매 취소 시, 지급된 AD TICKET도 함께 취소됩니다.</span>
+            쿠팡 홈페이지 접속 후 결제 시에만 리워드가 지급됩니다.
+            <br />
+            타 사이트나 플랫폼의(네이*쇼핑검색, 인스타**, 유튜* 등) 쿠팡 광고 배너, 특정상품 배너 클릭과 애드벌룬을 클릭을 병행하여 구매 시 리워드가 적립되지 않습니다.
+            <br /><br />
+            1. 3,333원 결제당 <span className="highlight">AD TICKET</span> 1개가 지급 됩니다.
+            <br />
+            (단, 배송비는 제외)
+            <br />
+            <span className="small">
+              예1) 11,000원 결제 시 애드벌룬 3개 후원
+              <br />
+              예2) 14,000원 결제 시 애드벌룬 4개 후원
+            </span>
           </GuideText>
         </GuideSection>
 

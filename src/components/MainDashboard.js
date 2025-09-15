@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import gasSponsorService from "../services/gasSponsor";
 import { 
   createContainerStyle, 
@@ -15,26 +16,16 @@ import {
 } from "../utils/autoLayout";
 
 // 이미지 상수들
-const imgEye = "http://localhost:3845/assets/63afbe91280e317dcff5a81a9fb9d5cc27d76db3.png";
-const imgSettings = "http://localhost:3845/assets/533bfd07bcaf92a339876fcb9c18ed03475f8094.png";
-const imgWallet = "http://localhost:3845/assets/717984cacafff4dabba275966a87b6aeb841077e.png";
-const imgDollarEuroExchange = "http://localhost:3845/assets/a5e3af09441a3318db3ba4227054448ee7be68d8.png";
-const imgAroundTheGlobe = "http://localhost:3845/assets/3133da9bed63f5ffd3a2e490f30717c5273b9e38.png";
-const imgCryptoTradingSpot = "http://localhost:3845/assets/0618b7576df673c4aea6c6fdd0605ed14a179f65.png";
-const imgImage7 = "http://localhost:3845/assets/7295164430571b46b9fbb1781cd8a3e8631971eb.png";
-const imgImage8 = "http://localhost:3845/assets/85a292aa95479e92e0d455d112b54208111c5d0d.png";
-const imgImage9 = "http://localhost:3845/assets/0efd44893bd0488612a1d8121a7b5b0b5db116fb.png";
 const imgImage3 = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
 const imgImage10 = "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
-const imgLine42 = "http://localhost:3845/assets/2eeecc92fcde4a9c11fe718d7116c4af4338d0d9.svg";
+const imgPolygon1 = "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
+const imgFrame60 = "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
 const imgEllipse2 = "http://localhost:3845/assets/9bcc4b909b8ec2fd01adeeaf82d47b22c8e9d181.svg";
 const imgEllipse4 = "http://localhost:3845/assets/be5a31e41c19f8e4c9bb19c23ce01d5c4f53b249.svg";
-const imgPolygon1 = "http://localhost:3845/assets/ae5e6915a4e7136319927308cc3e2cd0ac67d4de.svg";
-const imgPolygon2 = "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
-const imgFrame58 = "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
 
 const DashboardContainer = styled.div`
   ${createContainerStyle()}
+  position: relative;
 `;
 
 const Header = styled.div`
@@ -44,41 +35,49 @@ const Header = styled.div`
   box-sizing: border-box;
 `;
 
-const NetworkSelector = styled.button`
-  background: #5f5f5f;
-  border: none;
+const NetworkSelector = styled.div`
+  ${createFlexStyle('row', 'center', 'center', 8)}
+  background: #3b3b3b;
   border-radius: ${responsiveSize(20)};
-  height: ${responsiveSize(40)};
-  padding: 0 ${responsiveSpacing(15)};
-  display: flex;
-  align-items: center;
-  gap: ${responsiveSpacing(8)};
+  padding: ${responsiveSpacing(8)} ${responsiveSpacing(16)};
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.2s ease;
   
   &:hover {
-    background: #6f6f6f;
+    background: #4a4a4a;
   }
 `;
 
 const NetworkIcon = styled.div`
-  ${createIconStyle(20)}
-  background-image: url("${imgPolygon1}");
+  width: ${responsiveSize(20)};
+  height: ${responsiveSize(20)};
+  background-image: url("${imgFrame60}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
-const NetworkText = styled.span`
-  ${createTextStyle(12)}
+const NetworkText = styled.div`
+  ${createTextStyle(14)}
   color: white;
 `;
 
 const AccountInfo = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 10)}
+  ${createFlexStyle('column', 'center', 'center', 0)}
   flex: 1;
+  position: relative;
 `;
 
 const AccountIcon = styled.div`
-  ${createIconStyle(15)}
-  background-image: url("${imgFrame58}");
+  position: absolute;
+  left: ${responsiveSpacing(-40)};
+  top: ${responsiveSpacing(2)};
+  width: ${responsiveSize(15)};
+  height: ${responsiveSize(15)};
+  background-image: url("${imgFrame60}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const AccountName = styled.div`
@@ -94,17 +93,13 @@ const AccountAddress = styled.div`
 `;
 
 const TicketBalance = styled.div`
+  ${createFlexStyle('row', 'center', 'center', 10)}
   background: #3b3b3b;
   border-radius: ${responsiveSize(25)};
+  padding: ${responsiveSpacing(8)} ${responsiveSpacing(16)};
   height: ${responsiveSize(40)};
-  min-width: ${responsiveSize(80)};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: ${responsiveSpacing(5)};
-  padding: 0 ${responsiveSpacing(10)};
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.2s ease;
   
   &:hover {
     background: #4a4a4a;
@@ -112,115 +107,83 @@ const TicketBalance = styled.div`
 `;
 
 const TicketIcon = styled.div`
-  ${createIconStyle(25)}
+  width: ${responsiveSize(25)};
+  height: ${responsiveSize(25)};
   background-image: url("${imgImage3}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
-const TicketAmount = styled.div`
+const TicketCount = styled.div`
   ${createTextStyle(16)}
   color: white;
 `;
 
 const BalanceSection = styled.div`
   ${createFlexStyle('column', 'center', 'center', 10)}
-  margin: ${responsiveSpacing(30)} 0;
+  padding: ${responsiveSpacing(30)} ${responsiveSpacing(20)};
+  text-align: center;
 `;
 
 const BalanceAmount = styled.div`
   ${createTextStyle(48)}
   color: white;
   font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: ${responsiveSpacing(10)};
-`;
-
-const EyeButton = styled.button`
-  ${createIconStyle(20)}
-  background: none;
-  border: none;
-  cursor: pointer;
-  background-image: url("${imgEye}");
 `;
 
 const BalanceChange = styled.div`
   ${createTextStyle(16)}
-  color: #3ae851;
-  text-align: center;
+  color: #4ade80;
+  font-weight: 600;
+`;
+
+const EyeButton = styled.button`
+  position: absolute;
+  right: ${responsiveSpacing(20)};
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: ${responsiveSpacing(8)};
+  border-radius: 50%;
+  transition: background 0.2s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
 `;
 
 const BannerSection = styled.div`
   ${createFlexStyle('column', 'center', 'center', 15)}
-  margin: ${responsiveSpacing(30)} 0;
   padding: 0 ${responsiveSpacing(20)};
+  margin: ${responsiveSpacing(20)} 0;
 `;
 
-const Banner = styled.div`
+const BannerImage = styled.div`
   width: 100%;
-  height: ${responsiveSize(120)};
-  background: #110b0b;
-  border-radius: ${responsiveSize(10)};
-  position: relative;
-  overflow: hidden;
+  height: ${responsiveSize(100)};
+  background-image: url("${imgImage10}");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: ${responsiveSize(8)};
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease;
   
   &:hover {
     transform: scale(1.02);
   }
 `;
 
-const BannerContent = styled.div`
-  position: absolute;
-  top: ${responsiveSpacing(15)};
-  left: ${responsiveSpacing(20)};
-  z-index: 2;
+const DotContainer = styled.div`
+  ${createFlexStyle('row', 'center', 'center', 15)}
 `;
 
-const BannerLogo = styled.div`
-  ${createTextStyle(12)}
-  color: #ff6b6b;
-  margin-bottom: ${responsiveSpacing(5)};
-`;
-
-const BannerTitle = styled.div`
-  ${createTextStyle(24)}
-  color: white;
-  font-weight: 700;
-  margin-bottom: ${responsiveSpacing(5)};
-`;
-
-const BannerSubtitle = styled.div`
-  ${createTextStyle(14)}
-  color: #999999;
-  margin-bottom: ${responsiveSpacing(10)};
-`;
-
-const BannerPrize = styled.div`
-  ${createTextStyle(16)}
-  color: white;
-  font-weight: 700;
-`;
-
-const BannerImage = styled.div`
-  position: absolute;
-  right: ${responsiveSpacing(20)};
-  top: 50%;
-  transform: translateY(-50%);
-  width: ${responsiveSize(80)};
-  height: ${responsiveSize(80)};
-  background-image: url("${imgImage10}");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
-
-const BannerDots = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 10)}
-`;
-
-const BannerDot = styled.div`
-  ${createIconStyle(8)}
+const Dot = styled.div`
+  ${createIconStyle(10)}
   background-image: url("${imgEllipse4}");
   
   ${props => props.active && `
@@ -229,43 +192,42 @@ const BannerDot = styled.div`
 `;
 
 const TabSection = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 10)}
-  margin: ${responsiveSpacing(20)} 0;
+  ${createFlexStyle('row', 'center', 'center', 0)}
   padding: 0 ${responsiveSpacing(20)};
+  margin: ${responsiveSpacing(20)} 0;
 `;
 
 const Tab = styled.button`
-  height: ${responsiveSize(51)};
+  ${createTextStyle(18)}
+  color: ${props => props.active ? '#f29d38' : 'white'};
+  background: none;
   border: none;
-  background: ${(props) => (props.active ? "#f29d38" : "transparent")};
-  color: ${(props) => (props.active ? "white" : "#f29d38")};
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: ${responsiveFontSize(32)};
   cursor: pointer;
-  padding: 0 ${responsiveSpacing(20)};
-  border-radius: ${responsiveSize(5)};
-  transition: all 0.3s ease;
-  flex: 1;
-  max-width: ${responsiveSize(150)};
+  padding: ${responsiveSpacing(10)} ${responsiveSpacing(20)};
+  font-weight: 600;
+  transition: color 0.2s ease;
   
   &:hover {
-    background: ${(props) => (props.active ? "#f29d38" : "rgba(242, 157, 56, 0.1)")};
+    color: #f29d38;
   }
 `;
 
 const TokenList = styled.div`
-  width: 100%;
+  flex: 1;
   padding: 0 ${responsiveSpacing(20)};
-  margin: ${responsiveSpacing(20)} 0;
+  overflow-y: auto;
 `;
 
 const TokenItem = styled.div`
   ${createFlexStyle('row', 'space-between', 'center', 15)}
-  height: ${responsiveSize(60)};
-  width: 100%;
-  padding: ${responsiveSpacing(10)} 0;
+  padding: ${responsiveSpacing(15)} 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
   
   &:last-child {
     border-bottom: none;
@@ -273,123 +235,120 @@ const TokenItem = styled.div`
 `;
 
 const TokenIcon = styled.div`
-  ${createIconStyle(25)}
-  background-image: url("${(props) => props.icon}");
-  flex-shrink: 0;
+  width: ${responsiveSize(40)};
+  height: ${responsiveSize(40)};
+  background: #3b3b3b;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${createTextStyle(16)}
+  color: white;
+  font-weight: 600;
 `;
 
-const TokenDetails = styled.div`
+const TokenInfo = styled.div`
+  ${createFlexStyle('column', 'flex-start', 'flex-start', 5)}
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: ${responsiveSpacing(5)};
 `;
 
 const TokenName = styled.div`
-  ${createTextStyle(14)}
+  ${createTextStyle(16)}
   color: white;
-  text-align: left;
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 const TokenChange = styled.div`
-  ${createTextStyle(12)}
-  color: ${(props) => props.color};
-  text-align: left;
-`;
-
-const TokenAmounts = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${responsiveSpacing(5)};
-  align-items: flex-end;
+  ${createTextStyle(14)}
+  color: ${props => props.positive ? '#4ade80' : '#ef4444'};
 `;
 
 const TokenAmount = styled.div`
+  ${createFlexStyle('column', 'flex-end', 'flex-end', 5)}
+`;
+
+const TokenBalance = styled.div`
+  ${createTextStyle(16)}
+  color: white;
+  font-weight: 600;
+`;
+
+const TokenValue = styled.div`
+  ${createTextStyle(14)}
+  color: #999999;
+`;
+
+const LoadTokenButton = styled.button`
+  width: 100%;
+  padding: ${responsiveSpacing(15)};
+  background: #2a2a2a;
+  border: 1px solid #3b3b3b;
+  border-radius: ${responsiveSize(8)};
   ${createTextStyle(14)}
   color: white;
-  text-align: right;
-  font-weight: 700;
-`;
-
-const TokenPrice = styled.div`
-  ${createTextStyle(12)}
-  color: #999999;
-  text-align: right;
-`;
-
-const AddTokenButton = styled.button`
-  width: 100%;
-  height: ${responsiveSize(60)};
-  background: none;
-  border: none;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: ${responsiveFontSize(14)};
-  color: #f29d38;
-  text-align: center;
-  transition: all 0.3s ease;
+  transition: background 0.2s ease;
   margin: ${responsiveSpacing(20)} 0;
-  padding: 0 ${responsiveSpacing(20)};
   
   &:hover {
-    background: rgba(242, 157, 56, 0.1);
+    background: #3a3a3a;
   }
 `;
 
-const BottomNavigation = styled.div`
-  width: 100%;
+const NavigationBar = styled.div`
+  ${createFlexStyle('row', 'space-around', 'center', 0)}
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: ${responsiveSize(80)};
-  display: flex;
-  justify-content: space-between;
-  padding: ${responsiveSpacing(10)} ${responsiveSpacing(20)};
-  margin-top: ${responsiveSpacing(20)};
-  background: linear-gradient(180deg, rgba(29, 24, 24, 0.8) 0%, rgba(29, 24, 24, 1) 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: #2a2a2a;
+  border-top: 1px solid #3b3b3b;
+  padding: ${responsiveSpacing(10)} 0;
+  z-index: 100;
 `;
 
 const NavItem = styled.button`
-  width: ${responsiveSize(70)};
-  height: ${responsiveSize(60)};
-  background: ${(props) => (props.active ? "white" : "#5f5f5f")};
+  ${createFlexStyle('column', 'center', 'center', 5)}
+  background: none;
   border: none;
-  border-radius: ${responsiveSize(2)};
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: ${responsiveSpacing(5)};
-  transition: all 0.3s ease;
-  flex: 1;
-  max-width: ${responsiveSize(70)};
+  padding: ${responsiveSpacing(8)};
+  transition: color 0.2s ease;
+  color: ${props => props.active ? '#f29d38' : '#999999'};
   
   &:hover {
-    background: ${(props) => (props.active ? "white" : "#6f6f6f")};
+    color: #f29d38;
   }
 `;
 
 const NavIcon = styled.div`
-  ${createIconStyle(30)}
-  background-image: url("${(props) => props.icon}");
+  width: ${responsiveSize(24)};
+  height: ${responsiveSize(24)};
+  background: ${props => props.active ? '#f29d38' : '#999999'};
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${createTextStyle(12)}
+  color: white;
+  font-weight: 600;
 `;
 
-const NavLabel = styled.div`
-  ${createTextStyle(10)}
-  color: ${(props) => (props.active ? "#f29d38" : "black")};
-  text-align: center;
-  line-height: 1;
+const NavText = styled.div`
+  ${createTextStyle(12)}
+  color: inherit;
 `;
 
 const MainDashboard = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("TOKEN");
-  const [showBalance, setShowBalance] = useState(true);
   const [ticketBalance, setTicketBalance] = useState(18);
+  const [balance, setBalance] = useState(6.29);
+  const [balanceChange, setBalanceChange] = useState(1.16);
+  const [balanceChangePercent, setBalanceChangePercent] = useState(2.73);
+  const [isBalanceVisible, setIsBalanceVisible] = useState(true);
+  const [activeTab, setActiveTab] = useState('TOKEN');
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     initializeDashboard();
@@ -404,175 +363,138 @@ const MainDashboard = () => {
     }
   };
 
+  const handleTicketClick = () => {
+    navigate("/ad-ticket");
+  };
+
+  const handleToggleBalance = () => {
+    setIsBalanceVisible(!isBalanceVisible);
+  };
+
+  const handleBannerClick = () => {
+    setCurrentSlide((prev) => (prev + 1) % 3);
+  };
+
   const tokens = [
     {
+      id: 1,
       name: "Ethereum",
-      icon: imgImage7,
-      amount: "0.00263 ETH",
-      price: "$6.28",
+      symbol: "ETH",
+      balance: "0.00263",
+      value: "$6.28",
       change: "+2.73%",
-      changeColor: "#3ae851",
+      positive: true
     },
     {
+      id: 2,
       name: "Arbitrum",
-      icon: imgImage8,
-      amount: "0.001 ARB",
-      price: "$0.001",
+      symbol: "ARB",
+      balance: "0.001",
+      value: "$0.001",
       change: "-0.01%",
-      changeColor: "#ff6b6b",
+      positive: false
     },
     {
+      id: 3,
       name: "Matic",
-      icon: imgImage9,
-      amount: "0 MATIC",
-      price: "$0.001",
+      symbol: "MATIC",
+      balance: "0",
+      value: "$0.001",
       change: "0.00%",
-      changeColor: "#999999",
-    },
+      positive: true
+    }
   ];
 
-  const handleNavClick = (route) => {
-    switch (route) {
-      case "wallet":
-        // 이미 메인 대시보드에 있음
-        break;
-      case "send":
-        navigate("/send");
-        break;
-      case "swap":
-        toast.info("스왑 기능은 준비 중입니다.");
-        break;
-      case "transaction":
-        navigate("/history");
-        break;
-      case "settings":
-        navigate("/settings");
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleAddToken = () => {
-    toast.info("토큰 추가 기능은 준비 중입니다.");
-  };
+  const navItems = [
+    { id: 'wallet', label: 'Wallet', active: true },
+    { id: 'send', label: 'Send / Recive' },
+    { id: 'swap', label: 'Swap / Bridge' },
+    { id: 'transaction', label: 'Transaction' },
+    { id: 'setting', label: 'Setting' }
+  ];
 
   return (
     <DashboardContainer>
-      {/* 상단 헤더 */}
       <Header>
         <NetworkSelector>
           <NetworkIcon />
-          <NetworkText>Ethereum</NetworkText>
+          <NetworkText>Account 1</NetworkText>
         </NetworkSelector>
         
         <AccountInfo>
           <AccountIcon />
-          <div>
-            <AccountName>Account 1</AccountName>
-            <AccountAddress>0xcEDBf...4926F</AccountAddress>
-          </div>
+          <AccountName>Account 1</AccountName>
+          <AccountAddress>0xcEDBf...4926F</AccountAddress>
         </AccountInfo>
-
-        <TicketBalance onClick={() => navigate("/ad-ticket")}>
+        
+        <TicketBalance onClick={handleTicketClick}>
           <TicketIcon />
-          <TicketAmount>{ticketBalance}</TicketAmount>
+          <TicketCount>{ticketBalance}</TicketCount>
         </TicketBalance>
       </Header>
 
-      {/* 잔액 섹션 */}
-      <BalanceSection>
+      <BalanceSection style={{ position: 'relative' }}>
         <BalanceAmount>
-          {showBalance ? "$6.29" : "****"}
-          <EyeButton onClick={() => setShowBalance(!showBalance)} />
+          {isBalanceVisible ? `$${balance}` : '••••••'}
         </BalanceAmount>
-        <BalanceChange>+$1.16 (+2.73%)</BalanceChange>
+        {isBalanceVisible && (
+          <BalanceChange>
+            +${balanceChange} (+{balanceChangePercent}%)
+          </BalanceChange>
+        )}
+        <EyeButton onClick={handleToggleBalance}>
+          {isBalanceVisible ? <FiEye size={20} /> : <FiEyeOff size={20} />}
+        </EyeButton>
       </BalanceSection>
 
-      {/* 배너 섹션 */}
       <BannerSection>
-        <Banner>
-          <BannerContent>
-            <BannerLogo>very</BannerLogo>
-            <BannerTitle>VERY Hackathon</BannerTitle>
-            <BannerSubtitle>JUL-SEPT '25</BannerSubtitle>
-            <BannerPrize>Prize Pool</BannerPrize>
-            <BannerPrize>$73,000+13M $VERY</BannerPrize>
-          </BannerContent>
-          <BannerImage />
-        </Banner>
-        <BannerDots>
-          <BannerDot active />
-          <BannerDot />
-          <BannerDot />
-          <BannerDot />
-          <BannerDot />
-        </BannerDots>
+        <BannerImage onClick={handleBannerClick} />
+        <DotContainer>
+          {[0, 1, 2].map((index) => (
+            <Dot key={index} active={index === currentSlide} />
+          ))}
+        </DotContainer>
       </BannerSection>
 
-      {/* 탭 */}
       <TabSection>
-        <Tab
-          active={activeTab === "TOKEN"}
-          onClick={() => setActiveTab("TOKEN")}
-        >
+        <Tab active={activeTab === 'TOKEN'} onClick={() => setActiveTab('TOKEN')}>
           TOKEN
         </Tab>
-        <Tab
-          active={activeTab === "NFT"}
-          onClick={() => setActiveTab("NFT")}
-        >
+        <Tab active={activeTab === 'NFT'} onClick={() => setActiveTab('NFT')}>
           NFT
         </Tab>
       </TabSection>
 
-      {/* 토큰 목록 */}
       <TokenList>
-        {tokens.map((token, index) => (
-          <TokenItem key={index}>
-            <TokenIcon icon={token.icon} />
-            <TokenDetails>
+        {tokens.map((token) => (
+          <TokenItem key={token.id}>
+            <TokenIcon>{token.symbol[0]}</TokenIcon>
+            <TokenInfo>
               <TokenName>{token.name}</TokenName>
-              <TokenChange color={token.changeColor}>
-                {token.change}
-              </TokenChange>
-            </TokenDetails>
-            <TokenAmounts>
-              <TokenAmount>{token.amount}</TokenAmount>
-              <TokenPrice>{token.price}</TokenPrice>
-            </TokenAmounts>
+              <TokenChange positive={token.positive}>{token.change}</TokenChange>
+            </TokenInfo>
+            <TokenAmount>
+              <TokenBalance>{token.balance} {token.symbol}</TokenBalance>
+              <TokenValue>{token.value}</TokenValue>
+            </TokenAmount>
           </TokenItem>
         ))}
+        
+        <LoadTokenButton>
+          토큰 불러오기 / 추가하기
+        </LoadTokenButton>
       </TokenList>
 
-      {/* 토큰 추가 버튼 */}
-      <AddTokenButton onClick={handleAddToken}>
-        토큰 불러오기 / 추가하기
-      </AddTokenButton>
-
-      {/* 하단 네비게이션 */}
-      <BottomNavigation>
-        <NavItem active onClick={() => handleNavClick("wallet")}>
-          <NavIcon icon={imgWallet} />
-          <NavLabel active>Wallet</NavLabel>
-        </NavItem>
-        <NavItem onClick={() => handleNavClick("send")}>
-          <NavIcon icon={imgDollarEuroExchange} />
-          <NavLabel>Send / Recive</NavLabel>
-        </NavItem>
-        <NavItem onClick={() => handleNavClick("swap")}>
-          <NavIcon icon={imgAroundTheGlobe} />
-          <NavLabel>Swap / Bridge</NavLabel>
-        </NavItem>
-        <NavItem onClick={() => handleNavClick("transaction")}>
-          <NavIcon icon={imgCryptoTradingSpot} />
-          <NavLabel>Transaction</NavLabel>
-        </NavItem>
-        <NavItem onClick={() => handleNavClick("settings")}>
-          <NavIcon icon={imgSettings} />
-          <NavLabel>Setting</NavLabel>
-        </NavItem>
-      </BottomNavigation>
+      <NavigationBar>
+        {navItems.map((item) => (
+          <NavItem key={item.id} active={item.active}>
+            <NavIcon active={item.active}>
+              {item.label[0]}
+            </NavIcon>
+            <NavText>{item.label}</NavText>
+          </NavItem>
+        ))}
+      </NavigationBar>
     </DashboardContainer>
   );
 };

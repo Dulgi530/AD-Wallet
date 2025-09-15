@@ -9,6 +9,7 @@ import WalletDashboard from "./components/WalletDashboard";
 import ADTicketDashboard from "./components/ADTicketDashboard";
 import MainDashboard from "./components/MainDashboard";
 import CreateWallet from "./components/CreateWallet";
+import CryptoMission from "./components/CryptoMission";
 import SendMoney from "./components/SendMoney";
 import ReceiveMoney from "./components/ReceiveMoney";
 import TransactionHistory from "./components/TransactionHistory";
@@ -36,6 +37,7 @@ function App() {
           <Route path="/create-wallet" element={<CreateWallet />} />
           <Route path="/dashboard" element={<MainDashboard />} />
           <Route path="/ad-ticket" element={<ADTicketDashboard />} />
+          <Route path="/crypto-mission" element={<CryptoMission />} />
           <Route
             path="/send"
             element={
