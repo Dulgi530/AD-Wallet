@@ -2,6 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
+import { 
+  createContainerStyle, 
+  createButtonStyle, 
+  createTextStyle, 
+  createIconStyle,
+  createFlexStyle,
+  responsiveSize,
+  responsiveFontSize,
+  responsiveSpacing
+} from "../utils/autoLayout";
 
 // 이미지 상수들
 const imgInvisible = "http://localhost:3845/assets/f2b01876f41f56e3e6a7dfd6363d3854a834f76e.png";
@@ -9,17 +19,7 @@ const imgVector = "http://localhost:3845/assets/9c9baa69399e6e25e9d51108344555d9
 const imgVector1 = "http://localhost:3845/assets/894d81e3b1489d46491680c760b7b4766d1deee2.svg";
 
 const WalletContainer = styled.div`
-  background: #1d1818;
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-  padding: 0;
-  margin: 0;
-  
-  @media (max-width: 480px) {
-    min-height: 100vh;
-  }
+  ${createContainerStyle()}
 `;
 
 const PatternTop = styled.div`

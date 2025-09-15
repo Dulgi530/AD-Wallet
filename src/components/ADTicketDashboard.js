@@ -4,6 +4,17 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 import gasSponsorService from "../services/gasSponsor";
 import AdModal from "./AdModal";
+import { 
+  createContainerStyle, 
+  createHeaderStyle, 
+  createButtonStyle, 
+  createTextStyle, 
+  createIconStyle,
+  createFlexStyle,
+  responsiveSize,
+  responsiveFontSize,
+  responsiveSpacing
+} from "../utils/autoLayout";
 
 // 이미지 상수들
 const imgImage3 = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
@@ -19,185 +30,88 @@ const imgEllipse4 = "http://localhost:3845/assets/be5a31e41c19f8e4c9bb19c23ce01d
 const imgLine42 = "http://localhost:3845/assets/2eeecc92fcde4a9c11fe718d7116c4af4338d0d9.svg";
 
 const DashboardContainer = styled.div`
-  background: #1d1818;
-  position: relative;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-  padding: 0;
-  margin: 0;
-  
-  @media (max-width: 480px) {
-    min-height: 100vh;
-  }
+  ${createContainerStyle()}
 `;
 
 const Header = styled.div`
-  position: relative;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-  
-  @media (max-width: 480px) {
-    padding: 15px;
-  }
+  ${createHeaderStyle()}
 `;
 
 const BackButton = styled.button`
-  width: 25px;
-  height: 25px;
+  ${createIconStyle(25)}
   background: none;
   border: none;
   cursor: pointer;
   transform: rotate(270deg);
   background-image: url("${imgPolygon2}");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  
-  @media (max-width: 480px) {
-    width: 20px;
-    height: 20px;
-  }
 `;
 
 const AccountInfo = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  ${createFlexStyle('row', 'center', 'center', 10)}
   flex: 1;
-  justify-content: center;
-  
-  @media (max-width: 480px) {
-    gap: 8px;
-  }
 `;
 
 const AccountName = styled.div`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 14px;
+  ${createTextStyle(14)}
   color: white;
   text-align: center;
-  
-  @media (max-width: 480px) {
-    font-size: 12px;
-  }
 `;
 
 const AccountAddress = styled.div`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 12px;
+  ${createTextStyle(12)}
   color: #999999;
   text-align: center;
-  
-  @media (max-width: 480px) {
-    font-size: 10px;
-  }
 `;
 
 const TicketBalance = styled.div`
   background: #3b3b3b;
-  border-radius: 25px;
-  height: 40px;
-  min-width: 80px;
+  border-radius: ${responsiveSize(25)};
+  height: ${responsiveSize(40)};
+  min-width: ${responsiveSize(80)};
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 0 10px;
-  
-  @media (max-width: 480px) {
-    height: 35px;
-    min-width: 70px;
-    gap: 3px;
-  }
+  gap: ${responsiveSpacing(5)};
+  padding: 0 ${responsiveSpacing(10)};
 `;
 
 const TicketIcon = styled.div`
-  width: 25px;
-  height: 25px;
+  ${createIconStyle(25)}
   background-image: url("${imgImage3}");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  
-  @media (max-width: 480px) {
-    width: 20px;
-    height: 20px;
-  }
 `;
 
 const TicketAmount = styled.div`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 16px;
+  ${createTextStyle(16)}
   color: white;
-  
-  @media (max-width: 480px) {
-    font-size: 14px;
-  }
 `;
 
 const LargeTicketIcon = styled.div`
-  width: 50px;
-  height: 50px;
+  ${createIconStyle(50)}
   background-image: url("${imgImage3}");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin-right: 20px;
-  
-  @media (max-width: 480px) {
-    width: 40px;
-    height: 40px;
-    margin-right: 15px;
-  }
+  margin-right: ${responsiveSpacing(20)};
 `;
 
 const LargeTicketAmount = styled.div`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 32px;
+  ${createTextStyle(32)}
   color: white;
   line-height: normal;
-  
-  @media (max-width: 480px) {
-    font-size: 28px;
-  }
 `;
 
 const Description = styled.div`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 16px;
+  ${createTextStyle(16)}
   color: #999999;
   text-align: center;
   line-height: normal;
-  margin: 20px 0;
-  
-  @media (max-width: 480px) {
-    font-size: 14px;
-    margin: 15px 0;
-  }
+  margin: ${responsiveSpacing(20)} 0;
 `;
 
 const ChartContainer = styled.div`
   width: 100%;
-  height: 100px;
+  height: ${responsiveSize(100)};
   background: #110b0b;
   overflow: hidden;
-  margin: 20px 0;
-  border-radius: 8px;
-  
-  @media (max-width: 480px) {
-    height: 80px;
-    margin: 15px 0;
-  }
+  margin: ${responsiveSpacing(20)} 0;
+  border-radius: ${responsiveSize(8)};
 `;
 
 const ChartImage = styled.div`
@@ -210,47 +124,27 @@ const ChartImage = styled.div`
 `;
 
 const ChartDots = styled.div`
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  margin: 10px 0;
-  
-  @media (max-width: 480px) {
-    gap: 10px;
-  }
+  ${createFlexStyle('row', 'center', 'center', 15)}
+  margin: ${responsiveSpacing(10)} 0;
 `;
 
 const ChartDot = styled.div`
-  width: 10px;
-  height: 10px;
+  ${createIconStyle(10)}
   background-image: url("${imgEllipse4}");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
   
   &:first-child {
     background-image: url("${imgEllipse2}");
-  }
-  
-  @media (max-width: 480px) {
-    width: 8px;
-    height: 8px;
   }
 `;
 
 const AdList = styled.div`
   width: 100%;
-  padding: 0 20px;
-  margin: 20px 0;
-  
-  @media (max-width: 480px) {
-    padding: 0 15px;
-    margin: 15px 0;
-  }
+  padding: 0 ${responsiveSpacing(20)};
+  margin: ${responsiveSpacing(20)} 0;
 `;
 
 const AdItem = styled.div`
-  height: 60px;
+  height: ${responsiveSize(60)};
   width: 100%;
   display: flex;
   align-items: center;
@@ -258,71 +152,37 @@ const AdItem = styled.div`
   margin-bottom: 0;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 10px 0;
+  padding: ${responsiveSpacing(10)} 0;
   
   &:hover {
     background: rgba(255, 255, 255, 0.05);
   }
-  
-  @media (max-width: 480px) {
-    height: 50px;
-    padding: 8px 0;
-  }
 `;
 
 const AdIcon = styled.div`
-  width: 25px;
-  height: 25px;
+  ${createIconStyle(25)}
   background-image: url("${(props) => props.icon}");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin-right: 15px;
-  
-  @media (max-width: 480px) {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-  }
+  margin-right: ${responsiveSpacing(15)};
 `;
 
 const AdTitle = styled.div`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 14px;
+  ${createTextStyle(14)}
   color: white;
   text-align: left;
   flex: 1;
-  
-  @media (max-width: 480px) {
-    font-size: 12px;
-  }
 `;
 
 const AdLimit = styled.div`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 14px;
+  ${createTextStyle(14)}
   color: white;
   text-align: right;
-  margin-right: 10px;
-  
-  @media (max-width: 480px) {
-    font-size: 12px;
-    margin-right: 5px;
-  }
+  margin-right: ${responsiveSpacing(10)};
 `;
 
 const AdDescription = styled.div`
-  font-family: "Mina", "Noto Sans KR", sans-serif;
-  font-weight: 700;
-  font-size: 12px;
+  ${createTextStyle(12)}
   color: #999999;
   text-align: right;
-  
-  @media (max-width: 480px) {
-    font-size: 10px;
-  }
 `;
 
 const Divider = styled.div`
@@ -332,11 +192,7 @@ const Divider = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  margin: 10px 0;
-  
-  @media (max-width: 480px) {
-    margin: 8px 0;
-  }
+  margin: ${responsiveSpacing(10)} 0;
 `;
 
 const ADTicketDashboard = () => {

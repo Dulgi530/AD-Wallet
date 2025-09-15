@@ -2,6 +2,16 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
+import { 
+  createContainerStyle, 
+  createButtonStyle, 
+  createTextStyle, 
+  createIconStyle,
+  createFlexStyle,
+  responsiveSize,
+  responsiveFontSize,
+  responsiveSpacing
+} from "../utils/autoLayout";
 
 // 이미지 상수들
 const imgImage3 =
@@ -18,16 +28,7 @@ const imgVector1 =
   "http://localhost:3845/assets/894d81e3b1489d46491680c760b7b4766d1deee2.svg";
 
 const WalletContainer = styled.div`
-  background: #1d1818;
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-
-  @media (max-width: 480px) {
-    height: 100vh;
-    min-height: 667px;
-  }
+  ${createContainerStyle()}
 `;
 
 const PatternTop = styled.div`
