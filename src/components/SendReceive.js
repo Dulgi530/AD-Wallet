@@ -1667,7 +1667,7 @@ const SendReceive = () => {
 
         <NavItem
           style={{ position: "absolute", left: "171px", top: "10px" }}
-          onClick={() => navigate("/swap-bridge")}
+          onClick={() => navigate("/bridge")}
         >
           <NavIcon src={imgAroundTheGlobe} />
           <NavText>Swap / Bridge</NavText>

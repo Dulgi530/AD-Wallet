@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
@@ -43,13 +43,15 @@ const imgDollarEuroExchange = "/assets/eruo-dollor-icon.png";
 
 // 네트워크 아이콘들
 const suiIcon = "/assets/sui-sui-logo.svg";
-const ethereumIcon = "/assets/eth.svg";
-const arbitrumIcon = "/assets/arbitrum-icon.svg";
-const polygonIcon = "/assets/polygon-icon.svg";
+const ethereumIcon = "/assets/ethereum-eth-logo.png";
+const arbitrumIcon = "/assets/arbitrum-arb-logo.png";
+const polygonIcon = "/assets/polygon-matic-logo.png";
+const baseIcon = "/assets/base logo.webp";
 
 // 토큰 아이콘들
 const usdcIcon = "/assets/usd-coin-usdc-logo.svg";
 const usdtIcon = "/assets/tether-usdt-logo.svg";
+const ethIcon = "/assets/ethereum-eth-logo.png";
 
 // NFT 이미지들
 const imgFrame48 = "/assets/nft1.png";
@@ -775,6 +777,7 @@ const AddNetworkButton = styled.button`
 
 const MainDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [ticketBalance, setTicketBalance] = useState(10);
   const [balance, setBalance] = useState(5.0);
   const [balanceChange, setBalanceChange] = useState(1.16);
@@ -785,6 +788,38 @@ const MainDashboard = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedNetwork, setSelectedNetwork] = useState("sui");
   const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
+  const [tokens, setTokens] = useState([
+    {
+      id: "sui",
+      name: "Sui",
+      symbol: "SUI",
+      balance: "1.25",
+      value: "$5.00",
+      change: "+5.2%",
+      positive: true,
+      icon: suiIcon,
+    },
+    {
+      id: "usdc",
+      name: "USDC",
+      symbol: "USDC",
+      balance: "50.0",
+      value: "$50.00",
+      change: "+0.1%",
+      positive: true,
+      icon: usdcIcon,
+    },
+    {
+      id: "usdt",
+      name: "USDT",
+      symbol: "USDT",
+      balance: "25.5",
+      value: "$25.50",
+      change: "+0.05%",
+      positive: true,
+      icon: usdtIcon,
+    },
+  ]);
 
   // 배너 데이터
   const banners = [
@@ -794,8 +829,47 @@ const MainDashboard = () => {
   ];
 
   useEffect(() => {
-    initializeDashboard();
-  }, []);
+    // 브릿지에서 전달받은 티켓 잔액이 없을 때만 초기화
+    if (!location.state?.updatedTicketBalance) {
+      initializeDashboard();
+    }
+
+    // 브릿지 결과 처리
+    if (location.state?.bridgeResult) {
+      const { fromNetwork, toNetwork, token, amount } =
+        location.state.bridgeResult;
+
+      // 브릿지된 네트워크로 자동 전환
+      if (location.state?.switchToNetwork) {
+        setSelectedNetwork(location.state.switchToNetwork);
+        updateTokensForNetwork(location.state.switchToNetwork);
+      }
+
+      // 업데이트된 토큰 상태 적용
+      if (location.state?.updatedTokens) {
+        setTokens(location.state.updatedTokens);
+      } else {
+        // 브릿지된 토큰 잔액 차감 (FROM 네트워크에서)
+        setTokens((prevTokens) =>
+          prevTokens.map((tokenItem) => {
+            if (tokenItem.id === token.toLowerCase()) {
+              const currentBalance = parseFloat(tokenItem.balance);
+              const newBalance = Math.max(0, currentBalance - amount);
+              return {
+                ...tokenItem,
+                balance: newBalance.toFixed(2),
+              };
+            }
+            return tokenItem;
+          })
+        );
+      }
+
+      console.log(
+        `브릿지 완료: ${fromNetwork} → ${toNetwork}, ${amount} ${token} 차감됨, 네트워크 전환: ${location.state.switchToNetwork}`
+      );
+    }
+  }, [location.state]);
 
   // 자동 슬라이드 기능
   useEffect(() => {
@@ -805,6 +879,16 @@ const MainDashboard = () => {
 
     return () => clearInterval(interval);
   }, [banners.length]);
+
+  // 브릿지 페이지로부터 전달받은 티켓 잔액 업데이트
+  useEffect(() => {
+    if (location.state?.updatedTicketBalance !== undefined) {
+      setTicketBalance(location.state.updatedTicketBalance);
+      console.log(
+        `메인 대시보드 티켓 잔액 업데이트: ${location.state.updatedTicketBalance}`
+      );
+    }
+  }, [location.state]);
 
   const initializeDashboard = async () => {
     try {
@@ -835,11 +919,10 @@ const MainDashboard = () => {
   // Figma 디자인에 맞는 네트워크 데이터
   const networks = [
     { id: "sui", name: "Sui Mainnet", icon: suiIcon },
-    { id: "ethereum", name: "Ethereum Mainnet", icon: imgImage7 },
-    { id: "arbitrum", name: "Arbitrum One", icon: imgImage8 },
-    { id: "polygon", name: "Polygon Mainnet(MATIC)", icon: imgImage34 },
-    { id: "base", name: "BASE Mainnet", icon: imgImage35 },
-    { id: "very", name: "VERY Mainnet", icon: imgVerychatSymbolGraRd1 },
+    { id: "ethereum", name: "Ethereum Mainnet", icon: ethereumIcon },
+    { id: "arbitrum", name: "Arbitrum One", icon: arbitrumIcon },
+    { id: "polygon", name: "Polygon Mainnet(MATIC)", icon: polygonIcon },
+    { id: "base", name: "BASE Mainnet", icon: baseIcon },
   ];
 
   const handleNetworkChange = () => {
@@ -849,6 +932,81 @@ const MainDashboard = () => {
   const handleNetworkSelect = (networkId) => {
     setSelectedNetwork(networkId);
     setIsNetworkModalOpen(false);
+
+    // 네트워크에 따라 토큰 업데이트
+    updateTokensForNetwork(networkId);
+  };
+
+  const updateTokensForNetwork = (networkId) => {
+    if (networkId === "ethereum") {
+      // 이더리움 네트워크: ETH 토큰으로 변경
+      setTokens([
+        {
+          id: "eth",
+          name: "Ethereum",
+          symbol: "ETH",
+          balance: "0",
+          value: "$0.00",
+          change: "+0.0%",
+          positive: true,
+          icon: ethIcon,
+        },
+        {
+          id: "usdc",
+          name: "USDC",
+          symbol: "USDC",
+          balance: "0",
+          value: "$0.00",
+          change: "+0.0%",
+          positive: true,
+          icon: usdcIcon,
+        },
+        {
+          id: "usdt",
+          name: "USDT",
+          symbol: "USDT",
+          balance: "0",
+          value: "$0.00",
+          change: "+0.0%",
+          positive: true,
+          icon: usdtIcon,
+        },
+      ]);
+    } else if (networkId === "sui") {
+      // Sui 네트워크: SUI 토큰으로 변경
+      setTokens([
+        {
+          id: "sui",
+          name: "Sui",
+          symbol: "SUI",
+          balance: "1.25",
+          value: "$5.00",
+          change: "+5.2%",
+          positive: true,
+          icon: suiIcon,
+        },
+        {
+          id: "usdc",
+          name: "USDC",
+          symbol: "USDC",
+          balance: "50.0",
+          value: "$50.00",
+          change: "+0.1%",
+          positive: true,
+          icon: usdcIcon,
+        },
+        {
+          id: "usdt",
+          name: "USDT",
+          symbol: "USDT",
+          balance: "25.5",
+          value: "$25.50",
+          change: "+0.05%",
+          positive: true,
+          icon: usdtIcon,
+        },
+      ]);
+    }
   };
 
   const handleCloseModal = () => {
@@ -870,43 +1028,10 @@ const MainDashboard = () => {
     }
   };
 
-  const tokens = [
-    {
-      id: "sui",
-      name: "Sui",
-      symbol: "SUI",
-      balance: "1.25",
-      value: "$5.00",
-      change: "+5.2%",
-      positive: true,
-      icon: suiIcon,
-    },
-    {
-      id: "usdc",
-      name: "USDC",
-      symbol: "USDC",
-      balance: "50.0",
-      value: "$50.00",
-      change: "+0.1%",
-      positive: true,
-      icon: usdcIcon,
-    },
-    {
-      id: "usdt",
-      name: "USDT",
-      symbol: "USDT",
-      balance: "25.5",
-      value: "$25.50",
-      change: "-0.2%",
-      positive: false,
-      icon: usdtIcon,
-    },
-  ];
-
   const navItems = [
     { id: "wallet", label: "Wallet", active: true },
     { id: "send", label: "Send / Recive" },
-    { id: "swap", label: "Swap / Bridge" },
+    { id: "bridge", label: "Bridge" },
     { id: "transaction", label: "Transaction" },
     { id: "setting", label: "Setting" },
   ];
@@ -1076,10 +1201,10 @@ const MainDashboard = () => {
 
         <NavItem
           style={{ position: "absolute", left: "171px", top: "10px" }}
-          onClick={() => navigate("/swap-bridge")}
+          onClick={() => navigate("/bridge", { state: { tokens } })}
         >
           <NavIcon src={imgAroundTheGlobe} />
-          <NavText>Swap / Bridge</NavText>
+          <NavText>Bridge</NavText>
         </NavItem>
 
         <NavItem

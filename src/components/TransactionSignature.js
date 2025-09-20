@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import gasSponsorService from "../services/gasSponsor";
+import wormholeNttService from "../services/wormholeNtt";
 import {
   createContainerStyle,
   createTextStyle,
@@ -403,8 +404,23 @@ const TransactionSignature = () => {
     ticketBalance: 19,
   };
 
+  // 브릿지 데이터 매핑
+  const mappedData = {
+    type: transactionData.type || "Bridge",
+    amount: transactionData.amount || "0",
+    from: transactionData.fromNetwork || "Unknown",
+    to: transactionData.toNetwork || "Unknown",
+    network: transactionData.fromNetwork || "Unknown",
+    networkFee: transactionData.gasFee || "0 AD TICKET",
+    adTicket: transactionData.gasFee?.split(" ")[0] || "0",
+  };
+
   const handleBack = () => {
-    navigate("/send-receive");
+    if (transactionData.type === "Bridge") {
+      navigate("/bridge");
+    } else {
+      navigate("/send-receive");
+    }
   };
 
   const getNetworkIcon = () => {
@@ -412,32 +428,102 @@ const TransactionSignature = () => {
   };
 
   const handleCancel = () => {
-    navigate("/send-receive");
+    if (transactionData.type === "Bridge") {
+      navigate("/bridge");
+    } else {
+      navigate("/send-receive");
+    }
   };
 
   const handleConfirm = async () => {
     try {
-      // 실제 트랜잭션 전송 로직
       console.log("Transaction confirmed:", transactionData);
 
-      // AD Ticket을 사용하여 가스비 대납
-      const requiredTickets = transactionData.adTicket;
-      const success = await gasSponsorService.activateGasSponsor(
-        requiredTickets
-      );
+      if (transactionData.type === "Bridge") {
+        // 브릿지 실행
+        toast.loading("브릿지 전송을 시작합니다...", { duration: 3000 });
 
-      if (success) {
-        // 성공 시 토스트 메시지 표시
-        toast.success("트랜잭션이 성공적으로 전송되었습니다!");
+        // 실제 Wormhole NTT 서비스 사용
+        const result = await wormholeNttService.transferToken({
+          fromNetwork: transactionData.fromNetwork?.toLowerCase() || "sui",
+          toNetwork: transactionData.toNetwork?.toLowerCase() || "ethereum",
+          tokenId: transactionData.token?.toLowerCase() || "sui",
+          amount: parseFloat(transactionData.amount),
+          recipientAddress: "0x742d35Cc6634C0532925a3b8D0C0C1C2C3C4C5C6",
+          walletAddress: "0x1234567890123456789012345678901234567890",
+        });
 
-        // 잔액 업데이트
-        const updatedBalance = await gasSponsorService.get_ticket_balance();
-        console.log("Updated ticket balance:", updatedBalance);
+        toast.success(
+          `브릿지 전송이 완료되었습니다! 트랜잭션: ${result.transactionHash}`,
+          { duration: 5000 }
+        );
 
-        // 메인 대시보드로 이동
-        navigate("/dashboard");
+        // AD Ticket 사용 (가스비 대납)
+        const requiredTickets = parseInt(transactionData.adTicket);
+        await gasSponsorService.activateGasSponsor();
+
+        toast.success(`가스비 ${requiredTickets}개 AD 티켓이 소모되었습니다.`, {
+          duration: 4000,
+        });
+
+        // 브릿지된 토큰 확인 안내
+        setTimeout(() => {
+          toast.success(
+            `${transactionData.toNetwork} 네트워크에서 ${transactionData.amount} ${transactionData.token}를 확인할 수 있습니다!`,
+            { duration: 4000 }
+          );
+        }, 2000);
+
+        // 브릿지된 토큰 잔액 업데이트
+        const updatedTokens = location.state?.tokens
+          ? location.state.tokens.map((token) => {
+              if (token.id === transactionData.token?.toLowerCase()) {
+                const currentBalance = parseFloat(token.balance);
+                const newBalance = Math.max(
+                  0,
+                  currentBalance - parseFloat(transactionData.amount)
+                );
+                return {
+                  ...token,
+                  balance: newBalance.toFixed(2),
+                };
+              }
+              return token;
+            })
+          : [];
+
+        // 메인 대시보드로 이동 (브릿지 정보 포함)
+        navigate("/dashboard", {
+          state: {
+            updatedTicketBalance: ticketBalance - requiredTickets,
+            bridgeResult: {
+              fromNetwork: transactionData.fromNetwork,
+              toNetwork: transactionData.toNetwork,
+              token: transactionData.token,
+              amount: parseFloat(transactionData.amount),
+            },
+            // 브릿지된 네트워크로 자동 전환
+            switchToNetwork:
+              transactionData.toNetwork?.toLowerCase() || "ethereum",
+            // 업데이트된 토큰 상태 전달
+            updatedTokens: updatedTokens,
+          },
+        });
       } else {
-        toast.error("AD Ticket이 부족합니다.");
+        // 일반 전송 로직
+        const requiredTickets = transactionData.adTicket;
+        const success = await gasSponsorService.activateGasSponsor(
+          requiredTickets
+        );
+
+        if (success) {
+          toast.success("트랜잭션이 성공적으로 전송되었습니다!");
+          const updatedBalance = await gasSponsorService.get_ticket_balance();
+          console.log("Updated ticket balance:", updatedBalance);
+          navigate("/dashboard");
+        } else {
+          toast.error("AD Ticket이 부족합니다.");
+        }
       }
     } catch (error) {
       console.error("Transaction failed:", error);
@@ -470,31 +556,35 @@ const TransactionSignature = () => {
       <TransactionDetails>
         <DetailRow>
           <DetailLabel>유형</DetailLabel>
-          <DetailValue>{transactionData.type}</DetailValue>
+          <DetailValue>{mappedData.type}</DetailValue>
         </DetailRow>
         <DetailRow>
           <DetailLabel>수량</DetailLabel>
-          <DetailValue>{transactionData.amount}</DetailValue>
+          <DetailValue>{mappedData.amount}</DetailValue>
         </DetailRow>
         <DetailRow>
-          <DetailLabel>보내는 주소</DetailLabel>
-          <DetailValue>{transactionData.from}</DetailValue>
+          <DetailLabel>토큰</DetailLabel>
+          <DetailValue>{transactionData.token || "Unknown"}</DetailValue>
         </DetailRow>
         <DetailRow>
-          <DetailLabel>받는 주소</DetailLabel>
-          <DetailValue>{transactionData.to}</DetailValue>
+          <DetailLabel>보내는 네트워크</DetailLabel>
+          <DetailValue>{mappedData.from}</DetailValue>
+        </DetailRow>
+        <DetailRow>
+          <DetailLabel>받는 네트워크</DetailLabel>
+          <DetailValue>{mappedData.to}</DetailValue>
         </DetailRow>
         <DetailRow>
           <DetailLabel>네트워크</DetailLabel>
-          <DetailValue>{transactionData.network}</DetailValue>
+          <DetailValue>{mappedData.network}</DetailValue>
         </DetailRow>
         <DetailRow>
-          <DetailLabel>네트워크 수수료</DetailLabel>
-          <DetailValue>{transactionData.networkFee}</DetailValue>
+          <DetailLabel>가스비</DetailLabel>
+          <DetailValue>{mappedData.networkFee}</DetailValue>
         </DetailRow>
         <DetailRow>
           <DetailLabel>AD TICKET</DetailLabel>
-          <DetailValue>{transactionData.adTicket}</DetailValue>
+          <DetailValue>{mappedData.adTicket}</DetailValue>
         </DetailRow>
       </TransactionDetails>
 
@@ -565,7 +655,7 @@ const TransactionSignature = () => {
           <NavText>Send / Recive</NavText>
         </NavItem>
 
-        <NavItem onClick={() => navigate("/swap-bridge")}>
+        <NavItem onClick={() => navigate("/bridge")}>
           <NavIcon src={imgAroundTheGlobe} />
           <NavText>Swap / Bridge</NavText>
         </NavItem>

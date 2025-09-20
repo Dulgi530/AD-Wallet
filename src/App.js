@@ -13,6 +13,7 @@ import CryptoMission from "./components/CryptoMission";
 import SendMoney from "./components/SendMoney";
 import ReceiveMoney from "./components/ReceiveMoney";
 import SendReceive from "./components/SendReceive";
+import Bridge from "./components/Bridge";
 import TransactionSignature from "./components/TransactionSignature";
 import TransactionHistory from "./components/TransactionHistory";
 import Settings from "./components/Settings";
@@ -41,6 +42,7 @@ function App() {
           <Route path="/ad-ticket" element={<ADTicketDashboard />} />
           <Route path="/crypto-mission" element={<CryptoMission />} />
           <Route path="/send-receive" element={<SendReceive />} />
+          <Route path="/bridge" element={<Bridge />} />
           <Route
             path="/transaction-signature"
             element={<TransactionSignature />}
