@@ -4,111 +4,212 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import gasSponsorService from "../services/gasSponsor";
-import { 
-  createContainerStyle, 
-  createButtonStyle, 
-  createTextStyle, 
+import {
+  createContainerStyle,
+  createButtonStyle,
+  createTextStyle,
   createIconStyle,
   createFlexStyle,
   responsiveSize,
   responsiveFontSize,
-  responsiveSpacing
+  responsiveSpacing,
 } from "../utils/autoLayout";
 
 // 이미지 상수들
-const imgImage3 = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
-const imgImage10 = "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
-const imgPolygon1 = "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
-const imgFrame60 = "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
-const imgEllipse2 = "http://localhost:3845/assets/9bcc4b909b8ec2fd01adeeaf82d47b22c8e9d181.svg";
-const imgEllipse4 = "http://localhost:3845/assets/be5a31e41c19f8e4c9bb19c23ce01d5c4f53b249.svg";
+const imgImage3 = "/assets/adwallet-icon.png";
+const imgImage7 =
+  "http://localhost:3845/assets/7295164430571b46b9fbb1781cd8a3e8631971eb.png";
+const imgImage10 =
+  "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
+const imgPolygon1 =
+  "http://localhost:3845/assets/ae5e6915a4e7136319927308cc3e2cd0ac67d4de.svg";
+const imgPolygon2 =
+  "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
+const imgFrame58 =
+  "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
+const imgFrame60 =
+  "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
+const imgEllipse2 =
+  "http://localhost:3845/assets/9bcc4b909b8ec2fd01adeeaf82d47b22c8e9d181.svg";
+const imgEllipse4 =
+  "http://localhost:3845/assets/be5a31e41c19f8e4c9bb19c23ce01d5c4f53b249.svg";
+
+// 푸터 아이콘들
+const imgSettings = "/assets/setting-icon.png";
+const imgAroundTheGlobe = "/assets/globe-icon.png";
+const imgCryptoTradingSpot = "/assets/Crypto-Trading-Spot-icon.png";
+const imgWallet = "/assets/wallet-icon.png";
+const imgDollarEuroExchange = "/assets/eruo-dollor-icon.png";
+
+// 네트워크 아이콘들
+const ethereumIcon = "/assets/eth.svg";
+const arbitrumIcon = "/assets/arbitrum-icon.svg";
+const polygonIcon = "/assets/polygon-icon.svg";
+
+// NFT 이미지들
+const imgFrame48 = "/assets/nft1.png";
+const imgFrame49 = "/assets/nft4.png";
+const imgFrame50 = "/assets/nft2.png";
+const imgFrame51 = "/assets/nft3.png";
+
+// 네트워크 모달용 이미지들
+const imgImage8 =
+  "http://localhost:3845/assets/85a292aa95479e92e0d455d112b54208111c5d0d.png";
+const imgImage34 =
+  "http://localhost:3845/assets/f1f03a3718ff9502434cfb84bef99e9642480c43.png";
+const imgImage35 =
+  "http://localhost:3845/assets/2b5a811c8693185683ff45c5b34e1313562e02dd.png";
+const imgVerychatSymbolGraRd1 =
+  "http://localhost:3845/assets/2009fbbe52acc2646cfed4157d7ea21879b827f9.png";
+const imgLine42 =
+  "http://localhost:3845/assets/2eeecc92fcde4a9c11fe718d7116c4af4338d0d9.svg";
 
 const DashboardContainer = styled.div`
   ${createContainerStyle()}
   position: relative;
+  padding-bottom: 80px;
+  min-height: 100vh;
+  box-sizing: border-box;
 `;
 
 const Header = styled.div`
-  ${createFlexStyle('row', 'space-between', 'center', 0)}
-  padding: ${responsiveSpacing(20)};
+  position: relative;
   width: 100%;
+  height: 50px;
+  padding: 20px;
   box-sizing: border-box;
 `;
 
 const NetworkSelector = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 8)}
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 80px;
+  height: 40px;
   background: #3b3b3b;
-  border-radius: ${responsiveSize(20)};
-  padding: ${responsiveSpacing(8)} ${responsiveSpacing(16)};
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: background 0.2s ease;
-  
+
   &:hover {
     background: #4a4a4a;
   }
 `;
 
 const NetworkIcon = styled.div`
-  width: ${responsiveSize(20)};
-  height: ${responsiveSize(20)};
-  background-image: url("${imgFrame60}");
+  position: absolute;
+  left: 10px;
+  width: 25px;
+  height: 25px;
+  background-image: url("${(props) => props.src}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 `;
 
-const NetworkText = styled.div`
-  ${createTextStyle(14)}
-  color: white;
+const NetworkDropdown = styled.div`
+  position: absolute;
+  left: 50px;
+  top: 12px;
+  width: 15px;
+  height: 15px;
+  background-image: url("${imgPolygon1}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: rotate(180deg);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: rotate(180deg) scale(1.1);
+  }
 `;
 
 const AccountInfo = styled.div`
-  ${createFlexStyle('column', 'center', 'center', 0)}
-  flex: 1;
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  box-sizing: border-box;
 `;
 
 const AccountIcon = styled.div`
-  position: absolute;
-  left: ${responsiveSpacing(-40)};
-  top: ${responsiveSpacing(2)};
-  width: ${responsiveSize(15)};
-  height: ${responsiveSize(15)};
-  background-image: url("${imgFrame60}");
+  width: 15px;
+  height: 15px;
+  background-image: url("${imgFrame58}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  margin-right: 10px;
 `;
 
 const AccountName = styled.div`
-  ${createTextStyle(14)}
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
   color: white;
   text-align: center;
+  line-height: normal;
+  margin-right: 8px;
+`;
+
+const AccountDropdown = styled.div`
+  width: 10px;
+  height: 10px;
+  background-image: url("${imgPolygon2}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: rotate(180deg);
+  margin-left: 5px;
 `;
 
 const AccountAddress = styled.div`
-  ${createTextStyle(12)}
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
   color: #999999;
   text-align: center;
+  line-height: normal;
 `;
 
 const TicketBalance = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 10)}
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 80px;
+  height: 40px;
   background: #3b3b3b;
-  border-radius: ${responsiveSize(25)};
-  padding: ${responsiveSpacing(8)} ${responsiveSpacing(16)};
-  height: ${responsiveSize(40)};
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: background 0.2s ease;
-  
+
   &:hover {
     background: #4a4a4a;
   }
 `;
 
 const TicketIcon = styled.div`
-  width: ${responsiveSize(25)};
-  height: ${responsiveSize(25)};
+  position: absolute;
+  left: 10px;
+  top: 7.5px;
+  width: 25px;
+  height: 25px;
   background-image: url("${imgImage3}");
   background-size: contain;
   background-repeat: no-repeat;
@@ -116,12 +217,20 @@ const TicketIcon = styled.div`
 `;
 
 const TicketCount = styled.div`
-  ${createTextStyle(16)}
+  position: absolute;
+  left: 58px;
+  top: 20.5px;
+  transform: translateX(-50%) translateY(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
   color: white;
+  text-align: center;
+  line-height: normal;
 `;
 
 const BalanceSection = styled.div`
-  ${createFlexStyle('column', 'center', 'center', 10)}
+  ${createFlexStyle("column", "center", "center", 10)}
   padding: ${responsiveSpacing(30)} ${responsiveSpacing(20)};
   text-align: center;
 `;
@@ -150,14 +259,14 @@ const EyeButton = styled.button`
   padding: ${responsiveSpacing(8)};
   border-radius: 50%;
   transition: background 0.2s ease;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.1);
   }
 `;
 
 const BannerSection = styled.div`
-  ${createFlexStyle('column', 'center', 'center', 15)}
+  ${createFlexStyle("column", "center", "center", 15)}
   padding: 0 ${responsiveSpacing(20)};
   margin: ${responsiveSpacing(20)} 0;
 `;
@@ -172,41 +281,49 @@ const BannerImage = styled.div`
   border-radius: ${responsiveSize(8)};
   cursor: pointer;
   transition: transform 0.2s ease;
-  
+
   &:hover {
     transform: scale(1.02);
   }
 `;
 
 const DotContainer = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 15)}
+  ${createFlexStyle("row", "center", "center", 15)}
 `;
 
 const Dot = styled.div`
   ${createIconStyle(10)}
   background-image: url("${imgEllipse4}");
-  
-  ${props => props.active && `
+
+  ${(props) =>
+    props.active &&
+    `
     background-image: url("${imgEllipse2}");
   `}
 `;
 
 const TabSection = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 0)}
+  position: relative;
+  width: 100%;
+  height: 50px;
   padding: 0 ${responsiveSpacing(20)};
   margin: ${responsiveSpacing(20)} 0;
 `;
 
 const Tab = styled.button`
-  ${createTextStyle(18)}
-  color: ${props => props.active ? '#f29d38' : 'white'};
+  font-family: "Mina", sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: ${(props) => (props.active ? "#f29d38" : "white")};
   background: none;
   border: none;
   cursor: pointer;
-  padding: ${responsiveSpacing(10)} ${responsiveSpacing(20)};
-  font-weight: 600;
+  padding: 0;
   transition: color 0.2s ease;
-  
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
   &:hover {
     color: #f29d38;
   }
@@ -218,17 +335,84 @@ const TokenList = styled.div`
   overflow-y: auto;
 `;
 
+const NFTGallery = styled.div`
+  position: absolute;
+  left: 30px;
+  top: 412px;
+  width: 352px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+`;
+
+const NFTItem = styled.div`
+  position: relative;
+  width: 160px;
+  height: 220px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const NFTImage = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 160px;
+  height: 160px;
+  background-image: url("${(props) => props.src}");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 8px;
+`;
+
+const NFTTitle = styled.div`
+  position: absolute;
+  left: 0;
+  top: 181px;
+  transform: translateY(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+  line-height: normal;
+  width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const NFTDescription = styled.div`
+  position: absolute;
+  left: 0;
+  top: 201.5px;
+  transform: translateY(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #999999;
+  line-height: normal;
+  width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
 const TokenItem = styled.div`
-  ${createFlexStyle('row', 'space-between', 'center', 15)}
+  ${createFlexStyle("row", "space-between", "center", 15)}
   padding: ${responsiveSpacing(15)} 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   cursor: pointer;
   transition: background 0.2s ease;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.05);
   }
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -248,7 +432,7 @@ const TokenIcon = styled.div`
 `;
 
 const TokenInfo = styled.div`
-  ${createFlexStyle('column', 'flex-start', 'flex-start', 5)}
+  ${createFlexStyle("column", "flex-start", "flex-start", 5)}
   flex: 1;
 `;
 
@@ -260,11 +444,11 @@ const TokenName = styled.div`
 
 const TokenChange = styled.div`
   ${createTextStyle(14)}
-  color: ${props => props.positive ? '#4ade80' : '#ef4444'};
+  color: ${(props) => (props.positive ? "#4ade80" : "#ef4444")};
 `;
 
 const TokenAmount = styled.div`
-  ${createFlexStyle('column', 'flex-end', 'flex-end', 5)}
+  ${createFlexStyle("column", "flex-end", "flex-end", 5)}
 `;
 
 const TokenBalance = styled.div`
@@ -289,66 +473,283 @@ const LoadTokenButton = styled.button`
   cursor: pointer;
   transition: background 0.2s ease;
   margin: ${responsiveSpacing(20)} 0;
-  
+
   &:hover {
     background: #3a3a3a;
   }
 `;
 
 const NavigationBar = styled.div`
-  ${createFlexStyle('row', 'space-around', 'center', 0)}
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: ${responsiveSize(80)};
-  background: #2a2a2a;
-  border-top: 1px solid #3b3b3b;
-  padding: ${responsiveSpacing(10)} 0;
+  height: 69px;
+  background: #1d1818;
   z-index: 100;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  box-sizing: border-box;
+`;
+
+const PatternTop = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background-image: radial-gradient(
+      circle at 20px 3.5px,
+      #5f5f5f 1.5px,
+      transparent 1.5px
+    ),
+    radial-gradient(circle at 40px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 60px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 80px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 100px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 120px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 140px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 160px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 180px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 200px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 220px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 240px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 260px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 280px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 300px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 320px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 340px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 360px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 380px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 400px 3.5px, #5f5f5f 1.5px, transparent 1.5px);
+  background-size: 20px 7px;
+  background-position: 0 0;
+  z-index: 1;
+`;
+
+const PatternBottom = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background-image: radial-gradient(
+      circle at 20px 3.5px,
+      #5f5f5f 1.5px,
+      transparent 1.5px
+    ),
+    radial-gradient(circle at 40px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 60px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 80px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 100px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 120px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 140px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 160px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 180px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 200px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 220px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 240px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 260px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 280px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 300px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 320px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 340px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 360px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 380px 3.5px, #5f5f5f 1.5px, transparent 1.5px),
+    radial-gradient(circle at 400px 3.5px, #5f5f5f 1.5px, transparent 1.5px);
+  background-size: 20px 7px;
+  background-position: 0 0;
+  z-index: 1;
 `;
 
 const NavItem = styled.button`
-  ${createFlexStyle('column', 'center', 'center', 5)}
-  background: none;
+  position: relative;
+  width: 70px;
+  height: 60px;
+  background: ${(props) => (props.active ? "white" : "#5f5f5f")};
   border: none;
+  border-radius: 2px;
   cursor: pointer;
-  padding: ${responsiveSpacing(8)};
-  transition: color 0.2s ease;
-  color: ${props => props.active ? '#f29d38' : '#999999'};
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin: 0;
+
   &:hover {
-    color: #f29d38;
+    background: #f29d38;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
 
 const NavIcon = styled.div`
-  width: ${responsiveSize(24)};
-  height: ${responsiveSize(24)};
-  background: ${props => props.active ? '#f29d38' : '#999999'};
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  ${createTextStyle(12)}
-  color: white;
-  font-weight: 600;
+  width: 30px;
+  height: 30px;
+  background-image: ${(props) =>
+    props.active ? "none" : `url("${props.src}")`};
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 2px;
+  background-color: ${(props) => (props.active ? "#f29d38" : "transparent")};
+  mask: ${(props) =>
+    props.active ? `url("${props.src}") no-repeat center` : "none"};
+  -webkit-mask: ${(props) =>
+    props.active ? `url("${props.src}") no-repeat center` : "none"};
+  mask-size: contain;
+  -webkit-mask-size: contain;
 `;
 
 const NavText = styled.div`
-  ${createTextStyle(12)}
-  color: inherit;
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  color: ${(props) => (props.active ? "#f29d38" : "black")};
+  text-align: center;
+  line-height: normal;
+`;
+
+// 네트워크 선택 모달 (SendReceive와 동일한 스타일)
+const NetworkModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ModalContent = styled.div`
+  width: 320px;
+  background: #2a2a2a;
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 80vh;
+  overflow-y: auto;
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const ModalTitle = styled.div`
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+  text-align: center;
+  flex: 1;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+`;
+
+const NetworkList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+`;
+
+const NetworkItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid #333;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const ModalNetworkIcon = styled.div`
+  width: 24px;
+  height: 24px;
+  background-image: url("${(props) => props.src}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  flex-shrink: 0;
+`;
+
+const NetworkName = styled.div`
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+  flex: 1;
+`;
+
+const AddNetworkButton = styled.button`
+  width: 100%;
+  background: none;
+  border: none;
+  color: #f29d38;
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 16px 0;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #ffb84d;
+  }
 `;
 
 const MainDashboard = () => {
   const navigate = useNavigate();
-  const [ticketBalance, setTicketBalance] = useState(18);
+  const [ticketBalance, setTicketBalance] = useState(10);
   const [balance, setBalance] = useState(6.29);
   const [balanceChange, setBalanceChange] = useState(1.16);
   const [balanceChangePercent, setBalanceChangePercent] = useState(2.73);
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
-  const [activeTab, setActiveTab] = useState('TOKEN');
+  const [activeTab, setActiveTab] = useState("TOKEN");
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedNetwork, setSelectedNetwork] = useState("ethereum");
+  const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
 
   useEffect(() => {
     initializeDashboard();
@@ -359,7 +760,7 @@ const MainDashboard = () => {
       const balance = await gasSponsorService.getTicketBalance();
       setTicketBalance(balance);
     } catch (error) {
-      console.error('대시보드 초기화 실패:', error);
+      console.error("대시보드 초기화 실패:", error);
     }
   };
 
@@ -375,6 +776,41 @@ const MainDashboard = () => {
     setCurrentSlide((prev) => (prev + 1) % 3);
   };
 
+  // Figma 디자인에 맞는 네트워크 데이터
+  const networks = [
+    { id: "ethereum", name: "Ethereum Mainnet", icon: imgImage7 },
+    { id: "arbitrum", name: "Arbitrum One", icon: imgImage8 },
+    { id: "polygon", name: "Polygon Mainnet(MATIC)", icon: imgImage34 },
+    { id: "base", name: "BASE Mainnet", icon: imgImage35 },
+    { id: "very", name: "VERY Mainnet", icon: imgVerychatSymbolGraRd1 },
+  ];
+
+  const handleNetworkChange = () => {
+    setIsNetworkModalOpen(true);
+  };
+
+  const handleNetworkSelect = (networkId) => {
+    setSelectedNetwork(networkId);
+    setIsNetworkModalOpen(false);
+  };
+
+  const handleCloseModal = () => {
+    setIsNetworkModalOpen(false);
+  };
+
+  const getNetworkIcon = () => {
+    switch (selectedNetwork) {
+      case "ethereum":
+        return ethereumIcon;
+      case "arbitrum":
+        return arbitrumIcon;
+      case "polygon":
+        return polygonIcon;
+      default:
+        return ethereumIcon;
+    }
+  };
+
   const tokens = [
     {
       id: 1,
@@ -383,7 +819,7 @@ const MainDashboard = () => {
       balance: "0.00263",
       value: "$6.28",
       change: "+2.73%",
-      positive: true
+      positive: true,
     },
     {
       id: 2,
@@ -392,7 +828,7 @@ const MainDashboard = () => {
       balance: "0.001",
       value: "$0.001",
       change: "-0.01%",
-      positive: false
+      positive: false,
     },
     {
       id: 3,
@@ -401,47 +837,77 @@ const MainDashboard = () => {
       balance: "0",
       value: "$0.001",
       change: "0.00%",
-      positive: true
-    }
+      positive: true,
+    },
   ];
 
   const navItems = [
-    { id: 'wallet', label: 'Wallet', active: true },
-    { id: 'send', label: 'Send / Recive' },
-    { id: 'swap', label: 'Swap / Bridge' },
-    { id: 'transaction', label: 'Transaction' },
-    { id: 'setting', label: 'Setting' }
+    { id: "wallet", label: "Wallet", active: true },
+    { id: "send", label: "Send / Recive" },
+    { id: "swap", label: "Swap / Bridge" },
+    { id: "transaction", label: "Transaction" },
+    { id: "setting", label: "Setting" },
+  ];
+
+  const nfts = [
+    {
+      id: 1,
+      title: "Aidenteti Crew NFT (Se...",
+      description: "Aidenteti Crew",
+      image: imgFrame48,
+    },
+    {
+      id: 2,
+      title: "VeryNode",
+      description: "Very Chat",
+      image: imgFrame49,
+    },
+    {
+      id: 3,
+      title: "BUILD - KEEPKWAN X ...",
+      description: "Akashi Ai",
+      image: imgFrame51,
+    },
+    {
+      id: 4,
+      title: "Parrot",
+      description: "Zoo",
+      image: imgFrame50,
+    },
   ];
 
   return (
     <DashboardContainer>
       <Header>
-        <NetworkSelector>
-          <NetworkIcon />
-          <NetworkText>Account 1</NetworkText>
+        <NetworkSelector onClick={handleNetworkChange}>
+          <NetworkIcon src={getNetworkIcon()} />
+          <NetworkDropdown />
         </NetworkSelector>
-        
+
         <AccountInfo>
           <AccountIcon />
           <AccountName>Account 1</AccountName>
+          <AccountDropdown />
           <AccountAddress>0xcEDBf...4926F</AccountAddress>
         </AccountInfo>
-        
+
         <TicketBalance onClick={handleTicketClick}>
           <TicketIcon />
           <TicketCount>{ticketBalance}</TicketCount>
         </TicketBalance>
       </Header>
 
-      <BalanceSection style={{ position: 'relative' }}>
+      <BalanceSection style={{ position: "relative" }}>
         <BalanceAmount>
-          {isBalanceVisible ? `$${balance}` : '••••••'}
+          {isBalanceVisible
+            ? `$${balance}`
+            : `$${balance.toString().replace(/\d/g, "*")}`}
         </BalanceAmount>
-        {isBalanceVisible && (
-          <BalanceChange>
-            +${balanceChange} (+{balanceChangePercent}%)
-          </BalanceChange>
-        )}
+        <BalanceChange
+          style={{ visibility: isBalanceVisible ? "visible" : "hidden" }}
+        >
+          +${balanceChange} (+{balanceChangePercent}%)
+        </BalanceChange>
         <EyeButton onClick={handleToggleBalance}>
           {isBalanceVisible ? <FiEye size={20} /> : <FiEyeOff size={20} />}
         </EyeButton>
@@ -457,44 +923,129 @@ const MainDashboard = () => {
       </BannerSection>
 
       <TabSection>
-        <Tab active={activeTab === 'TOKEN'} onClick={() => setActiveTab('TOKEN')}>
+        <Tab
+          active={activeTab === "TOKEN"}
+          onClick={() => setActiveTab("TOKEN")}
+          style={{ left: "60px" }}
+        >
           TOKEN
         </Tab>
-        <Tab active={activeTab === 'NFT'} onClick={() => setActiveTab('NFT')}>
+        <Tab
+          active={activeTab === "NFT"}
+          onClick={() => setActiveTab("NFT")}
+          style={{ left: "271px" }}
+        >
           NFT
         </Tab>
       </TabSection>
 
-      <TokenList>
-        {tokens.map((token) => (
-          <TokenItem key={token.id}>
-            <TokenIcon>{token.symbol[0]}</TokenIcon>
-            <TokenInfo>
-              <TokenName>{token.name}</TokenName>
-              <TokenChange positive={token.positive}>{token.change}</TokenChange>
-            </TokenInfo>
-            <TokenAmount>
-              <TokenBalance>{token.balance} {token.symbol}</TokenBalance>
-              <TokenValue>{token.value}</TokenValue>
-            </TokenAmount>
-          </TokenItem>
-        ))}
-        
-        <LoadTokenButton>
-          토큰 불러오기 / 추가하기
-        </LoadTokenButton>
-      </TokenList>
+      {activeTab === "TOKEN" ? (
+        <TokenList>
+          {tokens.map((token) => (
+            <TokenItem key={token.id}>
+              <TokenIcon>{token.symbol[0]}</TokenIcon>
+              <TokenInfo>
+                <TokenName>{token.name}</TokenName>
+                <TokenChange positive={token.positive}>
+                  {token.change}
+                </TokenChange>
+              </TokenInfo>
+              <TokenAmount>
+                <TokenBalance>
+                  {token.balance} {token.symbol}
+                </TokenBalance>
+                <TokenValue>{token.value}</TokenValue>
+              </TokenAmount>
+            </TokenItem>
+          ))}
+
+          <LoadTokenButton>토큰 불러오기 / 추가하기</LoadTokenButton>
+        </TokenList>
+      ) : (
+        <NFTGallery>
+          {nfts.map((nft) => (
+            <NFTItem key={nft.id}>
+              <NFTImage src={nft.image} />
+              <NFTTitle>{nft.title}</NFTTitle>
+              <NFTDescription>{nft.description}</NFTDescription>
+            </NFTItem>
+          ))}
+        </NFTGallery>
+      )}
 
       <NavigationBar>
-        {navItems.map((item) => (
-          <NavItem key={item.id} active={item.active}>
-            <NavIcon active={item.active}>
-              {item.label[0]}
-            </NavIcon>
-            <NavText>{item.label}</NavText>
-          </NavItem>
-        ))}
+        <PatternTop />
+        <PatternBottom />
+
+        <NavItem
+          active={true}
+          style={{ position: "absolute", left: "21px", top: "10px" }}
+          onClick={() => navigate("/dashboard")}
+        >
+          <NavIcon active={true} src={imgWallet} />
+          <NavText active={true}>Wallet</NavText>
+        </NavItem>
+
+        <NavItem
+          style={{ position: "absolute", left: "96px", top: "10px" }}
+          onClick={() => navigate("/send-receive")}
+        >
+          <NavIcon src={imgDollarEuroExchange} />
+          <NavText>Send / Recive</NavText>
+        </NavItem>
+
+        <NavItem
+          style={{ position: "absolute", left: "171px", top: "10px" }}
+          onClick={() => navigate("/swap-bridge")}
+        >
+          <NavIcon src={imgAroundTheGlobe} />
+          <NavText>Swap / Bridge</NavText>
+        </NavItem>
+
+        <NavItem
+          style={{ position: "absolute", left: "246px", top: "10px" }}
+          onClick={() => navigate("/transaction-history")}
+        >
+          <NavIcon src={imgCryptoTradingSpot} />
+          <NavText>Transaction</NavText>
+        </NavItem>
+
+        <NavItem
+          style={{ position: "absolute", left: "322px", top: "10px" }}
+          onClick={() => navigate("/settings")}
+        >
+          <NavIcon src={imgSettings} />
+          <NavText>Setting</NavText>
+        </NavItem>
       </NavigationBar>
+
+      {/* 네트워크 선택 모달 */}
+      {isNetworkModalOpen && (
+        <NetworkModal onClick={handleCloseModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <ModalHeader>
+              <ModalTitle>네트워크</ModalTitle>
+              <CloseButton onClick={handleCloseModal}>×</CloseButton>
+            </ModalHeader>
+
+            <NetworkList>
+              {networks.map((network) => (
+                <NetworkItem
+                  key={network.id}
+                  onClick={() => handleNetworkSelect(network.id)}
+                >
+                  <ModalNetworkIcon src={network.icon} />
+                  <NetworkName>{network.name}</NetworkName>
+                </NetworkItem>
+              ))}
+            </NetworkList>
+
+            <AddNetworkButton onClick={() => console.log("네트워크 추가하기")}>
+              네트워크 추가하기
+            </AddNetworkButton>
+          </ModalContent>
+        </NetworkModal>
+      )}
     </DashboardContainer>
   );
 };

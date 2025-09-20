@@ -4,30 +4,36 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 import gasSponsorService from "../services/gasSponsor";
 import AdModal from "./AdModal";
-import AdWatchModal from "./AdWatchModal";
-import { 
-  createContainerStyle, 
-  createButtonStyle, 
-  createTextStyle, 
+import {
+  createContainerStyle,
+  createButtonStyle,
+  createTextStyle,
   createIconStyle,
   createFlexStyle,
   responsiveSize,
   responsiveFontSize,
-  responsiveSpacing
+  responsiveSpacing,
 } from "../utils/autoLayout";
 
 // 이미지 상수들
-const imgImage3 = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
-const imgImage10 = "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
-const img11 = "http://localhost:3845/assets/3a576cb5f4cb120ccaa705bb36531ed3dde6793e.png";
-const imgImage2 = "http://localhost:3845/assets/a5afa55a89940975aa49915299cb08c7c192db96.png";
-const imgImage12 = "http://localhost:3845/assets/c91a88f6c25bac59ea92b4abfe1628b921fef463.png";
-const imgPolygon1 = "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
-const imgFrame61 = "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
-const imgPolygon2 = "http://localhost:3845/assets/53fbb2746b1d4ea19636c18d0b9ef4e79652148f.svg";
-const imgEllipse2 = "http://localhost:3845/assets/9bcc4b909b8ec2fd01adeeaf82d47b22c8e9d181.svg";
-const imgEllipse4 = "http://localhost:3845/assets/be5a31e41c19f8e4c9bb19c23ce01d5c4f53b249.svg";
-const imgLine42 = "http://localhost:3845/assets/2eeecc92fcde4a9c11fe718d7116c4af4338d0d9.svg";
+const imgImage3 = "/assets/adwallet-icon.png";
+const imgImage10 =
+  "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
+const img11 = "/assets/coupang-icon.png";
+const imgImage2 = "/assets/cypto-mission-icon.png";
+const imgImage12 = "/assets/invate-icon.png";
+const imgPolygon1 =
+  "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
+const imgFrame61 =
+  "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
+const imgPolygon2 =
+  "http://localhost:3845/assets/53fbb2746b1d4ea19636c18d0b9ef4e79652148f.svg";
+const imgEllipse2 =
+  "http://localhost:3845/assets/9bcc4b909b8ec2fd01adeeaf82d47b22c8e9d181.svg";
+const imgEllipse4 =
+  "http://localhost:3845/assets/be5a31e41c19f8e4c9bb19c23ce01d5c4f53b249.svg";
+const imgLine42 =
+  "http://localhost:3845/assets/2eeecc92fcde4a9c11fe718d7116c4af4338d0d9.svg";
 
 const DashboardContainer = styled.div`
   ${createContainerStyle()}
@@ -35,74 +41,125 @@ const DashboardContainer = styled.div`
 `;
 
 const Header = styled.div`
-  ${createFlexStyle('row', 'space-between', 'center', 0)}
-  padding: ${responsiveSpacing(20)};
+  position: relative;
   width: 100%;
+  height: 50px;
+  padding: 20px;
   box-sizing: border-box;
 `;
 
 const BackButton = styled.button`
-  width: ${responsiveSize(25)};
-  height: ${responsiveSize(25)};
+  position: absolute;
+  left: 25px;
+  top: 28px;
+  width: 20px;
+  height: 20px;
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
+  transition: color 0.2s ease;
   transform: rotate(270deg);
+
+  &:hover {
+    color: #f29d38;
+  }
 `;
 
 const BackIcon = styled.div`
-  width: ${responsiveSize(25)};
-  height: ${responsiveSize(25)};
-  background-image: url("${imgPolygon2}");
+  width: 20px;
+  height: 20px;
+  background-image: url("/assets/arrow-left.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  transform: rotate(90deg);
 `;
 
 const AccountInfo = styled.div`
-  ${createFlexStyle('column', 'center', 'center', 0)}
-  flex: 1;
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  box-sizing: border-box;
 `;
 
 const AccountIcon = styled.div`
-  position: absolute;
-  left: ${responsiveSpacing(-40)};
-  top: ${responsiveSpacing(2)};
-  width: ${responsiveSize(15)};
-  height: ${responsiveSize(15)};
+  width: 15px;
+  height: 15px;
   background-image: url("${imgFrame61}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  margin-right: 10px;
 `;
 
 const AccountName = styled.div`
-  ${createTextStyle(14)}
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
   color: white;
   text-align: center;
+  line-height: normal;
+  margin-right: 8px;
+`;
+
+const AccountDropdown = styled.div`
+  width: 10px;
+  height: 10px;
+  background-image: url("${imgPolygon1}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: rotate(180deg);
+  margin-left: 5px;
 `;
 
 const AccountAddress = styled.div`
-  ${createTextStyle(12)}
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
   color: #999999;
   text-align: center;
+  line-height: normal;
 `;
 
 const TicketBalance = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 10)}
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 80px;
+  height: 40px;
   background: #3b3b3b;
-  border-radius: ${responsiveSize(25)};
-  padding: ${responsiveSpacing(8)} ${responsiveSpacing(16)};
-  height: ${responsiveSize(40)};
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #4a4a4a;
+  }
 `;
 
 const TicketIcon = styled.div`
-  width: ${responsiveSize(25)};
-  height: ${responsiveSize(25)};
+  position: absolute;
+  left: 10px;
+  top: 7.5px;
+  width: 25px;
+  height: 25px;
   background-image: url("${imgImage3}");
   background-size: contain;
   background-repeat: no-repeat;
@@ -110,66 +167,109 @@ const TicketIcon = styled.div`
 `;
 
 const TicketCount = styled.div`
-  ${createTextStyle(16)}
+  position: absolute;
+  left: 58px;
+  top: 20.5px;
+  transform: translateX(-50%) translateY(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
   color: white;
+  text-align: center;
+  line-height: normal;
 `;
 
 const MainTicketSection = styled.div`
-  ${createFlexStyle('column', 'center', 'center', 20)}
-  margin: ${responsiveSpacing(40)} 0;
-  padding: 0 ${responsiveSpacing(20)};
+  position: relative;
+  width: 100%;
+  height: 100px;
+  margin-top: 60px;
+  padding: 0 20px;
 `;
 
 const MainTicketIcon = styled.div`
-  width: ${responsiveSize(120)};
-  height: ${responsiveSize(120)};
-  background-image: url("${imgImage2}");
+  position: absolute;
+  left: 20px;
+  top: 0;
+  width: 50px;
+  height: 50px;
+  background-image: url("${imgImage3}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 `;
 
 const MainTicketAmount = styled.div`
-  ${createTextStyle(48)}
-  color: #f29d38;
+  position: absolute;
+  left: 85px;
+  top: 0;
+  font-family: "Mina", sans-serif;
   font-weight: 700;
-  text-align: center;
+  font-size: 32px;
+  color: white;
+  line-height: normal;
 `;
 
 const MainTicketDescription = styled.div`
-  ${createTextStyle(16)}
-  color: white;
+  position: absolute;
+  left: 127.5px;
+  top: 53.5px;
+  transform: translateX(-50%) translateY(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #999999;
   text-align: center;
-  line-height: 1.4;
+  line-height: normal;
 `;
 
-const ChartSection = styled.div`
-  ${createFlexStyle('column', 'center', 'center', 15)}
-  margin: ${responsiveSpacing(30)} 0;
-  padding: 0 ${responsiveSpacing(20)};
+const BannerSection = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100px;
+  margin-top: 20px;
+  padding: 0 20px;
+`;
+
+const BannerContainer = styled.div`
+  position: absolute;
+  left: 20px;
+  top: 0;
+  width: 372px;
+  height: 100px;
+  background: #110b0b;
+  border-radius: 10px;
+  overflow: hidden;
 `;
 
 const BannerImage = styled.div`
-  width: 100%;
-  height: ${responsiveSize(100)};
+  position: absolute;
+  left: 65px;
+  top: 0;
+  width: 201px;
+  height: 100px;
   background-image: url("${imgImage10}");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  border-radius: ${responsiveSize(8)};
 `;
 
 const DotContainer = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 15)}
+  position: absolute;
+  left: 50%;
+  top: 105px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
 `;
 
 const Dot = styled.div`
-  ${createIconStyle(10)}
-  background-image: url("${imgEllipse4}");
-  
-  ${props => props.active && `
-    background-image: url("${imgEllipse2}");
-  `}
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: ${(props) => (props.active ? "white" : "transparent")};
+  border: 1px solid ${(props) => (props.active ? "white" : "#999999")};
 `;
 
 const RewardList = styled.div`
@@ -179,18 +279,18 @@ const RewardList = styled.div`
 `;
 
 const RewardItem = styled.div`
-  ${createFlexStyle('row', 'space-between', 'center', 15)}
+  ${createFlexStyle("row", "space-between", "center", 15)}
   height: ${responsiveSize(70)};
   width: 100%;
   padding: ${responsiveSpacing(15)} 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   cursor: pointer;
   transition: background 0.2s ease;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.05);
   }
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -207,7 +307,7 @@ const RewardIcon = styled.div`
 `;
 
 const RewardContent = styled.div`
-  ${createFlexStyle('column', 'flex-start', 'flex-start', 5)}
+  ${createFlexStyle("column", "flex-start", "flex-start", 5)}
   flex: 1;
   min-width: 0;
 `;
@@ -234,12 +334,11 @@ const RewardStatus = styled.div`
 
 const ADTicketDashboard = () => {
   const navigate = useNavigate();
-  const [ticketBalance, setTicketBalance] = useState(18);
+  const [ticketBalance, setTicketBalance] = useState(10);
   const [isWatchingAd, setIsWatchingAd] = useState(false);
   const [dailyLimit, setDailyLimit] = useState(5);
-  const [currentUsage, setCurrentUsage] = useState(5);
+  const [currentUsage, setCurrentUsage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAdWatchModalOpen, setIsAdWatchModalOpen] = useState(false);
 
   useEffect(() => {
     initializeDashboard();
@@ -255,29 +354,28 @@ const ADTicketDashboard = () => {
     }
   };
 
-  const handleWatchAd = () => {
+  // Figma 디자인에 맞는 네트워크 데이터
+
+  const handleTicketClick = () => {
+    navigate("/ad-ticket");
+  };
+
+  const handleWatchAd = async () => {
     if (currentUsage >= dailyLimit) {
       toast.error("오늘 시청 가능한 광고 횟수를 모두 소진했습니다.");
       return;
     }
-    setIsAdWatchModalOpen(true);
-  };
 
-  const handleCloseAdWatchModal = () => {
-    setIsAdWatchModalOpen(false);
-  };
-
-  const handleConfirmWatchAd = async () => {
-    setIsAdWatchModalOpen(false);
+    // 바로 광고 시청 시작
     setIsWatchingAd(true);
     toast.success("광고 시청 중... (3초)");
-    
+
     // Simulate ad watching
     setTimeout(async () => {
       const reward = 1; // Each ad gives 1 ticket
       const newBalance = await gasSponsorService.updateTicketBalance(reward);
       setTicketBalance(newBalance);
-      setCurrentUsage(prev => prev + 1);
+      setCurrentUsage((prev) => prev + 1);
       setIsWatchingAd(false);
       toast.success(`+${reward} 티켓을 획득했습니다!`);
     }, 3000);
@@ -312,43 +410,46 @@ const ADTicketDashboard = () => {
       info: "일일 제한 횟수 5회",
       status: `${currentUsage}/${dailyLimit}`,
       onClick: handleWatchAd,
-      disabled: currentUsage >= dailyLimit || isWatchingAd
+      disabled: currentUsage >= dailyLimit || isWatchingAd,
     },
     {
       id: 2,
-      icon: img11,
+      icon: imgImage2,
       title: "크립토 미션",
       info: "다양한 Web3 미션을 통한 리워드",
-      onClick: handleCryptoMission
+      onClick: handleCryptoMission,
     },
     {
       id: 3,
-      icon: imgImage12,
+      icon: img11,
       title: "쿠팡 제휴",
       info: "3,333원 결제당 AD Ticket 지급\n※ 구매 취소 시, AD 취소",
-      onClick: handleCoupang
+      onClick: handleCoupang,
     },
     {
       id: 4,
-      icon: imgImage3,
+      icon: imgImage12,
       title: "친구초대",
       info: "초대코드로 친구를 초대 리워드",
-      onClick: handleInviteFriends
-    }
+      onClick: handleInviteFriends,
+    },
   ];
 
   return (
     <DashboardContainer>
       <Header>
-        <BackButton onClick={() => navigate("/dashboard")} />
-        
+        <BackButton onClick={() => navigate("/dashboard")}>
+          <BackIcon />
+        </BackButton>
+
         <AccountInfo>
           <AccountIcon />
           <AccountName>Account 1</AccountName>
+          <AccountDropdown />
           <AccountAddress>0xcEDBf...4926F</AccountAddress>
         </AccountInfo>
-        
-        <TicketBalance>
+
+        <TicketBalance onClick={handleTicketClick}>
           <TicketIcon />
           <TicketCount>{ticketBalance}</TicketCount>
         </TicketBalance>
@@ -362,8 +463,10 @@ const ADTicketDashboard = () => {
         </MainTicketDescription>
       </MainTicketSection>
 
-      <ChartSection>
-        <BannerImage />
+      <BannerSection>
+        <BannerContainer>
+          <BannerImage />
+        </BannerContainer>
         <DotContainer>
           <Dot active />
           <Dot />
@@ -371,16 +474,16 @@ const ADTicketDashboard = () => {
           <Dot />
           <Dot />
         </DotContainer>
-      </ChartSection>
+      </BannerSection>
 
       <RewardList>
         {rewards.map((reward) => (
-          <RewardItem 
-            key={reward.id} 
+          <RewardItem
+            key={reward.id}
             onClick={reward.onClick}
-            style={{ 
+            style={{
               opacity: reward.disabled ? 0.5 : 1,
-              cursor: reward.disabled ? 'not-allowed' : 'pointer'
+              cursor: reward.disabled ? "not-allowed" : "pointer",
             }}
           >
             <RewardIcon src={reward.icon} />
@@ -398,13 +501,6 @@ const ADTicketDashboard = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onParticipate={handleParticipate}
-      />
-
-      {/* 광고 시청 모달 */}
-      <AdWatchModal
-        isOpen={isAdWatchModalOpen}
-        onClose={handleCloseAdWatchModal}
-        onWatchAd={handleConfirmWatchAd}
       />
     </DashboardContainer>
   );

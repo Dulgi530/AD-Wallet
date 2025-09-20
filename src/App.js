@@ -12,6 +12,8 @@ import CreateWallet from "./components/CreateWallet";
 import CryptoMission from "./components/CryptoMission";
 import SendMoney from "./components/SendMoney";
 import ReceiveMoney from "./components/ReceiveMoney";
+import SendReceive from "./components/SendReceive";
+import TransactionSignature from "./components/TransactionSignature";
 import TransactionHistory from "./components/TransactionHistory";
 import Settings from "./components/Settings";
 
@@ -31,13 +33,18 @@ const MainContent = styled.main`
 function App() {
   return (
     <AppContainer>
-      <Router>
+      <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <Routes>
           <Route path="/" element={<WalletDashboard />} />
           <Route path="/create-wallet" element={<CreateWallet />} />
           <Route path="/dashboard" element={<MainDashboard />} />
           <Route path="/ad-ticket" element={<ADTicketDashboard />} />
           <Route path="/crypto-mission" element={<CryptoMission />} />
+          <Route path="/send-receive" element={<SendReceive />} />
+          <Route
+            path="/transaction-signature"
+            element={<TransactionSignature />}
+          />
           <Route
             path="/send"
             element={

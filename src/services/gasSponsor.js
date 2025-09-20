@@ -5,7 +5,7 @@ class GasSponsorService {
   constructor() {
     this.isActive = false;
     this.sponsorAddress = null;
-    this.ticketBalance = 0;
+    this.ticketBalance = 10;
   }
 
   // 가스비 대납 활성화
@@ -13,12 +13,12 @@ class GasSponsorService {
     try {
       // 실제 구현에서는 EIP-4337 SDK 호출
       console.log(`가스비 대납 활성화: ${ticketAmount} 티켓 사용`);
-      
+
       // 시뮬레이션: 백엔드 API 호출
       const response = await this.simulateBackendCall({
-        action: 'activate_gas_sponsor',
+        action: "activate_gas_sponsor",
         ticketAmount: ticketAmount,
-        userAddress: this.getUserAddress()
+        userAddress: this.getUserAddress(),
       });
 
       if (response.success) {
@@ -30,7 +30,7 @@ class GasSponsorService {
         throw new Error(response.error);
       }
     } catch (error) {
-      console.error('가스비 대납 활성화 실패:', error);
+      console.error("가스비 대납 활성화 실패:", error);
       return { success: false, error: error.message };
     }
   }
@@ -38,11 +38,11 @@ class GasSponsorService {
   // 가스비 대납 비활성화
   async deactivateGasSponsor() {
     try {
-      console.log('가스비 대납 비활성화');
-      
+      console.log("가스비 대납 비활성화");
+
       const response = await this.simulateBackendCall({
-        action: 'deactivate_gas_sponsor',
-        userAddress: this.getUserAddress()
+        action: "deactivate_gas_sponsor",
+        userAddress: this.getUserAddress(),
       });
 
       if (response.success) {
@@ -53,7 +53,7 @@ class GasSponsorService {
         throw new Error(response.error);
       }
     } catch (error) {
-      console.error('가스비 대납 비활성화 실패:', error);
+      console.error("가스비 대납 비활성화 실패:", error);
       return { success: false, error: error.message };
     }
   }
@@ -63,14 +63,14 @@ class GasSponsorService {
     return {
       isActive: this.isActive,
       sponsorAddress: this.sponsorAddress,
-      ticketBalance: this.ticketBalance
+      ticketBalance: this.ticketBalance,
     };
   }
 
   // 트랜잭션에 가스비 대납 적용
   async sponsorTransaction(transaction) {
     if (!this.isActive) {
-      throw new Error('가스비 대납이 활성화되지 않았습니다.');
+      throw new Error("가스비 대납이 활성화되지 않았습니다.");
     }
 
     try {
@@ -86,18 +86,18 @@ class GasSponsorService {
         maxFeePerGas: transaction.maxFeePerGas,
         maxPriorityFeePerGas: transaction.maxPriorityFeePerGas,
         paymasterAndData: this.sponsorAddress,
-        signature: "0x"
+        signature: "0x",
       };
 
       // 실제 구현에서는 EIP-4337 SDK를 사용하여 UserOperation 전송
-      console.log('가스비 대납 트랜잭션:', userOperation);
-      
+      console.log("가스비 대납 트랜잭션:", userOperation);
+
       return await this.simulateBackendCall({
-        action: 'sponsor_transaction',
-        userOperation: userOperation
+        action: "sponsor_transaction",
+        userOperation: userOperation,
       });
     } catch (error) {
-      console.error('가스비 대납 트랜잭션 실패:', error);
+      console.error("가스비 대납 트랜잭션 실패:", error);
       throw error;
     }
   }
@@ -107,12 +107,12 @@ class GasSponsorService {
     try {
       // 실제 구현에서는 Web3 provider를 통해 가스비 조회
       const response = await this.simulateBackendCall({
-        action: 'get_gas_price'
+        action: "get_gas_price",
       });
-      
+
       return response.gasPrice;
     } catch (error) {
-      console.error('가스비 조회 실패:', error);
+      console.error("가스비 조회 실패:", error);
       return 0.002; // 기본값
     }
   }
@@ -121,21 +121,22 @@ class GasSponsorService {
   async getTicketBalance() {
     try {
       const response = await this.simulateBackendCall({
-        action: 'get_ticket_balance',
-        userAddress: this.getUserAddress()
+        action: "get_ticket_balance",
+        userAddress: this.getUserAddress(),
       });
-      
+
       this.ticketBalance = response.balance;
       return response.balance;
     } catch (error) {
-      console.error('티켓 잔액 조회 실패:', error);
+      console.error("티켓 잔액 조회 실패:", error);
       return 0;
     }
   }
 
   // 티켓 잔액 업데이트
-  updateTicketBalance(amount) {
+  async updateTicketBalance(amount) {
     this.ticketBalance += amount;
+    return this.ticketBalance;
   }
 
   // 사용자 주소 조회 (시뮬레이션)
@@ -157,29 +158,29 @@ class GasSponsorService {
       setTimeout(() => {
         // 시뮬레이션 응답
         switch (data.action) {
-          case 'activate_gas_sponsor':
+          case "activate_gas_sponsor":
             resolve({
               success: true,
-              sponsorAddress: "0xPaymaster123456789012345678901234567890"
+              sponsorAddress: "0xPaymaster123456789012345678901234567890",
             });
             break;
-          case 'deactivate_gas_sponsor':
+          case "deactivate_gas_sponsor":
             resolve({ success: true });
             break;
-          case 'sponsor_transaction':
+          case "sponsor_transaction":
             resolve({
               success: true,
-              transactionHash: "0x" + Math.random().toString(16).substr(2, 64)
+              transactionHash: "0x" + Math.random().toString(16).substr(2, 64),
             });
             break;
-          case 'get_gas_price':
+          case "get_gas_price":
             resolve({
-              gasPrice: 0.002 + (Math.random() - 0.5) * 0.001
+              gasPrice: 0.002 + (Math.random() - 0.5) * 0.001,
             });
             break;
-          case 'get_ticket_balance':
+          case "get_ticket_balance":
             resolve({
-              balance: this.ticketBalance || 150
+              balance: this.ticketBalance || 10,
             });
             break;
           default:

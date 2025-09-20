@@ -70,6 +70,8 @@ const Header = () => {
         return "송금";
       case "/receive":
         return "수신";
+      case "/send-receive":
+        return "Send / Receive";
       case "/history":
         return "거래 내역";
       case "/settings":

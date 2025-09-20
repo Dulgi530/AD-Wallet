@@ -2,105 +2,217 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
-import { 
-  createContainerStyle, 
-  createButtonStyle, 
-  createTextStyle, 
-  createIconStyle,
-  createFlexStyle,
-  responsiveSize,
-  responsiveFontSize,
-  responsiveSpacing
-} from "../utils/autoLayout";
+import gasSponsorService from "../services/gasSponsor";
 
 // 이미지 상수들
-const imgImage3 = "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
-const imgImage10 = "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
-const imgFruitColor41 = "http://localhost:3845/assets/c8595b2e9065848d6a0cd389666cc17dc0efce33.png";
-const imgImage16 = "http://localhost:3845/assets/529e63980a976116c7aedbb27fdd866c543a6674.png";
-const imgImage17 = "http://localhost:3845/assets/e9200eccfa0a06c5540b2d9275d76686af4859c7.png";
-const imgImage2 = "http://localhost:3845/assets/a5afa55a89940975aa49915299cb08c7c192db96.png";
-const imgPolygon1 = "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
-const imgFrame60 = "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
-const imgPolygon2 = "http://localhost:3845/assets/6e2f0e29011b3e9310106de77f9fdc25f1f1a9e7.svg";
-const imgEllipse2 = "http://localhost:3845/assets/9bcc4b909b8ec2fd01adeeaf82d47b22c8e9d181.svg";
-const imgEllipse4 = "http://localhost:3845/assets/be5a31e41c19f8e4c9bb19c23ce01d5c4f53b249.svg";
-const imgLine42 = "http://localhost:3845/assets/2eeecc92fcde4a9c11fe718d7116c4af4338d0d9.svg";
+const imgImage3 =
+  "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
+const imgImage10 =
+  "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
+const imgFruitColor41 =
+  "http://localhost:3845/assets/c8595b2e9065848d6a0cd389666cc17dc0efce33.png";
+const imgImage16 =
+  "http://localhost:3845/assets/529e63980a976116c7aedbb27fdd866c543a6674.png";
+const imgImage17 =
+  "http://localhost:3845/assets/e9200eccfa0a06c5540b2d9275d76686af4859c7.png";
+const imgImage2 =
+  "http://localhost:3845/assets/a5afa55a89940975aa49915299cb08c7c192db96.png";
+const imgPolygon1 =
+  "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
+const imgFrame60 =
+  "http://localhost:3845/assets/cf3ec7890e749c15a472fb2aa478a7cf34825273.svg";
+const imgPolygon2 =
+  "http://localhost:3845/assets/6e2f0e29011b3e9310106de77f9fdc25f1f1a9e7.svg";
+const imgEllipse2 =
+  "http://localhost:3845/assets/9bcc4b909b8ec2fd01adeeaf82d47b22c8e9d181.svg";
+const imgEllipse4 =
+  "http://localhost:3845/assets/be5a31e41c19f8e4c9bb19c23ce01d5c4f53b249.svg";
+const imgLine42 =
+  "http://localhost:3845/assets/2eeecc92fcde4a9c11fe718d7116c4af4338d0d9.svg";
+
+// 네트워크 모달용 이미지들
+const imgImage7 =
+  "http://localhost:3845/assets/7295164430571b46b9fbb1781cd8a3e8631971eb.png";
+const imgImage8 =
+  "http://localhost:3845/assets/85a292aa95479e92e0d455d112b54208111c5d0d.png";
+const imgImage34 =
+  "http://localhost:3845/assets/f1f03a3718ff9502434cfb84bef99e9642480c43.png";
+const imgImage35 =
+  "http://localhost:3845/assets/2b5a811c8693185683ff45c5b34e1313562e02dd.png";
+const imgVerychatSymbolGraRd1 =
+  "http://localhost:3845/assets/2009fbbe52acc2646cfed4157d7ea21879b827f9.png";
 
 const MissionContainer = styled.div`
-  ${createContainerStyle()}
+  background: #1d1818;
+  min-height: 100vh;
   position: relative;
-`;
-
-const Header = styled.div`
-  ${createFlexStyle('row', 'space-between', 'center', 0)}
-  padding: ${responsiveSpacing(20)};
-  width: 100%;
+  padding-bottom: 80px;
   box-sizing: border-box;
 `;
 
+const Header = styled.div`
+  position: relative;
+  width: 100%;
+  height: 50px;
+  padding: 20px;
+  box-sizing: border-box;
+`;
+
+const NetworkSelector = styled.div`
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 80px;
+  height: 40px;
+  background: #3b3b3b;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #4a4a4a;
+  }
+`;
+
+const NetworkIcon = styled.div`
+  position: absolute;
+  left: 15px;
+  width: 25px;
+  height: 25px;
+  background-image: url("${(props) => props.src}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+const NetworkDropdown = styled.div`
+  position: absolute;
+  left: 50px;
+  top: 12px;
+  width: 15px;
+  height: 15px;
+  background-image: url("${imgPolygon1}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: rotate(180deg);
+`;
+
 const BackButton = styled.button`
-  width: ${responsiveSize(25)};
-  height: ${responsiveSize(25)};
+  position: absolute;
+  left: 25px;
+  top: 28px;
+  width: 20px;
+  height: 20px;
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: white;
+  transition: color 0.2s ease;
   transform: rotate(270deg);
+
+  &:hover {
+    color: #f29d38;
+  }
 `;
 
 const BackIcon = styled.div`
-  width: ${responsiveSize(25)};
-  height: ${responsiveSize(25)};
-  background-image: url("${imgPolygon2}");
+  width: 20px;
+  height: 20px;
+  background-image: url("/assets/arrow-left.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  transform: rotate(90deg);
 `;
 
 const AccountInfo = styled.div`
-  ${createFlexStyle('column', 'center', 'center', 0)}
-  flex: 1;
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  box-sizing: border-box;
 `;
 
 const AccountIcon = styled.div`
-  position: absolute;
-  left: ${responsiveSpacing(-40)};
-  top: ${responsiveSpacing(2)};
-  width: ${responsiveSize(15)};
-  height: ${responsiveSize(15)};
+  width: 15px;
+  height: 15px;
   background-image: url("${imgFrame60}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  margin-right: 10px;
 `;
 
 const AccountName = styled.div`
-  ${createTextStyle(14)}
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
   color: white;
   text-align: center;
+  line-height: normal;
+  margin-right: 8px;
+`;
+
+const AccountDropdown = styled.div`
+  width: 10px;
+  height: 10px;
+  background-image: url("${imgPolygon1}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: rotate(180deg);
+  margin-left: 5px;
 `;
 
 const AccountAddress = styled.div`
-  ${createTextStyle(12)}
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
   color: #999999;
   text-align: center;
+  line-height: normal;
 `;
 
 const TicketBalance = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 10)}
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 80px;
+  height: 40px;
   background: #3b3b3b;
-  border-radius: ${responsiveSize(25)};
-  padding: ${responsiveSpacing(8)} ${responsiveSpacing(16)};
-  height: ${responsiveSize(40)};
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #4a4a4a;
+  }
 `;
 
 const TicketIcon = styled.div`
-  width: ${responsiveSize(25)};
-  height: ${responsiveSize(25)};
+  position: absolute;
+  left: 10px;
+  top: 7.5px;
+  width: 25px;
+  height: 25px;
   background-image: url("${imgImage3}");
   background-size: contain;
   background-repeat: no-repeat;
@@ -108,106 +220,121 @@ const TicketIcon = styled.div`
 `;
 
 const TicketCount = styled.div`
-  ${createTextStyle(16)}
-  color: white;
-`;
-
-const Title = styled.h1`
-  ${createTextStyle(32)}
+  position: absolute;
+  left: 58px;
+  top: 20.5px;
+  transform: translateX(-50%) translateY(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
   color: white;
   text-align: center;
-  margin: ${responsiveSpacing(20)} 0;
-  font-weight: 700;
+  line-height: normal;
 `;
 
-const Subtitle = styled.p`
-  ${createTextStyle(16)}
+const TitleIcon = styled.div`
+  position: absolute;
+  left: 20px;
+  top: 130px;
+  width: 50px;
+  height: 50px;
+  background-image: url("${imgImage2}");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
+const TitleText = styled.div`
+  position: absolute;
+  left: 80px;
+  top: 135px;
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  color: white;
+  line-height: normal;
+`;
+
+const SubtitleText = styled.div`
+  position: absolute;
+  left: 149.5px;
+  top: 193.5px;
+  transform: translateX(-50%) translateY(-50%);
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
   color: #999999;
   text-align: center;
-  margin: 0 0 ${responsiveSpacing(20)} 0;
+  line-height: normal;
 `;
 
 const BannerSection = styled.div`
-  position: relative;
-  width: 100%;
-  height: ${responsiveSize(100)};
+  position: absolute;
+  left: 20px;
+  top: 216px;
+  width: 372px;
+  height: 100px;
   background: #110b0b;
-  margin: ${responsiveSpacing(20)} 0;
+  border-radius: 10px;
   overflow: hidden;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 20px rgba(242, 157, 56, 0.3);
-  }
-  
-  &:active {
-    transform: scale(0.98);
-  }
 `;
 
 const BannerImage = styled.div`
   position: absolute;
-  left: ${responsiveSpacing(85)};
+  left: 65px;
   top: 0;
-  width: ${responsiveSize(201)};
-  height: ${responsiveSize(100)};
+  width: 201px;
+  height: 100px;
   background-image: url("${imgImage10}");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 `;
 
-const NavigationDots = styled.div`
-  ${createFlexStyle('row', 'center', 'center', 5)}
-  margin: ${responsiveSpacing(20)} 0;
+const DotContainer = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 331px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
 `;
 
 const Dot = styled.div`
-  width: ${responsiveSize(10)};
-  height: ${responsiveSize(10)};
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: ${(props) => (props.active ? "#f29d38" : "#5f5f5f")};
+  background: ${(props) => (props.active ? "white" : "transparent")};
+  border: 1px solid ${(props) => (props.active ? "white" : "#999999")};
 `;
 
 const MissionList = styled.div`
-  width: 100%;
-  padding: 0 ${responsiveSpacing(20)};
+  position: absolute;
+  left: 50%;
+  top: 351px;
+  transform: translateX(-50%);
+  width: 412px;
 `;
 
 const MissionItem = styled.div`
   position: relative;
+  height: 60px;
   width: 100%;
-  height: ${responsiveSize(60)};
-  margin-bottom: ${responsiveSpacing(20)};
   cursor: pointer;
-  transition: all 0.2s ease;
-  
+  transition: background 0.2s ease;
+
   &:hover {
-    transform: scale(1.02);
-    
-    ${MissionTitle} {
-      color: #f29d38;
-    }
-    
-    ${MissionReward} {
-      color: #f29d38;
-    }
-  }
-  
-  &:active {
-    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.05);
   }
 `;
 
 const MissionIcon = styled.div`
   position: absolute;
-  left: ${responsiveSpacing(20)};
-  top: 50%;
-  transform: translateY(-50%);
-  width: ${responsiveSize(25)};
-  height: ${responsiveSize(25)};
+  left: 20px;
+  top: 17.5px;
+  width: 25px;
+  height: 25px;
   background-image: url("${(props) => props.src}");
   background-size: contain;
   background-repeat: no-repeat;
@@ -216,34 +343,36 @@ const MissionIcon = styled.div`
 
 const MissionTitle = styled.div`
   position: absolute;
-  left: ${responsiveSpacing(60)};
-  top: 50%;
+  left: 50px;
+  top: 30px;
   transform: translateY(-50%);
-  ${createTextStyle(14)}
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
   color: white;
-  text-align: center;
+  text-align: left;
+  line-height: normal;
 `;
 
 const MissionReward = styled.div`
   position: absolute;
-  right: ${responsiveSpacing(20)};
-  top: 50%;
+  right: 20px;
+  top: 30px;
   transform: translateY(-50%);
-  ${createTextStyle(12)}
-  color: white;
+  font-family: "Mina", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #f29d38;
   text-align: right;
-  
-  .highlight {
-    color: #f29d38;
-  }
+  line-height: normal;
 `;
 
-const MissionDivider = styled.div`
+const MissionLine = styled.div`
   position: absolute;
-  bottom: 0;
   left: 50%;
+  bottom: 0;
   transform: translateX(-50%);
-  width: ${responsiveSize(372)};
+  width: 372px;
   height: 1px;
   background-image: url("${imgLine42}");
   background-size: contain;
@@ -253,83 +382,97 @@ const MissionDivider = styled.div`
 
 const CryptoMission = () => {
   const navigate = useNavigate();
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [ticketBalance, setTicketBalance] = useState(10);
+
+  useEffect(() => {
+    initializeMission();
+  }, []);
+
+  const initializeMission = async () => {
+    try {
+      const balance = await gasSponsorService.getTicketBalance();
+      setTicketBalance(balance);
+    } catch (error) {
+      console.error("크립토 미션 초기화 실패:", error);
+    }
+  };
+
+  const handleMissionClick = (missionName) => {
+    toast.success(`${missionName} 미션을 시작합니다!`);
+    // 실제 구현에서는 해당 서비스로 이동
+  };
+
+  const handleTicketClick = () => {
+    navigate("/ad-ticket");
+  };
 
   const missions = [
     {
       id: 1,
-      title: "VeryChat 가입하기",
       icon: imgFruitColor41,
-      reward: "AD TICKET 10장 지급"
+      title: "VeryChat 가입하기",
+      reward: "AD TICKET 10장 지급",
     },
     {
       id: 2,
-      title: "코넛 가입하기",
       icon: imgImage16,
-      reward: "AD TICKET 10장 지급"
+      title: "코넛 가입하기",
+      reward: "AD TICKET 10장 지급",
     },
     {
       id: 3,
-      title: "하이드미플리즈 가입하기",
       icon: imgImage17,
-      reward: "AD TICKET 10장 지급"
-    }
+      title: "하이드미플리즈 가입하기",
+      reward: "AD TICKET 10장 지급",
+    },
   ];
-
-  const handleBack = () => {
-    navigate(-1);
-  };
-
-  const handleMissionClick = (mission) => {
-    toast.success(`${mission.title} 미션을 시작합니다!`);
-    // 실제 미션 로직 구현
-  };
-
-  const handleBannerClick = () => {
-    setCurrentSlide((prev) => (prev + 1) % 3);
-  };
 
   return (
     <MissionContainer>
       <Header>
-        <BackButton onClick={handleBack}>
+        <BackButton onClick={() => navigate("/ad-ticket")}>
           <BackIcon />
         </BackButton>
-        
+
         <AccountInfo>
           <AccountIcon />
           <AccountName>Account 1</AccountName>
+          <AccountDropdown />
           <AccountAddress>0xcEDBf...4926F</AccountAddress>
         </AccountInfo>
-        
-        <TicketBalance>
+
+        <TicketBalance onClick={handleTicketClick}>
           <TicketIcon />
-          <TicketCount>19</TicketCount>
+          <TicketCount>{ticketBalance}</TicketCount>
         </TicketBalance>
       </Header>
 
-      <Title>크립토 미션</Title>
-      <Subtitle>다양한 Web3을 즐기며 리워드를 받아요 !</Subtitle>
+      <TitleIcon />
+      <TitleText>크립토 미션</TitleText>
+      <SubtitleText>다양한 Web3을 즐기며 리워드를 받아요!</SubtitleText>
 
-      <BannerSection onClick={handleBannerClick}>
+      <BannerSection>
         <BannerImage />
       </BannerSection>
 
-      <NavigationDots>
-        {[0, 1, 2].map((index) => (
-          <Dot key={index} active={index === currentSlide} />
-        ))}
-      </NavigationDots>
+      <DotContainer>
+        <Dot active />
+        <Dot />
+        <Dot />
+        <Dot />
+        <Dot />
+      </DotContainer>
 
       <MissionList>
         {missions.map((mission, index) => (
-          <MissionItem key={mission.id} onClick={() => handleMissionClick(mission)}>
+          <MissionItem
+            key={mission.id}
+            onClick={() => handleMissionClick(mission.title)}
+          >
             <MissionIcon src={mission.icon} />
             <MissionTitle>{mission.title}</MissionTitle>
-            <MissionReward>
-              <span className="highlight">AD TICKET</span> 10장 지급
-            </MissionReward>
-            {index < missions.length - 1 && <MissionDivider />}
+            <MissionReward>{mission.reward}</MissionReward>
+            {index < missions.length - 1 && <MissionLine />}
           </MissionItem>
         ))}
       </MissionList>

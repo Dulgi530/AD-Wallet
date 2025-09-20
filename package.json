@@ -24,7 +24,7 @@
   "devDependencies": {
     "gh-pages": "^6.3.0"
   },
-  "homepage": "https://dulgi530.github.io/AD-Wallet",
+  "homepage": ".",
   "browserslist": {
     "production": [
       ">0.2%",
