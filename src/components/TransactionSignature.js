@@ -19,6 +19,7 @@ const imgArrowRight = "/assets/arrow-right.png";
 const imgAdTicket = "/assets/adwallet-icon.png";
 const imgFrame58 = "/assets/ethereum-icon.svg";
 const imgPolygon1 = "/assets/arrow-down.png";
+const suiIcon = "/assets/sui-sui-logo.svg";
 
 // 푸터 아이콘들
 const imgSettings = "/assets/setting-icon.png";
@@ -94,7 +95,7 @@ const AccountInfo = styled.div`
 const AccountIcon = styled.div`
   width: 15px;
   height: 15px;
-  background-image: url("${imgFrame58}");
+  background-image: url("${(props) => props.src || imgFrame58}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -406,6 +407,10 @@ const TransactionSignature = () => {
     navigate("/send-receive");
   };
 
+  const getNetworkIcon = () => {
+    return suiIcon; // 기본값으로 Sui 아이콘 사용
+  };
+
   const handleCancel = () => {
     navigate("/send-receive");
   };
@@ -448,7 +453,7 @@ const TransactionSignature = () => {
         </BackButton>
 
         <AccountInfo>
-          <AccountIcon />
+          <AccountIcon src={getNetworkIcon()} />
           <AccountName>Account 1</AccountName>
           <AccountDropdown />
           <AccountAddress>0xcEDBf...4926F</AccountAddress>

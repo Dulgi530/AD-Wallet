@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { FiCopy, FiGlobe, FiWallet } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import gasSponsorService from "../services/gasSponsor";
 import toast from "react-hot-toast";
 
@@ -22,6 +22,7 @@ const imgWallet = "/assets/wallet-icon.png";
 const imgDollarEuroExchange = "/assets/eruo-dollor-icon.png";
 
 // 네트워크 아이콘들
+const suiIcon = "/assets/sui-sui-logo.svg";
 const ethereumIcon = "/assets/eth.svg";
 const arbitrumIcon = "/assets/arbitrum-icon.svg";
 const polygonIcon = "/assets/polygon-icon.svg";
@@ -30,6 +31,7 @@ const polygonIcon = "/assets/polygon-icon.svg";
 const imgEthereum = "/assets/ethereum-icon.svg";
 const imgArbitrum = "/assets/arbitrum-icon.svg";
 const imgPolygon = "/assets/polygon-icon.svg";
+const imgSui = "/assets/sui-sui-logo.svg";
 
 // Arrow 아이콘들
 const imgArrowLeft = "/assets/arrow-left.png";
@@ -130,7 +132,7 @@ const AccountInfo = styled.div`
 const AccountIcon = styled.div`
   width: 15px;
   height: 15px;
-  background-image: url("${imgFrame58}");
+  background-image: url("${(props) => props.src || imgFrame58}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -216,19 +218,19 @@ const TicketCount = styled.div`
 `;
 
 // 이더리움 섹션
-const EthereumSection = styled.div`
+const SuiSection = styled.div`
   margin-top: 50px;
   padding: 0 20px;
 `;
 
-const EthereumHeader = styled.div`
+const SuiHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
   margin-bottom: 10px;
 `;
 
-const EthereumTitle = styled.div`
+const SuiTitle = styled.div`
   font-family: "Mina", sans-serif;
   font-weight: 700;
   font-size: 32px;
@@ -586,7 +588,7 @@ const ActionButtonImage = styled.button`
   }
 `;
 
-const EthereumChange = styled.div`
+const SuiChange = styled.div`
   font-family: "Mina", sans-serif;
   font-weight: 400;
   font-size: 14px;
@@ -594,7 +596,7 @@ const EthereumChange = styled.div`
   margin-bottom: 15px;
 `;
 
-const EthereumAddress = styled.div`
+const SuiAddress = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -691,7 +693,7 @@ const BalanceLeft = styled.div`
 const BalanceIcon = styled.div`
   width: 24px;
   height: 24px;
-  background-image: url("${imgEthereum}");
+  background-image: url("${imgSui}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -1050,24 +1052,52 @@ const NavText = styled.div`
 
 const SendReceive = () => {
   const navigate = useNavigate();
-  const [selectedNetwork, setSelectedNetwork] = useState("ethereum");
-  const [balance, setBalance] = useState(9.68);
+  const location = useLocation();
+  const [selectedNetwork, setSelectedNetwork] = useState("sui");
+  const [balance, setBalance] = useState(5.0);
   const [balanceChange, setBalanceChange] = useState(1.16);
-  const [balanceChangePercent, setBalanceChangePercent] = useState(2.73);
+  const [balanceChangePercent, setBalanceChangePercent] = useState(9.68);
   const [ticketBalance, setTicketBalance] = useState(10);
   const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
   const [isTokenModalOpen, setIsTokenModalOpen] = useState(false);
-  const [selectedToken, setSelectedToken] = useState("ethereum");
+  const [selectedToken, setSelectedToken] = useState("sui");
   const [currentView, setCurrentView] = useState("main"); // "main", "send", "receive"
   const [recipientAddress, setRecipientAddress] = useState("");
   const [sendAmount, setSendAmount] = useState("");
   const [memo, setMemo] = useState("");
   const [gasFee, setGasFee] = useState(0);
   const [requiredTickets, setRequiredTickets] = useState(0);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [calculationComplete, setCalculationComplete] = useState(false);
+  const [calculationTimeout, setCalculationTimeout] = useState(null);
 
   useEffect(() => {
     initializeTicketBalance();
   }, []);
+
+  // 쿼리 파라미터에서 토큰 ID 처리
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tokenId = searchParams.get("token");
+    if (tokenId && ["sui", "usdc", "usdt"].includes(tokenId)) {
+      setSelectedToken(tokenId);
+    }
+  }, [location.search]);
+
+  // debounce 함수
+  const debouncedCalculateGasFee = () => {
+    if (calculationTimeout) {
+      clearTimeout(calculationTimeout);
+    }
+
+    const timeout = setTimeout(() => {
+      if (recipientAddress && sendAmount) {
+        calculateGasFee();
+      }
+    }, 1000); // 1초 후에 계산 실행
+
+    setCalculationTimeout(timeout);
+  };
 
   const initializeTicketBalance = async () => {
     try {
@@ -1099,10 +1129,19 @@ const SendReceive = () => {
 
   // 토큰 데이터
   const tokens = [
-    { id: "ethereum", name: "Ethereum", symbol: "ETH", icon: imgImage7 },
-    { id: "usdc", name: "USD Coin", symbol: "USDC", icon: imgImage8 },
-    { id: "usdt", name: "Tether USD", symbol: "USDT", icon: imgImage34 },
-    { id: "dai", name: "Dai Stablecoin", symbol: "DAI", icon: imgImage35 },
+    { id: "sui", name: "Sui", symbol: "SUI", icon: imgSui },
+    {
+      id: "usdc",
+      name: "USDC",
+      symbol: "USDC",
+      icon: "/assets/usd-coin-usdc-logo.svg",
+    },
+    {
+      id: "usdt",
+      name: "USDT",
+      symbol: "USDT",
+      icon: "/assets/tether-usdt-logo.svg",
+    },
   ];
 
   const handleNetworkChange = () => {
@@ -1131,6 +1170,52 @@ const SendReceive = () => {
     setIsTokenModalOpen(false);
   };
 
+  // 선택된 토큰에 따른 정보 반환
+  const getSelectedTokenInfo = () => {
+    const selectedTokenData = tokens.find(
+      (token) => token.id === selectedToken
+    );
+    return selectedTokenData || tokens[0]; // 기본값은 첫 번째 토큰
+  };
+
+  // 토큰별 잔액 정보
+  const getTokenBalance = () => {
+    switch (selectedToken) {
+      case "sui":
+        return {
+          amount: "1.25 SUI",
+          usd: "$5.00",
+          change: "+9.68%",
+          balance: 5.0,
+          changePercent: 9.68,
+        };
+      case "usdc":
+        return {
+          amount: "50.0 USDC",
+          usd: "$50.00",
+          change: "+0.1%",
+          balance: 50.0,
+          changePercent: 0.1,
+        };
+      case "usdt":
+        return {
+          amount: "25.5 USDT",
+          usd: "$25.50",
+          change: "+0.05%",
+          balance: 25.5,
+          changePercent: 0.05,
+        };
+      default:
+        return {
+          amount: "1.25 SUI",
+          usd: "$5.00",
+          change: "+9.68%",
+          balance: 5.0,
+          changePercent: 9.68,
+        };
+    }
+  };
+
   const handleTicketClick = () => {
     navigate("/ad-ticket");
   };
@@ -1151,24 +1236,44 @@ const SendReceive = () => {
     setMemo("");
     setGasFee(0);
     setRequiredTickets(0);
+    setIsCalculating(false);
+    setCalculationComplete(false);
+
+    // timeout 정리
+    if (calculationTimeout) {
+      clearTimeout(calculationTimeout);
+      setCalculationTimeout(null);
+    }
   };
 
   const calculateGasFee = () => {
-    // 가스비 계산 로직 (더미 데이터)
-    const baseGasFee = 0.001; // 기본 가스비 (ETH)
-    const gasPrice = 20; // Gwei
-    const gasLimit = 21000; // 기본 트랜잭션 가스 한도
+    if (isCalculating) return; // 이미 계산 중이면 중복 실행 방지
 
-    const calculatedGasFee = baseGasFee + (gasPrice * gasLimit) / 1000000000;
-    setGasFee(calculatedGasFee);
+    setIsCalculating(true);
+    setCalculationComplete(false);
 
-    // AD Ticket 계산: 1 ETH = 100 AD Tickets (예시)
-    const ticketsNeeded = Math.ceil(calculatedGasFee * 100);
-    setRequiredTickets(ticketsNeeded);
+    // 펜딩 상태 시뮬레이션 (1초로 단축)
+    setTimeout(() => {
+      // 가스비 계산 로직 (더미 데이터)
+      const baseGasFee = 0.001; // 기본 가스비 (SUI)
+      const gasPrice = 20; // Gwei
+      const gasLimit = 21000; // 기본 트랜잭션 가스 한도
+
+      const calculatedGasFee = baseGasFee + (gasPrice * gasLimit) / 1000000000;
+      setGasFee(calculatedGasFee);
+
+      // AD Ticket 계산: 1 SUI = 100 AD Tickets (예시)
+      const ticketsNeeded = Math.ceil(calculatedGasFee * 100);
+      setRequiredTickets(ticketsNeeded);
+
+      setIsCalculating(false);
+      setCalculationComplete(true);
+    }, 1000);
   };
 
   const handleMaxAmount = () => {
-    setSendAmount(balance.toString());
+    const tokenBalance = getTokenBalance();
+    setSendAmount(tokenBalance.balance.toString());
   };
 
   const handleSendTransaction = async () => {
@@ -1177,7 +1282,8 @@ const SendReceive = () => {
       return;
     }
 
-    if (parseFloat(sendAmount) > balance) {
+    const tokenBalance = getTokenBalance();
+    if (parseFloat(sendAmount) > tokenBalance.balance) {
       toast.error("잔액이 부족합니다.");
       return;
     }
@@ -1197,8 +1303,8 @@ const SendReceive = () => {
           amount: sendAmount,
           from: "34v9XJVX2RykSoApLklLfg...34T1",
           to: recipientAddress,
-          network: "ETHEREUM Mainnet",
-          networkFee: "0.0012367 ETH",
+          network: "SUI Mainnet",
+          networkFee: "0.0012367 SUI",
           adTicket: requiredTickets,
         },
         ticketBalance: ticketBalance,
@@ -1213,6 +1319,8 @@ const SendReceive = () => {
 
   const getNetworkIcon = () => {
     switch (selectedNetwork) {
+      case "sui":
+        return "/assets/sui-sui-logo.svg";
       case "ethereum":
         return "/assets/eth.svg";
       case "arbitrum":
@@ -1220,50 +1328,9 @@ const SendReceive = () => {
       case "polygon":
         return "/assets/polygon-icon.svg";
       default:
-        return "/assets/eth.svg";
+        return "/assets/sui-sui-logo.svg";
     }
   };
-
-  const transactions = [
-    {
-      date: "2025/07/21",
-      items: [
-        {
-          type: "send",
-          icon: imgEuroDollar,
-          status: "Confirmed",
-          amount: "-0.00263 ETH",
-          time: "16:04:02",
-        },
-        {
-          type: "receive",
-          icon: imgEuroDollar,
-          status: "Confirmed",
-          amount: "+0.00263 ETH",
-          time: "16:03:42",
-        },
-      ],
-    },
-    {
-      date: "2025/07/22",
-      items: [
-        {
-          type: "swap",
-          icon: imgGlobe,
-          status: "Confirmed",
-          amount: "+0.05 ETH",
-          time: "16:04:02",
-        },
-        {
-          type: "contract",
-          icon: imgWallet,
-          status: "Confirmed",
-          amount: "-0.00263 ETH",
-          time: "16:04:02",
-        },
-      ],
-    },
-  ];
 
   return (
     <Container>
@@ -1275,7 +1342,7 @@ const SendReceive = () => {
         </NetworkSelector>
 
         <AccountInfo>
-          <AccountIcon />
+          <AccountIcon src={getNetworkIcon()} />
           <AccountName>Account 1</AccountName>
           <AccountDropdown />
         </AccountInfo>
@@ -1290,26 +1357,44 @@ const SendReceive = () => {
       {/* 메인 콘텐츠 영역 */}
       {currentView === "main" && (
         <>
-          {/* 이더리움 섹션 */}
-          <EthereumSection>
-            <EthereumHeader>
-              <EthereumTitle>Ethereum</EthereumTitle>
+          {/* 선택된 토큰 섹션 */}
+          <SuiSection>
+            <SuiHeader>
+              <SuiTitle>{getSelectedTokenInfo().name}</SuiTitle>
               <TokenSelector onClick={handleTokenChange}>
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "8px",
+                    top: "calc(50% + 2px)",
+                    transform: "translateY(-50%)",
+                  }}
+                >
+                  <img
+                    src={getSelectedTokenInfo().icon}
+                    alt={getSelectedTokenInfo().name}
+                    style={{ width: "24px", height: "24px" }}
+                  />
+                </div>
                 <TokenDropdown />
               </TokenSelector>
-            </EthereumHeader>
-            <EthereumChange>
-              +${balanceChange} (+{balanceChangePercent}%)
-            </EthereumChange>
-            <EthereumAddress>
+            </SuiHeader>
+            <SuiChange>
+              +${balanceChange} (+{getTokenBalance().changePercent}%)
+            </SuiChange>
+            <SuiAddress>
               <AddressText>
                 0xcEDBf1ceAd7C19C94ec7C01D15c974AbFB44926F
               </AddressText>
-              <CopyButton onClick={handleCopyAddress}>
-                <FiCopy size={16} />
+              <CopyButton onClick={handleCopyAddress} style={{ left: "280px" }}>
+                <img
+                  src="/assets/Copy.png"
+                  alt="Copy"
+                  style={{ width: "16px", height: "16px" }}
+                />
               </CopyButton>
-            </EthereumAddress>
-          </EthereumSection>
+            </SuiAddress>
+          </SuiSection>
 
           {/* Send/Receive 버튼 */}
           <ActionSection>
@@ -1327,50 +1412,92 @@ const SendReceive = () => {
           <BalanceSection>
             <BalanceItem>
               <BalanceLeft>
-                <BalanceIcon />
+                <BalanceIcon
+                  style={{
+                    backgroundImage: `url("${getSelectedTokenInfo().icon}")`,
+                  }}
+                />
                 <BalanceInfo>
-                  <BalanceName>Ethereum</BalanceName>
-                  <BalanceChange>+{balanceChangePercent}%</BalanceChange>
+                  <BalanceName>{getSelectedTokenInfo().name}</BalanceName>
+                  <BalanceChange>{getTokenBalance().change}</BalanceChange>
                 </BalanceInfo>
               </BalanceLeft>
               <BalanceRight>
-                <BalanceAmount>0.00263 ETH</BalanceAmount>
-                <BalanceUSD>${balance}</BalanceUSD>
+                <BalanceAmount>{getTokenBalance().amount}</BalanceAmount>
+                <BalanceUSD>{getTokenBalance().usd}</BalanceUSD>
               </BalanceRight>
             </BalanceItem>
           </BalanceSection>
 
-          {/* 거래 내역 */}
-          <TransactionSection>
-            {transactions.map((dateGroup, index) => (
-              <div key={index}>
-                <TransactionDate>{dateGroup.date}</TransactionDate>
-                {dateGroup.items.map((transaction, itemIndex) => (
-                  <TransactionItem key={itemIndex}>
-                    <TransactionIcon src={transaction.icon} />
-                    <TransactionInfo>
-                      <TransactionType>
-                        {transaction.type === "send" && "Send"}
-                        {transaction.type === "receive" && "Receive"}
-                        {transaction.type === "swap" && "Swap"}
-                        {transaction.type === "contract" &&
-                          "Contract interaction"}
-                      </TransactionType>
-                      <TransactionStatus>
-                        {transaction.status}
-                      </TransactionStatus>
-                    </TransactionInfo>
-                    <TransactionAmount>
-                      <TransactionValue type={transaction.type}>
-                        {transaction.amount}
-                      </TransactionValue>
-                      <TransactionTime>{transaction.time}</TransactionTime>
-                    </TransactionAmount>
-                  </TransactionItem>
-                ))}
-              </div>
-            ))}
-          </TransactionSection>
+          {/* 거래 내역 - Sui 토큰만 표시 */}
+          {selectedToken === "sui" && (
+            <TransactionSection>
+              <TransactionDate>2025/07/21</TransactionDate>
+              <TransactionItem>
+                <TransactionIcon
+                  src={imgEuroDollar}
+                  style={{
+                    filter: "brightness(0) invert(1)",
+                  }}
+                />
+                <TransactionInfo>
+                  <TransactionType>Send</TransactionType>
+                  <TransactionStatus>Confirmed</TransactionStatus>
+                </TransactionInfo>
+                <TransactionAmount>
+                  <TransactionValue type="send">-0.00263 SUI</TransactionValue>
+                  <TransactionTime>16:04:02</TransactionTime>
+                </TransactionAmount>
+              </TransactionItem>
+              <TransactionItem>
+                <TransactionIcon
+                  src={imgEuroDollar}
+                  style={{
+                    filter: "brightness(0) invert(1)",
+                  }}
+                />
+                <TransactionInfo>
+                  <TransactionType>Receive</TransactionType>
+                  <TransactionStatus>Confirmed</TransactionStatus>
+                </TransactionInfo>
+                <TransactionAmount>
+                  <TransactionValue type="receive">
+                    +0.00263 SUI
+                  </TransactionValue>
+                  <TransactionTime>16:03:42</TransactionTime>
+                </TransactionAmount>
+              </TransactionItem>
+
+              <TransactionDate>2025/07/22</TransactionDate>
+              <TransactionItem>
+                <TransactionIcon
+                  src={imgGlobe}
+                  style={{
+                    filter: "brightness(0) invert(1)",
+                  }}
+                />
+                <TransactionInfo>
+                  <TransactionType>Swap</TransactionType>
+                  <TransactionStatus>Confirmed</TransactionStatus>
+                </TransactionInfo>
+                <TransactionAmount>
+                  <TransactionValue type="receive">+0.05 SUI</TransactionValue>
+                  <TransactionTime>16:04:02</TransactionTime>
+                </TransactionAmount>
+              </TransactionItem>
+              <TransactionItem>
+                <TransactionIcon src={imgWallet} />
+                <TransactionInfo>
+                  <TransactionType>Contract interaction</TransactionType>
+                  <TransactionStatus>Confirmed</TransactionStatus>
+                </TransactionInfo>
+                <TransactionAmount>
+                  <TransactionValue type="send">-0.00263 SUI</TransactionValue>
+                  <TransactionTime>16:04:02</TransactionTime>
+                </TransactionAmount>
+              </TransactionItem>
+            </TransactionSection>
+          )}
         </>
       )}
 
@@ -1378,8 +1505,8 @@ const SendReceive = () => {
       {currentView === "send" && (
         <SendContainer>
           <AssetSection>
-            <AssetName>Ethereum</AssetName>
-            <AssetBalance>{balance} ETH</AssetBalance>
+            <AssetName>{getSelectedTokenInfo().name}</AssetName>
+            <AssetBalance>{getTokenBalance().amount}</AssetBalance>
           </AssetSection>
 
           <InputSection>
@@ -1389,7 +1516,10 @@ const SendReceive = () => {
                 type="text"
                 placeholder="0x..."
                 value={recipientAddress}
-                onChange={(e) => setRecipientAddress(e.target.value)}
+                onChange={(e) => {
+                  setRecipientAddress(e.target.value);
+                  debouncedCalculateGasFee();
+                }}
               />
             </InputGroup>
 
@@ -1402,7 +1532,10 @@ const SendReceive = () => {
                 type="number"
                 placeholder="0.0"
                 value={sendAmount}
-                onChange={(e) => setSendAmount(e.target.value)}
+                onChange={(e) => {
+                  setSendAmount(e.target.value);
+                  debouncedCalculateGasFee();
+                }}
               />
             </InputGroup>
 
@@ -1420,12 +1553,21 @@ const SendReceive = () => {
           <GasFeeSection>
             <GasFeeHeader>
               <GasFeeIcon />
-              <GasFeeTitle>AD TICKET - {requiredTickets}개</GasFeeTitle>
+              <GasFeeTitle>
+                {isCalculating
+                  ? "계산 중..."
+                  : `AD TICKET - ${requiredTickets}개`}
+              </GasFeeTitle>
             </GasFeeHeader>
-            <GasFeeAmount>가스수수료 {gasFee.toFixed(6)} ETH</GasFeeAmount>
+            <GasFeeAmount>
+              {isCalculating
+                ? "가스비 계산 중..."
+                : `가스수수료 ${gasFee.toFixed(6)} SUI`}
+            </GasFeeAmount>
             <GasFeeWarning>
-              AD TICKET이 없을시 소유하신 토큰으로 가스수수료를 사용하거나
-              거래를 실행할수없습니다.
+              {isCalculating
+                ? "전송 정보를 분석하고 있습니다..."
+                : "AD TICKET이 없을시 소유하신 토큰으로 가스수수료를 사용하거나 거래를 실행할수없습니다."}
             </GasFeeWarning>
           </GasFeeSection>
 
@@ -1460,7 +1602,9 @@ const SendReceive = () => {
               disabled={
                 !recipientAddress ||
                 !sendAmount ||
-                ticketBalance < requiredTickets
+                ticketBalance < requiredTickets ||
+                isCalculating ||
+                !calculationComplete
               }
               style={{ left: "220px", bottom: "20px" }}
             >

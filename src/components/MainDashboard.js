@@ -42,9 +42,14 @@ const imgWallet = "/assets/wallet-icon.png";
 const imgDollarEuroExchange = "/assets/eruo-dollor-icon.png";
 
 // 네트워크 아이콘들
+const suiIcon = "/assets/sui-sui-logo.svg";
 const ethereumIcon = "/assets/eth.svg";
 const arbitrumIcon = "/assets/arbitrum-icon.svg";
 const polygonIcon = "/assets/polygon-icon.svg";
+
+// 토큰 아이콘들
+const usdcIcon = "/assets/usd-coin-usdc-logo.svg";
+const usdtIcon = "/assets/tether-usdt-logo.svg";
 
 // NFT 이미지들
 const imgFrame48 = "/assets/nft1.png";
@@ -144,7 +149,7 @@ const AccountInfo = styled.div`
 const AccountIcon = styled.div`
   width: 15px;
   height: 15px;
-  background-image: url("${imgFrame58}");
+  background-image: url("${(props) => props.src || imgFrame58}");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -266,19 +271,38 @@ const EyeButton = styled.button`
 `;
 
 const BannerSection = styled.div`
-  ${createFlexStyle("column", "center", "center", 15)}
-  padding: 0 ${responsiveSpacing(20)};
-  margin: ${responsiveSpacing(20)} 0;
+  position: relative;
+  width: 100%;
+  height: 100px;
+  margin-top: 5px;
+  padding: 0 20px;
+`;
+
+const BannerContainer = styled.div`
+  width: 100%;
+  height: ${responsiveSize(100)};
+  position: relative;
+  overflow: hidden;
+  border-radius: ${responsiveSize(8)};
+`;
+
+const BannerSlider = styled.div`
+  display: flex;
+  width: ${(props) => props.bannerCount * 100}%;
+  height: 100%;
+  transition: transform 0.5s ease;
+  transform: translateX(
+    ${(props) => -props.currentSlide * (100 / props.bannerCount)}%
+  );
 `;
 
 const BannerImage = styled.div`
-  width: 100%;
-  height: ${responsiveSize(100)};
-  background-image: url("${imgImage10}");
+  width: ${(props) => 100 / props.bannerCount}%;
+  height: 100%;
+  background-image: url("${(props) => props.image}");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  border-radius: ${responsiveSize(8)};
   cursor: pointer;
   transition: transform 0.2s ease;
 
@@ -288,7 +312,13 @@ const BannerImage = styled.div`
 `;
 
 const DotContainer = styled.div`
-  ${createFlexStyle("row", "center", "center", 15)}
+  position: absolute;
+  left: 50%;
+  top: 110px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  justify-content: center;
 `;
 
 const Dot = styled.div`
@@ -421,7 +451,7 @@ const TokenItem = styled.div`
 const TokenIcon = styled.div`
   width: ${responsiveSize(40)};
   height: ${responsiveSize(40)};
-  background: #3b3b3b;
+  background: ${(props) => (props.src ? "transparent" : "#3b3b3b")};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -429,6 +459,10 @@ const TokenIcon = styled.div`
   ${createTextStyle(16)}
   color: white;
   font-weight: 600;
+  background-image: ${(props) => (props.src ? `url("${props.src}")` : "none")};
+  background-size: ${(props) => (props.src ? "80%" : "contain")};
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const TokenInfo = styled.div`
@@ -742,18 +776,35 @@ const AddNetworkButton = styled.button`
 const MainDashboard = () => {
   const navigate = useNavigate();
   const [ticketBalance, setTicketBalance] = useState(10);
-  const [balance, setBalance] = useState(6.29);
+  const [balance, setBalance] = useState(5.0);
   const [balanceChange, setBalanceChange] = useState(1.16);
   const [balanceChangePercent, setBalanceChangePercent] = useState(2.73);
+  const [totalBalance, setTotalBalance] = useState(80.5);
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const [activeTab, setActiveTab] = useState("TOKEN");
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [selectedNetwork, setSelectedNetwork] = useState("ethereum");
+  const [selectedNetwork, setSelectedNetwork] = useState("sui");
   const [isNetworkModalOpen, setIsNetworkModalOpen] = useState(false);
+
+  // 배너 데이터
+  const banners = [
+    { id: 1, image: "/assets/banner.png", title: "Banner 1" },
+    { id: 2, image: "/assets/banner2.png", title: "Banner 2" },
+    { id: 3, image: "/assets/banner3.png", title: "Banner 3" },
+  ];
 
   useEffect(() => {
     initializeDashboard();
   }, []);
+
+  // 자동 슬라이드 기능
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
+    }, 3000); // 3초마다 자동 슬라이드
+
+    return () => clearInterval(interval);
+  }, [banners.length]);
 
   const initializeDashboard = async () => {
     try {
@@ -768,16 +819,22 @@ const MainDashboard = () => {
     navigate("/ad-ticket");
   };
 
+  const handleTokenClick = (tokenId) => {
+    // 토큰 ID를 쿼리 파라미터로 전달하여 Send/Receive 페이지로 이동
+    navigate(`/send-receive?token=${tokenId}`);
+  };
+
   const handleToggleBalance = () => {
     setIsBalanceVisible(!isBalanceVisible);
   };
 
   const handleBannerClick = () => {
-    setCurrentSlide((prev) => (prev + 1) % 3);
+    setCurrentSlide((prev) => (prev + 1) % banners.length);
   };
 
   // Figma 디자인에 맞는 네트워크 데이터
   const networks = [
+    { id: "sui", name: "Sui Mainnet", icon: suiIcon },
     { id: "ethereum", name: "Ethereum Mainnet", icon: imgImage7 },
     { id: "arbitrum", name: "Arbitrum One", icon: imgImage8 },
     { id: "polygon", name: "Polygon Mainnet(MATIC)", icon: imgImage34 },
@@ -800,6 +857,8 @@ const MainDashboard = () => {
 
   const getNetworkIcon = () => {
     switch (selectedNetwork) {
+      case "sui":
+        return suiIcon;
       case "ethereum":
         return ethereumIcon;
       case "arbitrum":
@@ -807,37 +866,40 @@ const MainDashboard = () => {
       case "polygon":
         return polygonIcon;
       default:
-        return ethereumIcon;
+        return suiIcon;
     }
   };
 
   const tokens = [
     {
-      id: 1,
-      name: "Ethereum",
-      symbol: "ETH",
-      balance: "0.00263",
-      value: "$6.28",
-      change: "+2.73%",
+      id: "sui",
+      name: "Sui",
+      symbol: "SUI",
+      balance: "1.25",
+      value: "$5.00",
+      change: "+5.2%",
       positive: true,
+      icon: suiIcon,
     },
     {
-      id: 2,
-      name: "Arbitrum",
-      symbol: "ARB",
-      balance: "0.001",
-      value: "$0.001",
-      change: "-0.01%",
+      id: "usdc",
+      name: "USDC",
+      symbol: "USDC",
+      balance: "50.0",
+      value: "$50.00",
+      change: "+0.1%",
+      positive: true,
+      icon: usdcIcon,
+    },
+    {
+      id: "usdt",
+      name: "USDT",
+      symbol: "USDT",
+      balance: "25.5",
+      value: "$25.50",
+      change: "-0.2%",
       positive: false,
-    },
-    {
-      id: 3,
-      name: "Matic",
-      symbol: "MATIC",
-      balance: "0",
-      value: "$0.001",
-      change: "0.00%",
-      positive: true,
+      icon: usdtIcon,
     },
   ];
 
@@ -885,7 +947,7 @@ const MainDashboard = () => {
         </NetworkSelector>
 
         <AccountInfo>
-          <AccountIcon />
+          <AccountIcon src={getNetworkIcon()} />
           <AccountName>Account 1</AccountName>
           <AccountDropdown />
           <AccountAddress>0xcEDBf...4926F</AccountAddress>
@@ -900,8 +962,8 @@ const MainDashboard = () => {
       <BalanceSection style={{ position: "relative" }}>
         <BalanceAmount>
           {isBalanceVisible
-            ? `$${balance}`
-            : `$${balance.toString().replace(/\d/g, "*")}`}
+            ? `$${totalBalance}`
+            : `$${totalBalance.toString().replace(/\d/g, "*")}`}
         </BalanceAmount>
         <BalanceChange
           style={{ visibility: isBalanceVisible ? "visible" : "hidden" }}
@@ -914,9 +976,22 @@ const MainDashboard = () => {
       </BalanceSection>
 
       <BannerSection>
-        <BannerImage onClick={handleBannerClick} />
+        <BannerContainer onClick={handleBannerClick}>
+          <BannerSlider
+            currentSlide={currentSlide}
+            bannerCount={banners.length}
+          >
+            {banners.map((banner) => (
+              <BannerImage
+                key={banner.id}
+                image={banner.image}
+                bannerCount={banners.length}
+              />
+            ))}
+          </BannerSlider>
+        </BannerContainer>
         <DotContainer>
-          {[0, 1, 2].map((index) => (
+          {banners.map((_, index) => (
             <Dot key={index} active={index === currentSlide} />
           ))}
         </DotContainer>
@@ -942,8 +1017,13 @@ const MainDashboard = () => {
       {activeTab === "TOKEN" ? (
         <TokenList>
           {tokens.map((token) => (
-            <TokenItem key={token.id}>
-              <TokenIcon>{token.symbol[0]}</TokenIcon>
+            <TokenItem
+              key={token.id}
+              onClick={() => handleTokenClick(token.id)}
+            >
+              <TokenIcon src={token.icon}>
+                {!token.icon && token.symbol[0]}
+              </TokenIcon>
               <TokenInfo>
                 <TokenName>{token.name}</TokenName>
                 <TokenChange positive={token.positive}>

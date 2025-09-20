@@ -168,6 +168,7 @@ const SocialIcon = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   margin-bottom: 10px;
+  filter: ${(props) => (props.isApple ? "brightness(0) invert(1)" : "none")};
 `;
 
 const SocialText = styled.p`
@@ -221,7 +222,7 @@ const ButtonText = styled.p`
   transform: translate(-50%, -50%);
   font-family: "Mina", sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 20px;
   color: white;
   margin: 0;
   text-align: center;
@@ -280,7 +281,7 @@ const WalletDashboard = () => {
           </SocialButton>
 
           <SocialButton onClick={handleAppleLogin}>
-            <SocialIcon src={imgImage27} />
+            <SocialIcon src={imgImage27} isApple={true} />
             <SocialText>Apple</SocialText>
           </SocialButton>
 

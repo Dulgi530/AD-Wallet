@@ -3,10 +3,22 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import gasSponsorService from "../services/gasSponsor";
+import {
+  createContainerStyle,
+  createButtonStyle,
+  createTextStyle,
+  createIconStyle,
+  createFlexStyle,
+  responsiveSize,
+  responsiveFontSize,
+  responsiveSpacing,
+} from "../utils/autoLayout";
 
 // 이미지 상수들
-const imgImage3 =
-  "http://localhost:3845/assets/4a6aad9c9d13776d70b296a4d7b3f71253a93463.png";
+const imgImage3 = "/assets/adwallet-icon.png";
+const imgVerychat = "/assets/verychat.png";
+const imgCounut = "/assets/counut.png";
+const imgHidemeplease = "/assets/hidemeplease.png";
 const imgImage10 =
   "http://localhost:3845/assets/2d1ee20636d2178512aeb74537b7833e46a0afa6.png";
 const imgFruitColor41 =
@@ -17,6 +29,7 @@ const imgImage17 =
   "http://localhost:3845/assets/e9200eccfa0a06c5540b2d9275d76686af4859c7.png";
 const imgImage2 =
   "http://localhost:3845/assets/a5afa55a89940975aa49915299cb08c7c192db96.png";
+const imgCryptoMission = "/assets/cypto-mission-icon.png";
 const imgPolygon1 =
   "http://localhost:3845/assets/79d8126f7474a53dbb7b8b36d203a8b1fe7a6b23.svg";
 const imgFrame60 =
@@ -244,10 +257,22 @@ const TitleIcon = styled.div`
   background-position: center;
 `;
 
-const TitleText = styled.div`
+const TitleSection = styled.div`
   position: absolute;
-  left: 80px;
+  left: 20px;
   top: 135px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
+
+const CryptoMissionIcon = styled.img`
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+`;
+
+const TitleText = styled.div`
   font-family: "Mina", sans-serif;
   font-weight: 700;
   font-size: 32px;
@@ -258,7 +283,7 @@ const TitleText = styled.div`
 const SubtitleText = styled.div`
   position: absolute;
   left: 149.5px;
-  top: 193.5px;
+  top: 200px;
   transform: translateX(-50%) translateY(-50%);
   font-family: "Mina", sans-serif;
   font-weight: 700;
@@ -271,34 +296,54 @@ const SubtitleText = styled.div`
 const BannerSection = styled.div`
   position: absolute;
   left: 20px;
-  top: 216px;
+  top: 218px;
   width: 372px;
   height: 100px;
-  background: #110b0b;
-  border-radius: 10px;
+`;
+
+const BannerContainer = styled.div`
+  width: 100%;
+  height: ${responsiveSize(100)};
+  position: relative;
   overflow: hidden;
+  border-radius: ${responsiveSize(8)};
+  background: #110b0b;
+`;
+
+const BannerSlider = styled.div`
+  display: flex;
+  width: ${(props) => props.bannerCount * 100}%;
+  height: 100%;
+  transition: transform 0.5s ease;
+  transform: translateX(
+    ${(props) => -props.currentSlide * (100 / props.bannerCount)}%
+  );
 `;
 
 const BannerImage = styled.div`
-  position: absolute;
-  left: 65px;
-  top: 0;
-  width: 201px;
-  height: 100px;
-  background-image: url("${imgImage10}");
+  width: ${(props) => 100 / props.bannerCount}%;
+  height: 100%;
+  background-image: url("${(props) => props.image}");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 `;
 
 const DotContainer = styled.div`
   position: absolute;
   left: 50%;
-  top: 331px;
+  top: 323px;
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
   justify-content: center;
+  margin: 20px;
 `;
 
 const Dot = styled.div`
@@ -312,9 +357,10 @@ const Dot = styled.div`
 const MissionList = styled.div`
   position: absolute;
   left: 50%;
-  top: 351px;
+  top: 343px;
   transform: translateX(-50%);
   width: 412px;
+  margin-top: 10px;
 `;
 
 const MissionItem = styled.div`
@@ -383,10 +429,27 @@ const MissionLine = styled.div`
 const CryptoMission = () => {
   const navigate = useNavigate();
   const [ticketBalance, setTicketBalance] = useState(10);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // 배너 데이터
+  const banners = [
+    { id: 1, image: "/assets/banner.png", title: "Banner 1" },
+    { id: 2, image: "/assets/banner2.png", title: "Banner 2" },
+    { id: 3, image: "/assets/banner3.png", title: "Banner 3" },
+  ];
 
   useEffect(() => {
     initializeMission();
   }, []);
+
+  // 자동 슬라이드 기능
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
+    }, 3000); // 3초마다 자동 슬라이드
+
+    return () => clearInterval(interval);
+  }, [banners.length]);
 
   const initializeMission = async () => {
     try {
@@ -402,6 +465,10 @@ const CryptoMission = () => {
     // 실제 구현에서는 해당 서비스로 이동
   };
 
+  const handleBannerClick = () => {
+    setCurrentSlide((prev) => (prev + 1) % banners.length);
+  };
+
   const handleTicketClick = () => {
     navigate("/ad-ticket");
   };
@@ -409,19 +476,19 @@ const CryptoMission = () => {
   const missions = [
     {
       id: 1,
-      icon: imgFruitColor41,
+      icon: imgVerychat,
       title: "VeryChat 가입하기",
       reward: "AD TICKET 10장 지급",
     },
     {
       id: 2,
-      icon: imgImage16,
+      icon: imgCounut,
       title: "코넛 가입하기",
       reward: "AD TICKET 10장 지급",
     },
     {
       id: 3,
-      icon: imgImage17,
+      icon: imgHidemeplease,
       title: "하이드미플리즈 가입하기",
       reward: "AD TICKET 10장 지급",
     },
@@ -448,20 +515,28 @@ const CryptoMission = () => {
       </Header>
 
       <TitleIcon />
-      <TitleText>크립토 미션</TitleText>
+      <TitleSection>
+        <CryptoMissionIcon src={imgCryptoMission} />
+        <TitleText>크립토 미션</TitleText>
+      </TitleSection>
       <SubtitleText>다양한 Web3을 즐기며 리워드를 받아요!</SubtitleText>
 
       <BannerSection>
-        <BannerImage />
+        <BannerContainer onClick={handleBannerClick}>
+          <BannerSlider
+            currentSlide={currentSlide}
+            bannerCount={banners.length}
+          >
+            {banners.map((banner) => (
+              <BannerImage
+                key={banner.id}
+                image={banner.image}
+                bannerCount={banners.length}
+              />
+            ))}
+          </BannerSlider>
+        </BannerContainer>
       </BannerSection>
-
-      <DotContainer>
-        <Dot active />
-        <Dot />
-        <Dot />
-        <Dot />
-        <Dot />
-      </DotContainer>
 
       <MissionList>
         {missions.map((mission, index) => (

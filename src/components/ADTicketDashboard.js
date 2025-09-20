@@ -227,31 +227,41 @@ const BannerSection = styled.div`
   position: relative;
   width: 100%;
   height: 100px;
-  margin-top: 20px;
+  margin-top: 5px;
   padding: 0 20px;
 `;
 
 const BannerContainer = styled.div`
-  position: absolute;
-  left: 20px;
-  top: 0;
-  width: 372px;
-  height: 100px;
-  background: #110b0b;
-  border-radius: 10px;
+  width: 100%;
+  height: ${responsiveSize(100)};
+  position: relative;
   overflow: hidden;
+  border-radius: ${responsiveSize(8)};
+`;
+
+const BannerSlider = styled.div`
+  display: flex;
+  width: ${(props) => props.bannerCount * 100}%;
+  height: 100%;
+  transition: transform 0.5s ease;
+  transform: translateX(
+    ${(props) => -props.currentSlide * (100 / props.bannerCount)}%
+  );
 `;
 
 const BannerImage = styled.div`
-  position: absolute;
-  left: 65px;
-  top: 0;
-  width: 201px;
-  height: 100px;
-  background-image: url("${imgImage10}");
+  width: ${(props) => 100 / props.bannerCount}%;
+  height: 100%;
+  background-image: url("${(props) => props.image}");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 `;
 
 const DotContainer = styled.div`
@@ -339,10 +349,27 @@ const ADTicketDashboard = () => {
   const [dailyLimit, setDailyLimit] = useState(5);
   const [currentUsage, setCurrentUsage] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // 배너 데이터
+  const banners = [
+    { id: 1, image: "/assets/banner.png", title: "Banner 1" },
+    { id: 2, image: "/assets/banner2.png", title: "Banner 2" },
+    { id: 3, image: "/assets/banner3.png", title: "Banner 3" },
+  ];
 
   useEffect(() => {
     initializeDashboard();
   }, []);
+
+  // 자동 슬라이드 기능
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
+    }, 3000); // 3초마다 자동 슬라이드
+
+    return () => clearInterval(interval);
+  }, [banners.length]);
 
   const initializeDashboard = async () => {
     try {
@@ -360,15 +387,21 @@ const ADTicketDashboard = () => {
     navigate("/ad-ticket");
   };
 
+  const handleBannerClick = () => {
+    setCurrentSlide((prev) => (prev + 1) % banners.length);
+  };
+
   const handleWatchAd = async () => {
     if (currentUsage >= dailyLimit) {
-      toast.error("오늘 시청 가능한 광고 횟수를 모두 소진했습니다.");
+      toast.error("오늘 시청 가능한 광고 횟수를 모두 소진했습니다.", {
+        duration: 3000,
+      });
       return;
     }
 
     // 바로 광고 시청 시작
     setIsWatchingAd(true);
-    toast.success("광고 시청 중... (3초)");
+    toast.success("광고 시청 중... (3초)", { duration: 3000 });
 
     // Simulate ad watching
     setTimeout(async () => {
@@ -377,7 +410,7 @@ const ADTicketDashboard = () => {
       setTicketBalance(newBalance);
       setCurrentUsage((prev) => prev + 1);
       setIsWatchingAd(false);
-      toast.success(`+${reward} 티켓을 획득했습니다!`);
+      toast.success(`+${reward} 티켓을 획득했습니다!`, { duration: 3000 });
     }, 3000);
   };
 
@@ -394,12 +427,12 @@ const ADTicketDashboard = () => {
   };
 
   const handleParticipate = () => {
-    toast.success("쿠팡 제휴에 참여합니다!");
+    toast.success("쿠팡 제휴에 참여합니다!", { duration: 3000 });
     setIsModalOpen(false);
   };
 
   const handleInviteFriends = () => {
-    toast.info("친구초대 기능은 준비 중입니다.");
+    toast.info("친구초대 기능은 준비 중입니다.", { duration: 3000 });
   };
 
   const rewards = [
@@ -464,15 +497,24 @@ const ADTicketDashboard = () => {
       </MainTicketSection>
 
       <BannerSection>
-        <BannerContainer>
-          <BannerImage />
+        <BannerContainer onClick={handleBannerClick}>
+          <BannerSlider
+            currentSlide={currentSlide}
+            bannerCount={banners.length}
+          >
+            {banners.map((banner) => (
+              <BannerImage
+                key={banner.id}
+                image={banner.image}
+                bannerCount={banners.length}
+              />
+            ))}
+          </BannerSlider>
         </BannerContainer>
         <DotContainer>
-          <Dot active />
-          <Dot />
-          <Dot />
-          <Dot />
-          <Dot />
+          {banners.map((_, index) => (
+            <Dot key={index} active={index === currentSlide} />
+          ))}
         </DotContainer>
       </BannerSection>
 
