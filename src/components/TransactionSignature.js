@@ -518,8 +518,8 @@ const TransactionSignature = () => {
 
         if (success) {
           toast.success("트랜잭션이 성공적으로 전송되었습니다!");
-          const updatedBalance = await gasSponsorService.get_ticket_balance();
-          console.log("Updated ticket balance:", updatedBalance);
+          //const updatedBalance = await gasSponsorService.get_ticket_balance();
+          //console.log("Updated ticket balance:", updatedBalance);
           navigate("/dashboard");
         } else {
           toast.error("AD Ticket이 부족합니다.");
